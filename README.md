@@ -5,7 +5,7 @@
 cd client & npm i
 ```
 
-### Compile & run bakcend
+### Compile & run frontend
 ```
 npm run serve
 ```
