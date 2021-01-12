@@ -27,9 +27,11 @@
                 <div class="forgot-pass">Forgot Password?</div>
                 <button class="submit" type="submit">Log In</button>
               </form>
-              <p class="register">Don't have an account?
-                <button class="signup-button switch-button">Sign up here</button>
-              </p>
+              <form @submit.prevent="$router.push('/register')">
+                <p class="register">Don't have an account?
+                  <button class="signup-button switch-button">Sign up here</button>
+                </p>
+              </form>
             </div>
           </div>
         </div>
@@ -47,11 +49,6 @@ export default {
 </script>
 
 <style scoped>
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
 
 .login-page {
 
@@ -177,23 +174,6 @@ export default {
 
 .form {
   width: 338px;
-}
-
-.form fieldset {
-  position: relative;
-  opacity: 0;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  transition: all .3s ease-out;
-}
-
-.form legend {
-  position: absolute;
-  overflow: hidden;
-  width: 1px;
-  height: 1px;
-  clip: rect(0 0 0 0);
 }
 
 #email{
