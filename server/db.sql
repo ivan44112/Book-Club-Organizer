@@ -1,4 +1,3 @@
-heroku pg:psql -a book-club-organizer1
 
 --download extension
 create extension if not exists "uuid-ossp";
