@@ -1,24 +1,22 @@
 # bookcluborganizer
 
-## Project setup
+## Frontend setup
 ```
-npm install
+cd client & npm i
 ```
 
-### Compiles and hot-reloads for development
+### Compile & run frontend
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Backend setup
 ```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
+cd server & npm i
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Compile & run backend
+```
+nodemon index
+```
+
