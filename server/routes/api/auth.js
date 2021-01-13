@@ -3,8 +3,9 @@ const pool = require("../../db");
 const bcrypt = require("bcrypt");
 const jwtGenerator = require("../../utils/jwtGenerator");
 const authorize = require("../../middleware/authorize");
+const {registerValidation,loginValidation,userValidationResult} = require("../../validation/userValidation");
 
-router.post("/register", async(req,res)=>{
+router.post("/register", registerValidation,userValidationResult, async(req,res)=>{
     const {name,email,password}=req.body;
 
     try {
@@ -29,7 +30,7 @@ router.post("/register", async(req,res)=>{
     }
 });
 
-router.post("/login", async(req,res)=>{
+router.post("/login",  loginValidation,userValidationResult, async(req,res)=>{
 
     const{email,password}=req.body;
 
@@ -62,7 +63,5 @@ router.get("/verify", authorize, async(req, res) => {
         res.status(500).send("Server error");
     }
 });
-
-
 
 module.exports = router;
