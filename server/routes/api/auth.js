@@ -3,7 +3,9 @@ const pool = require("../../db");
 const bcrypt = require("bcrypt");
 const jwtGenerator = require("../../utils/jwtGenerator");
 const authorize = require("../../middleware/authorize");
-const {registerValidation,loginValidation,userValidationResult} = require("../../validation/userValidation");
+const {registerValidation,
+    loginValidation,
+    userValidationResult} = require("../../validation/userValidation");
 
 router.post("/register", registerValidation,userValidationResult, async(req,res)=>{
     const {name,email,password}=req.body;
@@ -57,6 +59,8 @@ router.post("/login",  loginValidation,userValidationResult, async(req,res)=>{
 
 router.get("/verify", authorize, async(req, res) => {
     try {
+        const user = req.user;
+        console.log(user);
         res.json(true);
     } catch (err) {
         console.error(err.message);
