@@ -3,7 +3,9 @@ const pool = require("../../db");
 const bcrypt = require("bcrypt");
 const jwtGenerator = require("../../utils/jwtGenerator");
 const authorize = require("../../middleware/authorize");
-const {registerValidation,loginValidation,userValidationResult} = require("../../validation/userValidation");
+const {registerValidation,
+    loginValidation,
+    userValidationResult} = require("../../validation/userValidation");
 
 router.post("/register", registerValidation,userValidationResult, async(req,res)=>{
     const {name,email,password}=req.body;
