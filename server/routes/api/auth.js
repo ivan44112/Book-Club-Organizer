@@ -59,6 +59,8 @@ router.post("/login",  loginValidation,userValidationResult, async(req,res)=>{
 
 router.get("/verify", authorize, async(req, res) => {
     try {
+        const user = req.user;
+        console.log(user);
         res.json(true);
     } catch (err) {
         console.error(err.message);
