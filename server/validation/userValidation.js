@@ -50,4 +50,3 @@ exports.userValidationResult = (req,res,next)=>{
     }
     next();
 }
-

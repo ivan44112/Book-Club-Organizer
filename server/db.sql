@@ -30,3 +30,26 @@ CREATE TABLE club_members
     FOREIGN KEY (club_id) REFERENCES clubs(club_id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 )
+
+CREATE TABLE books
+(
+    book_id      uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+    book_name VARCHAR(255) NOT NULL,
+    book_author VARCHAR(255) NOT NULL,
+    pages_num INT NOT NULL,
+    rating VARCHAR(255) NOT NULL
+)
+
+/*
+ is_reading=0(user currently reading this book)
+            =1(user read that book)
+ */
+CREATE TABLE user_books
+(
+    user_books_id      uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+    book_id uuid NOT NULL,
+    user_id uuid NOT NULL,
+    is_reading boolean NOT NULL,
+    FOREIGN KEY (book_id) REFERENCES books(book_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+)
