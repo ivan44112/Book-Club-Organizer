@@ -29,7 +29,7 @@ router.patch("/changebook/:id",async(req,res)=>{
             return res.status(401).send("Club doesen't exist");
         }
 
-        await pool.query("UPDATE clubs SET current_book=$1, books_read=books_read+1 WHERE club_id=$2", [book,id]);
+        await pool.query("UPDATE clubs SET current_book=$1, books_read=COALESCE(books_read,0)+1 WHERE club_id=$2", [book,id]);
 
         res.json({status:'true'});
     }catch(err){
@@ -55,5 +55,13 @@ router.post("/addMember/:id", authorize, async(req,res)=>{
        console.error(err.message);
     }
 })
+/*
+dodat u addMember?
+ */
 
+router.get("/countMembers/:id", async(req,res)=>{
+    const id = req.params.id;
+    const memCount = await pool.query("SELECT COUNT(*) FROM club_members WHERE club_id=$1",[id]);
+    res.json(memCount.rows[0]);
+})
 module.exports = router;
