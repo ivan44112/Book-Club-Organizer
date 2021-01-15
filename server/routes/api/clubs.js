@@ -3,6 +3,7 @@ const pool = require("../../db");
 const authorize = require("../../middleware/authorize");
 
 router.post("/create", authorize, async(req,res)=>{
+
     const {name} = req.body;
 
     try{
@@ -20,6 +21,7 @@ router.post("/create", authorize, async(req,res)=>{
     }
 });
 router.patch("/changebook/:id",async(req,res)=>{
+
     const {book} = req.body;
     const id = req.params.id;
     try{
@@ -58,7 +60,6 @@ router.post("/addMember/:id", authorize, async(req,res)=>{
 /*
 dodat u addMember?
  */
-
 router.get("/countMembers/:id", async(req,res)=>{
     const id = req.params.id;
     const memCount = await pool.query("SELECT COUNT(*) FROM club_members WHERE club_id=$1",[id]);

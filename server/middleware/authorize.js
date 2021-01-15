@@ -15,4 +15,3 @@ module.exports = function(req,res,next){
         return res.status(403).json("Not authorized");
     }
 }
-
