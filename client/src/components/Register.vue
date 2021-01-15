@@ -2,11 +2,11 @@
   <div class="register-page">
     <div class="content">
     <section class="forms-section">
-<div class="forms">
-<div class="form register-form">
-  <div class="register-section">
+    <div class="forms">
+    <div class="form register-form">
+    <div class="register-section">
     <button class="register-button switch-button">Register</button>
-  </div>
+    </div>
   <div class="input-section">
     <form @submit.prevent="$router.push('/dashboard')">
       <label for="email"></label>
