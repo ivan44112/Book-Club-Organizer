@@ -1,62 +1,75 @@
 <template>
-    <div class=dashboard>
-      <div class="section-top">
-        <div class="logo-container">
+  <div class=dashboard>
+    <div class="section-top">
+      <div class="logo-container">
         <div class="logo-img"></div>
-          <form class="search-bar">
-            <div class="search">
-              <span class="fa fa-search"></span>
-              <input type="text" placeholder="Type in to search">
-            </div>
-            <div class="dropdown">
-                <select class="dropdown-menu" v-model="selected">
-                  <option disabled value="">Filter</option>
-                  <option>Books</option>
-                  <option>Videos</option>
-                  <option>Clubs</option>
-                </select>
-              </div>
-          </form>
-        </div>
-        <div class="content-right">
-          <div class="join-club">
-            <button class="button">Join a Club</button>
+        <form class="search-bar">
+          <div class="search">
+            <span class="glass-search"></span>
+            <input type="text" id="search-text" placeholder="Type in to search">
+            <label for="search-text"></label>
           </div>
-          <div class="notification-bell">
-            <a href="#" class="notification">
-              <span class="bell">3</span>
-            </a>
+          <div class="dropdown">
+            <label for="dropdown-menu"></label>
+            <select class="dropdown-menu" id="dropdown-menu" v-model="selected">
+              <option disabled value="">Filter</option>
+              <option>Books</option>
+              <option>Videos</option>
+              <option>Clubs</option>
+            </select>
           </div>
-          <div class="profile-img"></div>
-          <div class="profile-name">John Doe</div>
-        </div>
+        </form>
       </div>
-      <nav class="section-left">
-        <ul>
-          <li><a class="active" href="#">Dashboard</a> </li>
-          <li><a href="#" class="Clubs">Clubs</a> </li>
-          <li><a href="#" class="My Books">My Books</a> </li>
-          <li><a href="#" class="Messages">Messages</a> </li>
-          <li><a href="#" class="Settings">Settings</a> </li>
-        </ul>
-      </nav>
+      <div class="content-right">
+        <div class="join-club">
+          <button class="button">Join a Club</button>
+        </div>
+        <div class="notification-bell">
+          <a href="#" class="notification">
+            <span class="bell">3</span>
+          </a>
+        </div>
+        <div class="profile-img"></div>
+        <div class="profile-name">John Doe</div>
+      </div>
     </div>
+    <nav class="section-left">
+
+      <ul class="menu-items">
+        <NavigationItem
+            v-for="icon in icons" :key="icon.text" :text="icon.text" :icon="icon.icon" :to="icon.to"
+        />
+      </ul>
+    </nav>
+  </div>
 
 </template>
 
 <script>
+import NavigationItem from "@/components/NavigationItem";
+
 export default {
-name: "Dashboard",
-  data () {
+  name: "Dashboard",
+  components: {
+    NavigationItem
+  },
+  data() {
+
     return {
-      selected: ''
+      selected: '',
+      icons: [{text: 'Dashboard', icon: 'dashboardIcon', to:'/dashboard'},
+        {text: 'Clubs', icon: 'clubIcon' , to:'/dashboard/clubs'},
+        {text: 'Books', icon: 'booksIcon' , to:'/dashboard/books'},
+        {text: 'Messages', icon: 'messagesIcon' , to:'/dashboard/messages'},
+        {text: 'Settings', icon: 'settingsIcon' , to:'/dashboard/settings'},
+      ],
     }
   }
 }
 </script>
 
 <style scoped>
-.dashboard{
+.dashboard {
   margin: 0;
   font-family: Roboto, -apple-system, 'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
 
@@ -70,26 +83,27 @@ name: "Dashboard",
   left: 0;
 }
 
-.logo-container{
+.logo-container {
   display: flex;
   align-items: center;
   justify-content: center;
   padding-left: 50px;
 }
 
-.section-top{
+.section-top {
   width: 100%;
   height: 90px;
   display: flex;
+  border: 1px solid aliceblue;
 }
 
-.logo-img{
+.logo-img {
   width: 146px;
   height: 40px;
-  background-image: url("assets/logoNav.png");
+  background-image: url("../assets/logoNav.png");
 }
 
-.search-bar{
+.search-bar {
   padding-left: 30px;
   display: flex;
 }
@@ -111,21 +125,25 @@ name: "Dashboard",
   opacity: 1;
   border: 1px solid #ACACAC;
   border-radius: 8px 0 0 8px;
+  outline: none;
 
 }
 
-.search input { text-indent: 32px;}
-.search .fa-search {
+.search input {
+  text-indent: 32px;
+}
+
+.search .glass-search {
   position: absolute;
   top: 10px;
   left: 10px;
-  background-image: url("assets/searchIcon.svg");
+  background-image: url("../assets/searchIcon.svg");
   width: 20px;
   height: 20px;
 }
 
 
-.dropdown-menu{
+.dropdown-menu {
   font: normal normal normal 14px/11px Arial;
   border-radius: 0 8px 8px 0;
   color: #858585;
@@ -134,37 +152,42 @@ name: "Dashboard",
   padding-right: 5px;
   text-align: center;
   border: 1px solid #ACACAC;
+  outline: none;
+
 }
 
-.content-right{
+.content-right {
   display: flex;
   align-items: center;
   justify-content: center;
   padding-right: 50px;
 }
-.button{
+
+.button {
   position: absolute;
   border: none;
   left: 1180px;
   width: 138px;
   height: 35px;
   top: 30px;
-  background: #0072D5  no-repeat padding-box;
+  background: #0072D5 no-repeat padding-box;
   border-radius: 6px;
   opacity: 1;
   font: normal normal bold 14px/21px Arial;
   color: #FFFFFF;
   cursor: pointer;
+  outline: none;
 }
+
 .notification {
-  background-image: url("assets/bell.svg");
+  background-image: url("../assets/bell.svg");
   background-repeat: no-repeat;
-  text-decoration: none;
   padding: 12px 16px;
   top: 40px;
   position: absolute;
   left: 1380px;
 }
+
 .notification .bell {
   position: absolute;
   top: -10px;
@@ -175,8 +198,8 @@ name: "Dashboard",
   font-weight: bold;
 }
 
-.profile-img{
-  background-image: url("assets/avatar.png");
+.profile-img {
+  background-image: url("../assets/avatar.png");
   width: 42px;
   height: 42px;
   position: absolute;
@@ -185,7 +208,7 @@ name: "Dashboard",
 
 }
 
-.profile-name{
+.profile-name {
   position: absolute;
   font: normal normal bold 18px/24px Arial;
   color: #2B2B2B;
@@ -193,39 +216,14 @@ name: "Dashboard",
   left: 1550px;
 }
 
-.section-left{
+.section-left {
   display: flex;
-  background: #FFFFFF  no-repeat padding-box;
+  flex-direction: row;
+  background: #FFFFFF no-repeat padding-box;
   opacity: 1;
-  border-top:solid  #ece6e6;
+  padding-left: 45px;
 }
 
-ul {
-  display: inline-block;
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  width: 225px;
-  background: #FFFFFF  no-repeat padding-box;
-  opacity: 1;
-}
-
-li a {
-  display: block;
-  color: #0072D5;
-  padding: 8px 16px;
-  text-decoration: none;
-}
-
-.active{
-  background-color: #0072D5;
-  color: white;
-}
-
-li a:hover:not(.active) {
-  background-color: #0072D5;
-  color: white;
-}
 
 
 

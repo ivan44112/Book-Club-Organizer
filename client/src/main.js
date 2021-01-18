@@ -6,6 +6,11 @@ import Login from "@/components/Login";
 import Register from "@/components/Register";
 import {ValidationObserver, ValidationProvider, extend} from "vee-validate";
 import * as rules from 'vee-validate/dist/rules';
+import './assets/icons/style.css'
+import Clubs from "@/components/Clubs";
+import MyBooks from "@/components/MyBooks";
+import Messages from "@/components/Messages";
+import Settings from "@/components/Settings";
 
 Object.keys(rules).forEach(rule => {
   extend(rule, rules[rule]);
@@ -29,7 +34,13 @@ const router = new VueRouter({
     {
       path: '/dashboard',
       name: 'Dashboard',
-      component: Dashboard
+      component: Dashboard,
+      children:[
+        {path: 'clubs', component:Clubs},
+        {path: 'books', component:MyBooks},
+        {path: 'messages', component:Messages},
+        {path: 'settings', component:Settings}
+      ]
     },
     {
       path: '/register',
@@ -37,6 +48,7 @@ const router = new VueRouter({
       component: Register
     }
   ]
+
 });
 
 Vue.config.productionTip = false

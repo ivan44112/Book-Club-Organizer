@@ -27,7 +27,7 @@
                 <div class="forgot-pass">Forgot Password?</div>
                 <button class="submit" type="submit">Log In</button>
               </form>
-              <form @submit.prevent="$router.push('/register')">
+              <form @submit.prevent="$router.push('/dashboard')">
                 <p class="register">Don't have an account?
                   <button class="signup-button switch-button">Sign up here</button>
                 </p>
@@ -64,7 +64,7 @@ export default {
   top: 0;
   left: 0;
 
-  background-image: url("assets/background.svg");
+  background-image: url("../assets/background.svg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -93,7 +93,7 @@ export default {
 .image-section{
   width: 66%;
   height: calc(100vh - 90px);
-  background-image: url("assets/image right.png");
+  background-image: url("../assets/image right.png");
 }
 
 
@@ -179,10 +179,13 @@ export default {
 #email{
   font: normal normal bold 16px/26px Arial;
   padding-top: 30px;
+  outline: none;
+  background-color: white;
 }
 #password{
   font: normal normal bold 16px/26px Arial;
   padding-top: 30px;
+  outline: none;
 
 }
 
@@ -228,6 +231,7 @@ export default {
   border-top: 0;
   border-left: 0;
   border-right: 0;
+  background-color: white;
 }
 
 </style>

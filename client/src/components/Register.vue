@@ -68,7 +68,7 @@ name: "Register"
   top: 0;
   left: 0;
 
-  background-image: url("assets/background.svg");
+  background-image: url("../assets/background.svg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
