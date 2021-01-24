@@ -19,15 +19,33 @@ export default {
 
 <style scoped>
 
+.menu-items{
+
+}
+
 li.menu-items{
   display: flex;
-  font-size: 24px;
   padding-top: 20px;
+  text-align: left;
+  font: normal normal bold 19px/23px Arial;
+  letter-spacing: 0px;
+  color: #0072D5;
+  opacity: 1;
+
+
+}
+.items>i{
+  margin-right: 10px;
+  width: 25px;
+  display: inline-block;
+  text-align: center;
 }
 
 .items{
   color: gray;
   text-decoration: none;
+
+
 }
 
 .items:hover{

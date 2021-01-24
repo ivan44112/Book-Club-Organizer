@@ -37,7 +37,7 @@ const router = new VueRouter({
       component: Dashboard,
       children:[
         {path: 'clubs', component:Clubs},
-        {path: 'books', component:MyBooks},
+        {path: 'mybooks', component:MyBooks},
         {path: 'messages', component:Messages},
         {path: 'settings', component:Settings}
       ]

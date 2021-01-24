@@ -27,7 +27,7 @@
                 <div class="forgot-pass">Forgot Password?</div>
                 <button class="submit" type="submit">Log In</button>
               </form>
-              <form @submit.prevent="$router.push('/dashboard')">
+              <form @submit.prevent="$router.push('/register')">
                 <p class="register">Don't have an account?
                   <button class="signup-button switch-button">Sign up here</button>
                 </p>
@@ -150,10 +150,10 @@ export default {
 }
 
 .logo-line{
-  width: 1px;
   height: 33px;
   border: 1px solid #FFFFFF;
   margin: 0 15px;
+
 }
 
 .logo-logotext{
