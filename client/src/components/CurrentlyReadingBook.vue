@@ -43,7 +43,7 @@ name: "CurrentlyReadingBook"
 .kings-container{
   width: 100%;
   display: flex;
-  padding-top: 50px;
+  padding-top: 25px;
   padding-left: 30px;
   text-align: left;
 
@@ -115,7 +115,7 @@ name: "CurrentlyReadingBook"
 
 .average-member{
   margin-top: 10px;
-  border: 1px solid green;
+  border: 1px solid #109A3D;
   border-radius: 8px;
   position: relative;
   font: normal normal normal 14px/19px Arial;
@@ -136,7 +136,7 @@ name: "CurrentlyReadingBook"
   left: 0;
   top: 0;
   bottom: 0;
-  background: green;
+  background: #109A3D;
   text-align: center;
   border-radius: 8px;
 }

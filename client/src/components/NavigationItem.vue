@@ -27,7 +27,7 @@ li.menu-items{
   display: flex;
   padding-top: 20px;
   text-align: left;
-  font: normal normal bold 19px/23px Arial;
+  font: normal normal bold 16px/23px Arial;
   letter-spacing: 0px;
   color: #0072D5;
   opacity: 1;
