@@ -46,6 +46,15 @@ router.patch("/readingStatus/:id", authorize, async(req,res)=>{
     }catch(err){
        console.error(err.message);
     }
+})
 
+router.get("/getUserBooks", authorize, async(req,res)=>{
+    try{
+        const userBooks = await pool.query("SELECT * FROM user_books WHERE user_id=$1",[req.user]);
+
+        res.json(userBooks.rows);
+    }catch(err){
+       console.error(err.message);
+    }
 })
 module.exports = router;

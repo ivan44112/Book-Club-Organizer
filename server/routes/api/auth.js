@@ -14,7 +14,7 @@ router.post("/register", registerValidation,userValidationResult, async(req,res)
         const user = await pool.query("SELECT * FROM users WHERE user_email = $1",[email]);
 
         if(user.rows.length > 0){
-            return res.status(401).send("User already exsists");
+            return res.status(401).send("User already exists");
         }
 
         const saltRound = 10;
@@ -59,8 +59,6 @@ router.post("/login",  loginValidation,userValidationResult, async(req,res)=>{
 
 router.get("/verify", authorize, async(req, res) => {
     try {
-        const user = req.user;
-        console.log(user);
         res.json(true);
     } catch (err) {
         console.error(err.message);

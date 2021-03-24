@@ -65,4 +65,14 @@ router.get("/countMembers/:id", async(req,res)=>{
     const memCount = await pool.query("SELECT COUNT(*) FROM club_members WHERE club_id=$1",[id]);
     res.json(memCount.rows[0]);
 })
+
+router.get("/getClubs", async(req,res)=>{
+    try{
+        const clubs = await pool.query("SELECT * FROM clubs")
+
+        res.json(clubs.rows);
+    }catch(err){
+       console.error(err.message);
+    }
+})
 module.exports = router;

@@ -16,6 +16,6 @@ const productionConfig = {
     }
 }
 
-const pool = new Pool(devConfig);
+const pool = new Pool(productionConfig);
 
 module.exports = pool;
