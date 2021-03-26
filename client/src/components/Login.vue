@@ -19,11 +19,11 @@
               <button class="signin-button switch-button">Sign in</button>
             </div>
             <div class="input-section">
-              <form @submit.prevent="$router.push('/dashboard')">
+              <form v-on:submit.prevent="login()">
                 <label for="email"></label>
-                <input type="email" id="email" name="email" placeholder="Email" required>
+                <input type="email" v-model="email"  id="email" name="email" placeholder="Email" required>
                 <label for="password"></label>
-                <input type="password" id="password" name="password" placeholder="Password" required>
+                <input type="password" v-model="password" id="password" name="password" placeholder="Password" required>
                 <div class="forgot-pass">Forgot Password?</div>
                 <button class="submit" type="submit">Log In</button>
               </form>
@@ -43,8 +43,26 @@
 </template>
 
 <script>
+import { Auth } from "@/services/userServices";
+
 export default {
-  name: "Login"
+  name: "Login",
+  data(){
+    return{
+      email:'',
+      password:''
+    };
+  },
+  methods:{
+    async login(){
+        let result = await Auth.login(this.email, this.password);
+        console.log('Login result', result);
+
+        if(result === true){
+          this.$router.push('/dashboard');
+      }
+    }
+  }
 }
 </script>
 
