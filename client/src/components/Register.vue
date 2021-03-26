@@ -8,9 +8,10 @@
     <button class="register-button switch-button">Register</button>
     </div>
   <div class="input-section">
-    <form @submit.prevent="$router.push('/dashboard')">
+    <form v-on:submit.prevent="register()">
       <label for="email"></label>
-      <input type="email" id="email" name="email" placeholder="Email" required>
+      <input type="email" v-model="email" id="email" name="email" placeholder="Email" required>
+      <input type="text" v-model="name" id="name" name="name" placeholder="Name" required>
         <ValidationObserver>
           <ValidationProvider rules="required|password:@confirm" v-slot="{ errors }">
             <label for="password"></label>
@@ -37,6 +38,8 @@
 
 <script>
 import { extend } from 'vee-validate';
+import { Auth } from "@/services/userServices";
+
 extend('password', {
   params: ['target'],
   validate(value, { target }) {
@@ -45,11 +48,23 @@ extend('password', {
   message: 'Password confirmation does not match'
 });
 export default {
+  name: "Register",
   data: () => ({
+    email:'',
+    name:'',
     password: '',
     confirmation: ''
   }),
-name: "Register"
+  methods:{
+    async register(){
+      let result=await Auth.register(this.name, this.email, this.password);
+      console.log('Registration result',result);
+
+      if(result === true){
+        this.$router.push('/dashboard');
+      }
+    }
+  }
 }
 </script>
 

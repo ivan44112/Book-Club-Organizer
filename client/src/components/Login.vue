@@ -21,7 +21,7 @@
             <div class="input-section">
               <form v-on:submit.prevent="login()">
                 <label for="email"></label>
-                <input type="email" v-model="email"  id="email" name="email" placeholder="Email" required>
+                <input type="email" v-model="email" id="email" name="email" placeholder="Email" required>
                 <label for="password"></label>
                 <input type="password" v-model="password" id="password" name="password" placeholder="Password" required>
                 <div class="forgot-pass">Forgot Password?</div>

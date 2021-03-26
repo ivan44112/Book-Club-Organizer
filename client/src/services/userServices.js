@@ -20,20 +20,25 @@ let Auth = {
 
         return true;
     },
+    async register(name, email, password){
+        let response = await Service.post('/register', {
+            name : name,
+            email: email,
+            password: password,
+        })
+
+        let user = response.data;
+
+        localStorage.setItem('user',JSON.stringify(user));
+
+        return true;
+    },
     logout() {
         localStorage.removeItem('user');
     },
     getUser(){
         return JSON.parse(localStorage.getItem('user'));
-    },
-    getToken(){
-        let user = Auth.getUser();
-        if(user){
-            return user;
-        }else{
-            return false;
-        }
-    },
+    }
 };
 
 export{ Service, Auth };
