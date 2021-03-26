@@ -11,6 +11,7 @@ import Clubs from "@/components/Clubs";
 import MyBooks from "@/components/MyBooks";
 import Messages from "@/components/Messages";
 import Settings from "@/components/Settings";
+import {Auth} from "@/services/userServices";
 
 Object.keys(rules).forEach(rule => {
   extend(rule, rules[rule]);
@@ -20,8 +21,6 @@ Vue.component('ValidationObserver', ValidationObserver);
 Vue.component('ValidationProvider', ValidationProvider);
 
 Vue.use(VueRouter)
-
-
 
 const router = new VueRouter({
   mode: 'history',
@@ -48,6 +47,20 @@ const router = new VueRouter({
       component: Register
     }
   ]
+
+});
+
+router.beforeEach( (to,from,next) => {
+  const publicPages= ["/", "/register"];
+  const loginNeeded = !publicPages.includes(to.path);
+  const user = Auth.getUser();
+
+  if(loginNeeded && !user){
+    next('/');
+    return;
+  }
+
+  next();
 
 });
 
