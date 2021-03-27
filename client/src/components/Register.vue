@@ -57,12 +57,17 @@ export default {
   }),
   methods:{
     async register(){
-      let result=await Auth.register(this.name, this.email, this.password);
-      console.log('Registration result',result);
+      try {
+        let result=await Auth.register(this.name, this.email, this.password);
+        console.log('Registration result',result);
 
-      if(result === true){
-        this.$router.push('/dashboard');
+        if(result === true){
+          this.$router.push('/dashboard');
+        }
+      }catch (e){
+        console.log(e.response.data);
       }
+
     }
   }
 }
@@ -140,6 +145,11 @@ export default {
 
 
 #email{
+  font: normal normal bold 16px/26px Arial;
+  padding-top: 30px;
+}
+
+#name{
   font: normal normal bold 16px/26px Arial;
   padding-top: 30px;
 }

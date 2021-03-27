@@ -11,10 +11,11 @@ import Clubs from "@/components/Clubs";
 import MyBooks from "@/components/MyBooks";
 import Messages from "@/components/Messages";
 import Settings from "@/components/Settings";
+import DashboardContent from "@/components/DashboardContent";
 import {Auth} from "@/services/userServices";
 
 Object.keys(rules).forEach(rule => {
-  extend(rule, rules[rule]);
+    extend(rule, rules[rule]);
 });
 
 Vue.component('ValidationObserver', ValidationObserver);
@@ -23,30 +24,31 @@ Vue.component('ValidationProvider', ValidationProvider);
 Vue.use(VueRouter)
 
 const router = new VueRouter({
-  mode: 'history',
-  routes: [{
-    path: '/',
-    name: 'Login',
-    component: Login
+    mode: 'history',
+    routes: [{
+        path: '/',
+        name: 'Login',
+        component: Login
 
-  },
-    {
-      path: '/dashboard',
-      name: 'Dashboard',
-      component: Dashboard,
-      children:[
-        {path: 'clubs', component:Clubs},
-        {path: 'mybooks', component:MyBooks},
-        {path: 'messages', component:Messages},
-        {path: 'settings', component:Settings}
-      ]
     },
-    {
-      path: '/register',
-      name: 'Register',
-      component: Register
-    }
-  ]
+        {
+            path: '/dashboard',
+            name: 'Dashboard',
+            component: Dashboard,
+            children: [
+                {path: 'dashboardcontent', component: DashboardContent},
+                {path: 'clubs', component: Clubs},
+                {path: 'mybooks', component: MyBooks},
+                {path: 'messages', component: Messages},
+                {path: 'settings', component: Settings}
+            ]
+        },
+        {
+            path: '/register',
+            name: 'Register',
+            component: Register
+        }
+    ]
 
 });
 
@@ -67,9 +69,9 @@ router.beforeEach( (to,from,next) => {
 Vue.config.productionTip = false
 
 new Vue({
-  el: '#app',
-  router,
-  render: h => h(App),
+    el: '#app',
+    router,
+    render: h => h(App),
 }).$mount('#app')
 
 

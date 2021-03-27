@@ -11,7 +11,8 @@
     "core-js": "^3.6.5",
     "tailwindcss": "^2.0.2",
     "vue": "^2.6.11",
-    "vue-router": "^3.4.9"
+    "vue-router": "^3.4.9",
+    "nodemon": "^2.0.7"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

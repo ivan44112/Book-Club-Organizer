@@ -1,5 +1,6 @@
 <template>
   <div class=dashboard>
+
     <div class="section-top">
       <div class="logo-container">
         <div class="logo-img">
@@ -40,45 +41,30 @@
           />
         </ul>
       </nav>
-      <div class="content-middle">
-        <div class="title-container">
-          <h1 class="title-blue">Currently Reading Books</h1>
-        </div>
-        <div class=readingbooks-container>
-          <CurrentlyReadingBook/>
-          <CurrentlyReadingBook/>
-        </div>
-        <div class="news-container">
-          <h1 class="news-blue">News from your clubs</h1>
-        </div>
-        <div class="no-news">There are currently no news</div>
-        <div class="upcoming-books">Upcoming Books</div>
-      </div>
-        </div>
-      </div>
-
+      <router-view></router-view>
+    </div>
+  </div>
 
 
 </template>
 
 <script>
 import NavigationItem from "@/components/NavigationItem";
-import CurrentlyReadingBook from "@/components/CurrentlyReadingBook";
+
 
 export default {
   name: "Dashboard",
   components: {
-    CurrentlyReadingBook,
     NavigationItem
   },
   data() {
 
     return {
-      icons: [{text: 'Dashboard', icon: 'dashboardIcon', to:'/dashboard'},
-        {text: 'Clubs', icon: 'clubIcon' , to:'/dashboard/clubs'},
-        {text: 'My Books', icon: 'booksIcon' , to:'/dashboard/mybooks'},
-        {text: 'Messages', icon: 'messagesIcon' , to:'/dashboard/messages'},
-        {text: 'Settings', icon: 'settingsIcon' , to:'/dashboard/settings'},
+      icons: [{text: 'Dashboard', icon: 'dashboardIcon', to: '/dashboard/dashboardcontent'},
+        {text: 'Clubs', icon: 'clubIcon', to: '/dashboard/clubs'},
+        {text: 'My Books', icon: 'booksIcon', to: '/dashboard/mybooks'},
+        {text: 'Messages', icon: 'messagesIcon', to: '/dashboard/messages'},
+        {text: 'Settings', icon: 'settingsIcon', to: '/dashboard/settings'},
       ],
     }
   }
@@ -118,7 +104,7 @@ export default {
   height: 40px;
 }
 
-.search-form{
+.search-form {
   display: flex;
   align-items: center;
 }
@@ -169,7 +155,7 @@ export default {
   padding-right: 50px;
 }
 
-.join-club{
+.join-club {
   padding-right: 20px;
 }
 
@@ -196,7 +182,7 @@ export default {
   align-items: center;
 }
 
-.notification img{
+.notification img {
   padding-right: 28px;
 }
 
@@ -224,7 +210,8 @@ export default {
   color: #2B2B2B;
   opacity: 1;
 }
-.arrow{
+
+.arrow {
   padding-left: 8px;
   padding-top: 6px;
 }
@@ -235,90 +222,28 @@ export default {
   border-right: 1px solid #dae0e5;
 }
 
-.profile-container{
+.profile-container {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.profile-name{
+.profile-name {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.profile-text{
+
+.profile-text {
   padding-top: 5px;
 }
 
-.content-middle{
-  width: calc(100% - 190px);
 
 
-}
-
-.title-container{
-  width: 100%;
-  left: 190px;
+.main-container {
   display: flex;
-  justify-content: flex-start;
-  background-color: #f7f9fd;
-
 }
 
-.title-blue{
-  border: none;
-  color: #0072D5;
-  outline: none;
-  font: normal normal bold 20px/26px Arial;
-  padding-left: 30px;
 
-}
-
-.main-container{
- display: flex;
-}
-
-.news-container{
-  width: 100%;
-  left: 190px;
-  display: flex;
-  justify-content: flex-start;
-  background-color: #f7f9fd;
-
-}
-.news-blue{
-  border: none;
-  color: #0072D5;
-  outline: none;
-  font: normal normal bold 20px/26px Arial;
-  padding-left: 30px;
-  padding-top: 25px;
-}
-
-.no-news{
-  width: 100%;
-  left: 190px;
-  display: flex;
-  justify-content: flex-start;
-  padding-top: 20px;
-  padding-left: 30px;
-  background-color: white;
-  font: normal normal normal 15px/24px Arial;
-}
-.upcoming-books{
-  width: 100%;
-  left: 190px;
-  display: flex;
-  justify-content: flex-start;
-  padding-top: 25px;
-  padding-left: 30px;
-  background-color: #f7f9fd;
-  border: none;
-  color: #0072D5;
-  outline: none;
-  font: normal normal bold 20px/26px Arial;
-  padding-left: 30px;
-
-}
 
 </style>
