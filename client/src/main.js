@@ -13,6 +13,8 @@ import Messages from "@/components/Messages";
 import Settings from "@/components/Settings";
 import DashboardContent from "@/components/DashboardContent";
 import {Auth} from "@/services/userServices";
+import BookProperty from "@/components/BookProperty";
+
 
 Object.keys(rules).forEach(rule => {
     extend(rule, rules[rule]);
@@ -40,29 +42,31 @@ const router = new VueRouter({
                 {path: 'clubs', component: Clubs},
                 {path: 'mybooks', component: MyBooks},
                 {path: 'messages', component: Messages},
-                {path: 'settings', component: Settings}
+                {path: 'settings', component: Settings},
+                {path: 'bookproperty', component:BookProperty}
             ]
         },
         {
             path: '/register',
             name: 'Register',
             component: Register
-        }
+        },
+
     ]
 
 });
 
-router.beforeEach( (to,from,next) => {
-  const publicPages= ["/", "/register"];
-  const loginNeeded = !publicPages.includes(to.path);
-  const user = Auth.getUser();
+router.beforeEach((to, from, next) => {
+    const publicPages = ["/", "/register"];
+    const loginNeeded = !publicPages.includes(to.path);
+    const user = Auth.getUser();
 
-  if(loginNeeded && !user){
-    next('/');
-    return;
-  }
+    if (loginNeeded && !user) {
+        next('/');
+        return;
+    }
 
-  next();
+    next();
 
 });
 

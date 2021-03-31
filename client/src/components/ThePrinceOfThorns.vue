@@ -1,46 +1,42 @@
 <template>
-  <div class="kings-container">
-    <img class="kings-image" src="../assets/book1.png">
-    <div class="kings-title">
-      <div class="more">
-        <a class="more-btn" href="#">More ></a>
+<div class="prince-container">
+  <img class="prince-image" src="../assets/book2.png">
+  <div class="prince-title">
+    <h1 class="book-title">The prince of Thorns</h1>
+    <div class="by">by
+      <span class="kings-author">Mark Lawrence </span>
+    </div>
+    <i class="icon-clubIcon">
+      <span class="club-name">Dark Fantasy</span> </i>
+    <div class="pages">Pages: 357</div>
+    <div class="rating">Rating: 4.3/5</div>
+    <div class="average">
+      <span class="member-page">Average member page:</span>
+      <span class="page-number">110</span>
+    </div>
+    <div class="average-member">
+      <div class="average-percent">
+        <span class="avg-percent">37%</span>
       </div>
-      <h1 class="book-title">The way of Kings</h1>
-      <div class="by">by
-        <span class="kings-author">Brandon Sanderson </span>
-      </div>
-      <i class="icon-clubIcon">
-        <span class="club-name">The Flying Readers</span> </i>
-      <div class="pages">Pages: 1040</div>
-      <div class="rating">Rating: 4.7/5</div>
-      <div class="average">
-        <span class="member-page">Average member page:</span>
-        <span class="page-number">548</span>
-      </div>
-      <div class="average-member">
-        <div class="average-percent">
-          <span class="avg-percent">54%</span>
-        </div>
-      </div>
-      <div class="current-page">My current page:
-        <span class="current-number">792</span>
-        <div class="current-percent">
-          <span class="curr-percent">62%</span>
-        </div>
+    </div>
+    <div class="current-page">My current page:
+      <span class="current-number">238</span>
+      <div class="current-percent">
+        <span class="curr-percent">73%</span>
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script>
 export default {
-  name: "CurrentlyReadingBook"
+name: "ThePrinceOfThorns"
 }
 </script>
 
 <style scoped>
-
-.kings-container {
+.prince-container {
   width: 100%;
   display: flex;
   padding-top: 25px;
@@ -50,7 +46,7 @@ export default {
 
 }
 
-.kings-title {
+.prince-title {
   width: 67%;
   display: flex;
   flex-direction: column;
@@ -109,7 +105,6 @@ export default {
   color: #727272;
   opacity: 1;
   padding-top: 10px;
-
 }
 
 .average-member {
@@ -133,7 +128,7 @@ export default {
 
 .average-percent {
   position: absolute;
-  width: 54%;
+  width: 37%;
   left: 0;
   top: 0;
   bottom: 0;
@@ -182,7 +177,7 @@ export default {
 }
 
 .curr-percent {
-  width: 62%;
+  width: 73%;
   left: 0;
   top: 0;
   bottom: 0;
@@ -193,19 +188,4 @@ export default {
   color: white;
 }
 
-.more {
-  display: flex;
-  justify-content: flex-end;
-  padding-right: 20px;
-  padding-top: 10px;
-
-
-}
-
-.more-btn {
-  font: normal normal bold 14px/19px Arial;
-  color: #0072D5;
-  text-decoration: none;
-
-}
 </style>

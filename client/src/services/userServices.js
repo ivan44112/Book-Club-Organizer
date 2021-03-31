@@ -6,12 +6,11 @@ let Service = axios.create({
 });
 
 
-
 let Auth = {
-    async login(email, password){
-        let response = await Service.post("/login",{
-            email : email,
-            password : password
+    async login(email, password) {
+        let response = await Service.post("/login", {
+            email: email,
+            password: password
         });
 
         let user = response.data;
@@ -20,25 +19,25 @@ let Auth = {
 
         return true;
     },
-    async register(name, email, password){
+    async register(name, email, password) {
         let response = await Service.post('/register', {
-            name : name,
+            name: name,
             email: email,
             password: password,
         })
 
         let user = response.data;
 
-        localStorage.setItem('user',JSON.stringify(user));
+        localStorage.setItem('user', JSON.stringify(user));
 
         return true;
     },
     logout() {
         localStorage.removeItem('user');
     },
-    getUser(){
+    getUser() {
         return JSON.parse(localStorage.getItem('user'));
     }
 };
 
-export{ Service, Auth };
+export {Service, Auth};

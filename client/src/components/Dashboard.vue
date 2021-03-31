@@ -239,11 +239,9 @@ export default {
 }
 
 
-
 .main-container {
   display: flex;
 }
-
 
 
 </style>

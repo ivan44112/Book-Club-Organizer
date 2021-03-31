@@ -1,85 +1,52 @@
 <template>
-  <div class="clubs">
-    <div class="title-container">
-      <h1 class="title-blue">My Book Clubs</h1>
-    </div>
-    <div class="club1-container">
-      <img class="club1-image" src="../assets/club1.png">
-      <div class="club1-title">
-        <h1 class="club-name">The Flying Readers</h1>
-        <div class="owner">Owner:
-          <span class="owner-name">Ana Smith
-          <img class="ana-image" src="../assets/anasmith.png">
+  <div class="fantasy-container">
+    <img class="club2-image" src="../assets/club2.png">
+    <div class="club2-title">
+      <h1 class="club-name">Dark Fantasy</h1>
+      <div class="owner">Owner:
+        <span class="owner-name">Robert Miller
+          <img class="robert-image" src="../assets/robertmiller.png">
         </span>
-        </div>
-        <div class="currently-reading">Currently Reading:
-          <span class="book-name">The way of Kings</span>
-          <span class="read-percent">(54%)</span>
-        </div>
-        <div class="upcoming-book">Upcoming Book:
-          <span class="upcoming-name">Words of Radiance</span>
-        </div>
-        <div class="members">Members:
-          <span class="members-count">32</span>
-        </div>
-        <div class="books-read">Books read:
-          <span class="books-count">18</span>
-        </div>
-        <div class="more">
-          <a class="more-btn" href="#">More ></a>
-        </div>
+      </div>
+      <div class="currently-reading">Currently Reading:
+        <span class="book-name">The prince of Thorns</span>
+        <span class="read-percent">(37%)</span>
+      </div>
+      <div class="upcoming-book">Upcoming Book:
+        <span class="upcoming-name">Suggestion Phase</span>
+      </div>
+      <div class="members">Members:
+        <span class="members-count">17</span>
+      </div>
+      <div class="books-read">Books read:
+        <span class="books-count">5</span>
+      </div>
+      <div class="more">
+        <a class="more-btn" href="#">More ></a>
       </div>
     </div>
-    <DarkFantasy/>
   </div>
-
-
 </template>
 
 <script>
-import DarkFantasy from "@/components/DarkFantasy";
 export default {
-  name: "Clubs",
-  components: {
-    DarkFantasy
-  }
+  name: "DarkFantasy"
 }
 </script>
 
 <style scoped>
 
-.clubs {
-  width: calc(100% - 190px);
-
-}
-
-.title-container {
-  width: 100%;
-  left: 190px;
-  display: flex;
-  justify-content: flex-start;
-  background-color: #f7f9fd;
-
-}
-
-.title-blue {
-  border: none;
-  color: #0072D5;
-  outline: none;
-  font: normal normal bold 20px/26px Arial;
-  padding-left: 30px;
-
-}
-
-.club1-container {
+.fantasy-container {
   width: 100%;
   display: flex;
   padding-top: 25px;
   padding-left: 30px;
   text-align: left;
+
 }
 
-.club1-title {
+
+.club2-title {
   width: 67%;
   display: flex;
   flex-direction: column;
@@ -108,7 +75,7 @@ export default {
   display: flex;
 }
 
-.ana-image {
+.robert-image {
   width: 25px;
   display: flex;
   padding-left: 10px;
@@ -183,4 +150,5 @@ export default {
   text-decoration: none;
 
 }
+
 </style>

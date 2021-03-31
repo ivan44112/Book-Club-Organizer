@@ -4,7 +4,7 @@
       <div class="logo-container">
         <div class="logo-title">Booknizer</div>
         <div class="logo-line"></div>
-        <div class="logo-logotext">Your online book Club organizer </div>
+        <div class="logo-logotext">Your online book Club organizer</div>
       </div>
       <div class="link-container">
         <div class="link">About</div>
@@ -43,23 +43,23 @@
 </template>
 
 <script>
-import { Auth } from "@/services/userServices";
+import {Auth} from "@/services/userServices";
 
 export default {
   name: "Login",
-  data(){
-    return{
-      email:'',
-      password:''
+  data() {
+    return {
+      email: '',
+      password: ''
     };
   },
-  methods:{
-    async login(){
-        let result = await Auth.login(this.email, this.password);
-        console.log('Login result', result);
+  methods: {
+    async login() {
+      let result = await Auth.login(this.email, this.password);
+      console.log('Login result', result);
 
-        if(result === true){
-          this.$router.push('/dashboard');
+      if (result === true) {
+        this.$router.push('/dashboard');
       }
     }
   }
@@ -97,29 +97,31 @@ export default {
   width: 40%;
 }
 
-.section-top{
+.section-top {
   width: 100%;
   height: 90px;
   display: flex;
   justify-content: space-between;
 }
 
-.content{
+.content {
   display: flex;
 
 }
-.image-section{
+
+.image-section {
   width: 66%;
   height: calc(100vh - 90px);
   background-image: url("../assets/image right.png");
 }
 
 
-.switch-section{
+.switch-section {
   display: flex;
   background-color: white;
 }
-.switch-button{
+
+.switch-button {
   cursor: pointer;
   outline: 0;
   border: 0;
@@ -129,33 +131,34 @@ export default {
   font-size: 30px;
   padding: 50px 0;
 }
-.signin-button{
+
+.signin-button {
   padding-right: 30px;
   font: normal normal bold 31px/40px Arial;
 
 }
 
-.signup-button{
+.signup-button {
   font: normal normal bold 16px/11px Arial;
   color: #0072D5;
   padding-left: 5px;
 }
 
-.logo-container{
+.logo-container {
   display: flex;
   align-items: center;
   justify-content: center;
   padding-left: 50px;
 }
 
-.link-container{
+.link-container {
   display: flex;
   align-items: center;
   justify-content: center;
   padding-right: 50px;
 }
 
-.link{
+.link {
   padding: 0 20px;
   color: white;
   margin-top: 18px;
@@ -167,14 +170,14 @@ export default {
   color: #FFF700;
 }
 
-.logo-line{
+.logo-line {
   height: 33px;
   border: 1px solid #FFFFFF;
   margin: 0 15px;
 
 }
 
-.logo-logotext{
+.logo-logotext {
   font: normal normal bold 16px/21px Calibri;
   padding-top: 18px;
   color: #ffffff;
@@ -194,20 +197,21 @@ export default {
   width: 338px;
 }
 
-#email{
+#email {
   font: normal normal bold 16px/26px Arial;
   padding-top: 30px;
   outline: none;
   background-color: white;
 }
-#password{
+
+#password {
   font: normal normal bold 16px/26px Arial;
   padding-top: 30px;
   outline: none;
 
 }
 
-.forgot-pass{
+.forgot-pass {
   font: normal normal normal 12px/16px Roboto;
   letter-spacing: 0;
   color: #535353;
@@ -216,7 +220,7 @@ export default {
   cursor: pointer;
 }
 
-.submit{
+.submit {
   display: block;
   width: 330px;
   height: 50px;
@@ -230,14 +234,14 @@ export default {
   font: normal normal bold 19px/25px Arial;
 }
 
-.register{
+.register {
   display: flex;
   align-items: center;
   font: normal normal normal 16px/21px Arial;
   color: #535353;
 }
 
-.input-section input{
+.input-section input {
   display: block;
   width: 100%;
   margin-top: 8px;

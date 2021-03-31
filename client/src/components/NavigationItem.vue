@@ -19,11 +19,11 @@ export default {
 
 <style scoped>
 
-.menu-items{
+.menu-items {
 
 }
 
-li.menu-items{
+li.menu-items {
   display: flex;
   padding-top: 20px;
   text-align: left;
@@ -34,25 +34,26 @@ li.menu-items{
 
 
 }
-.items>i{
+
+.items > i {
   margin-right: 10px;
   width: 25px;
   display: inline-block;
   text-align: center;
 }
 
-.items{
+.items {
   color: gray;
   text-decoration: none;
 
 
 }
 
-.items:hover{
+.items:hover {
   color: #0072D5;
 }
 
-.items:focus{
+.items:focus {
   color: #0072D5;
 }
 

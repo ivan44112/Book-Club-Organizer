@@ -1,48 +1,50 @@
 <template>
   <div class="register-page">
     <div class="content">
-    <section class="forms-section">
-    <div class="forms">
-    <div class="form register-form">
-    <div class="register-section">
-    <button class="register-button switch-button">Register</button>
-    </div>
-  <div class="input-section">
-    <form v-on:submit.prevent="register()">
-      <label for="email"></label>
-      <input type="email" v-model="email" id="email" name="email" placeholder="Email" required>
-      <input type="text" v-model="name" id="name" name="name" placeholder="Name" required>
-        <ValidationObserver>
-          <ValidationProvider rules="required|password:@confirm" v-slot="{ errors }">
-            <label for="password"></label>
-            <input type="password" id="password" placeholder="Password" required v-model="password" />
-            <span>{{ errors[0] }}</span>
-          </ValidationProvider>
-          <ValidationProvider name="confirm" rules="required" v-slot="{ errors }">
-            <label for="confirm-password"></label>
-            <input type="password" id="confirm-password" placeholder="Confirm Password" required v-model="confirmation" />
-            <span>{{ errors[0] }}</span>
-          </ValidationProvider>
-        </ValidationObserver>
-      <label for="agree"></label>
-      <input type="checkbox" name="checkbox" value="check" id="agree" required>I have read the terms and conditions
-      <button class="submit" type="submit">Register</button>
-    </form>
-  </div>
-</div>
-</div>
-    </section>
+      <section class="forms-section">
+        <div class="forms">
+          <div class="form register-form">
+            <div class="register-section">
+              <button class="register-button switch-button">Register</button>
+            </div>
+            <div class="input-section">
+              <form v-on:submit.prevent="register()">
+                <label for="email"></label>
+                <input type="email" v-model="email" id="email" name="email" placeholder="Email" required>
+                <input type="text" v-model="name" id="name" name="name" placeholder="Name" required>
+                <ValidationObserver>
+                  <ValidationProvider rules="required|password:@confirm" v-slot="{ errors }">
+                    <label for="password"></label>
+                    <input type="password" id="password" placeholder="Password" required v-model="password"/>
+                    <span>{{ errors[0] }}</span>
+                  </ValidationProvider>
+                  <ValidationProvider name="confirm" rules="required" v-slot="{ errors }">
+                    <label for="confirm-password"></label>
+                    <input type="password" id="confirm-password" placeholder="Confirm Password" required
+                           v-model="confirmation"/>
+                    <span>{{ errors[0] }}</span>
+                  </ValidationProvider>
+                </ValidationObserver>
+                <label for="agree"></label>
+                <input type="checkbox" name="checkbox" value="check" id="agree" required>I have read the terms and
+                conditions
+                <button class="submit" type="submit">Register</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 </template>
 
 <script>
-import { extend } from 'vee-validate';
-import { Auth } from "@/services/userServices";
+import {extend} from 'vee-validate';
+import {Auth} from "@/services/userServices";
 
 extend('password', {
   params: ['target'],
-  validate(value, { target }) {
+  validate(value, {target}) {
     return value === target;
   },
   message: 'Password confirmation does not match'
@@ -50,21 +52,21 @@ extend('password', {
 export default {
   name: "Register",
   data: () => ({
-    email:'',
-    name:'',
+    email: '',
+    name: '',
     password: '',
     confirmation: ''
   }),
-  methods:{
-    async register(){
+  methods: {
+    async register() {
       try {
-        let result=await Auth.register(this.name, this.email, this.password);
-        console.log('Registration result',result);
+        let result = await Auth.register(this.name, this.email, this.password);
+        console.log('Registration result', result);
 
-        if(result === true){
+        if (result === true) {
           this.$router.push('/dashboard');
         }
-      }catch (e){
+      } catch (e) {
         console.log(e.response.data);
       }
 
@@ -75,7 +77,7 @@ export default {
 
 <style scoped>
 
-.register-page{
+.register-page {
   margin: 0;
   font-family: Roboto, -apple-system, 'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
 
@@ -102,18 +104,18 @@ export default {
   width: 40%;
 }
 
-.content{
+.content {
   box-sizing: border-box;
   display: block;
   padding-top: 10%;
 }
 
-.register-section{
+.register-section {
   display: flex;
   background-color: white;
 }
 
-.switch-button{
+.switch-button {
   cursor: pointer;
   outline: 0;
   border: 0;
@@ -124,7 +126,7 @@ export default {
   padding: 50px 0;
 }
 
-.register-button{
+.register-button {
   padding-right: 30px;
   font: normal normal bold 31px/40px Arial;
 }
@@ -144,29 +146,32 @@ export default {
 }
 
 
-#email{
+#email {
   font: normal normal bold 16px/26px Arial;
   padding-top: 30px;
 }
 
-#name{
+#name {
   font: normal normal bold 16px/26px Arial;
   padding-top: 30px;
 }
-#password{
+
+#password {
   font: normal normal bold 16px/26px Arial;
   padding-top: 30px;
 
 }
-#confirm-password{
+
+#confirm-password {
   font: normal normal bold 16px/26px Arial;
   padding-top: 30px;
 }
-#agree{
+
+#agree {
   font: normal normal bold 16px/26px Arial;
 }
 
-.submit{
+.submit {
   display: block;
   width: 330px;
   height: 50px;
@@ -180,7 +185,7 @@ export default {
   font: normal normal bold 19px/25px Arial;
 }
 
-.input-section input{
+.input-section input {
   display: block;
   width: 100%;
   margin-top: 8px;
@@ -193,7 +198,6 @@ export default {
   border-left: 0;
   border-right: 0;
 }
-
 
 
 </style>
