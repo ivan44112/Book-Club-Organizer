@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="book-progress2">
-        <img class="book2" @click="Redirect" src="../assets/book1.png">
+        <img class="book2" src="../assets/book1.png">
         <div class="book2-percent">
           <span class="book2-count">54%</span>
 
