@@ -39,12 +39,33 @@
 
 <script>
 import ThePrinceOfThorns from "@/components/ThePrinceOfThorns";
+import axios from "axios";
 
 export default {
   name: "BookProperty",
   components: {
     ThePrinceOfThorns,
   },
+  data() {
+    return {
+      book: {},
+      loadState: ''
+    }
+  },
+  methods:{
+    getBookData(){
+      this.loadState = 'loading';
+      axios
+          .get(`https://www.googleapis.com/books/v1/volumes/${this.$route.params.id}`)
+          .then(response => {
+            this.book = response.data;
+            this.loadState = 'success';
+          })
+    }
+  },
+   mounted() {
+    this.getBookData()
+  }
 }
 </script>
 

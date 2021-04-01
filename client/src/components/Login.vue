@@ -59,7 +59,7 @@ export default {
       console.log('Login result', result);
 
       if (result === true) {
-        this.$router.push('/dashboard');
+        this.$router.push('/dashboard/dashboardcontent');
       }
     }
   }

@@ -43,15 +43,14 @@ const router = new VueRouter({
                 {path: 'mybooks', component: MyBooks},
                 {path: 'messages', component: Messages},
                 {path: 'settings', component: Settings},
-                {path: 'bookproperty', component:BookProperty}
+                {path: 'book/:id', name: "book", component:BookProperty}
             ]
         },
         {
             path: '/register',
             name: 'Register',
-            component: Register
-        },
-
+            component: [Register]
+        }
     ]
 
 });
