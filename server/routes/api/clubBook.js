@@ -45,7 +45,7 @@ router.post("/addClubBook/:id", async (req, res) => {
             return res.status(401).send("Club doesn't exist");
         }
 
-        await pool.query("UPDATE club_books SET status=false WHERE status=true");
+        await pool.query("UPDATE club_books SET reading_status=false WHERE reading_status=true");
         await pool.query("INSERT INTO club_books(book_id, club_id) VALUES ($1,$2)", [book, club_id]);
 
         res.json({status: 'true'});
@@ -66,7 +66,7 @@ router.get("/getFinishedBooks/:id", async (req, res) => {
     const {status} = req.body;
 
     try {
-        const finishedBooks = await pool.query("SELECT book_id FROM club_books WHERE club_id=$1 AND status=$2", [club_id, status]);
+        const finishedBooks = await pool.query("SELECT book_id FROM club_books WHERE club_id=$1 AND reading_status=$2", [club_id, status]);
 
         res.json(finishedBooks.rows);
     } catch (err) {
@@ -79,7 +79,7 @@ router.get("/getFinishedBooks/:id", async (req, res) => {
 Insert comment for book discussion
 POST REQUEST - /addComment/:id
 id to provide in url -> club_books_id
-require:Bearer token -> commenter becomes currently logged in person
+require:Bearer token -> book changes becomes currently logged in person
 provide:comment
  */
 router.post("/addComment/:id", authorize, async (req, res) => {

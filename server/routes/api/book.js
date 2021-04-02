@@ -2,60 +2,77 @@ const router = require("express").Router()
 const pool = require("../../db");
 const authorize = require("../../middleware/authorize");
 
-router.post("/addBook", async (req, res) => {
-    const {name, author, pages, rating} = req.body;
+/*
+After a club decides it's next book, adds that book to every user for that club
+POST REQUEST - /addUserBook/:id
+id to provide in url -> club_id
+provide:book_id
+ */
+router.post("/addUserBook/:id", async (req, res) => {
+    const club_id = req.params.id;
+    const {book_id} = req.body;
+
     try {
-        const book = await pool.query("SELECT * FROM books WHERE book_name=$1", [name])
-        if (book.rows.length > 0) {
-            return res.status(401).send("Book already exists");
+        const data = await pool.query("SELECT user_id FROM club_members WHERE club_id=$1", [club_id])
+        const users = data.rows;
+
+        for (let prop in users) {
+            await pool.query("INSERT INTO user_books(book_id, user_id, club_id) VALUES($1,$2,$3) RETURNING *", [
+                book_id, users[prop].user_id, club_id
+            ])
         }
-        const newBook = await pool.query("INSERT INTO books (book_name,book_author,pages_num,rating) VALUES($1,$2,$3,$4) RETURNING *", [name, author, pages, rating]);
-
-        res.json(newBook.rows[0]);
-    } catch (err) {
-        console.error(err.message);
-    }
-});
-
-router.post("/userBook/:id", authorize, async (req, res) => {
-    const {isReading} = req.body;
-    const bookId = req.params.id;
-    try {
-        const userBook = await pool.query("SELECT * FROM user_books WHERE book_id=$1", [bookId])
-        if (userBook.rows.length > 0) {
-            return res.status(401).send("User already has that book added");
-        }
-        const newBook = await pool.query("INSERT INTO user_books (book_id,user_id,is_reading) VALUES ($1,$2,$3) RETURNING *", [bookId, req.user, isReading]);
-
-        res.json(newBook.rows[0]);
-    } catch (err) {
-        console.error(err.message);
-    }
-});
-
-router.patch("/readingStatus/:id", authorize, async (req, res) => {
-    const {isReading} = req.body;
-    const bookId = req.params.id;
-    try {
-        const userBook = await pool.query("SELECT * FROM user_books WHERE book_id=$1", [bookId])
-        if (userBook.rows.length === 0) {
-            return res.status(401).send("User doesen't have that book added");
-        }
-        await pool.query("UPDATE user_books SET is_reading=$1 WHERE book_id=$2 AND user_id=$3", [isReading, bookId, req.user])
 
         res.json({success: 'true'});
     } catch (err) {
         console.error(err.message);
+        res.status(500).send("Server error");
     }
 });
 
-router.get("/getUserBooks", authorize, async (req, res) => {
+/*
+Update reading status of a book
+PATCH REQUEST - /readingStatus/:id
+id to provide in url -> club_id
+require:Bearer token -> book changes for currently logged in person
+provide:book_id, reading_status
+ */
+router.patch("/readingStatus/:id", authorize, async (req, res) => {
+    const user = req.user;
+    const club_id = req.params.id;
+    const {book_id, reading_status} = req.body;
+
     try {
-        const userBooks = await pool.query("SELECT * FROM user_books WHERE user_id=$1", [req.user]);
+        const userBook = await pool.query("SELECT * FROM user_books WHERE book_id=$1", [book_id])
+        if (userBook.rows.length === 0) {
+            return res.status(401).send("User doesn't have that book added");
+        }
+        await pool.query("UPDATE user_books SET reading_status=$1, date_last_updated=timezone('cest'::text, CURRENT_TIMESTAMP) WHERE book_id=$2 AND user_id=$3 AND club_id=$4", [
+            reading_status, book_id, user, club_id
+        ]);
+
+        res.json({success: 'true'});
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server error");
+    }
+});
+
+/*
+Get all books currently being read by user
+GET REQUEST - /getUserBooks/:id
+id to provide in url -> club_id
+require:Bearer token -> books of currently logged in person
+ */
+router.get("/getUserBooks/:id", authorize, async (req, res) => {
+    const user=req.user;
+
+    try {
+        const userBooks = await pool.query("SELECT * FROM user_books WHERE user_id=$1 AND reading_status='2'", [user]);
 
         res.json(userBooks.rows);
     } catch (err) {
         console.error(err.message);
+        res.status(500).send("Server error");
     }
 });
 
