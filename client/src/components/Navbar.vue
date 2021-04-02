@@ -1,5 +1,4 @@
 <template>
-
   <div class="section-top">
     <div class="logo-container">
       <div class="logo-img">
@@ -24,7 +23,9 @@
     </div>
     <div class="content-right">
       <div class="join-club">
-        <button class="button">Join a Club</button>
+        <router-link to="/dashboard/exploreclubs">
+          <button class="button">Join a Club</button>
+        </router-link>
       </div>
       <div class="notification-bell">
         <a href="#" class="notification">
