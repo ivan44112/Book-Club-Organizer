@@ -6,7 +6,6 @@
     </div>
     <div class=readingbooks-container>
       <CurrentlyReadingBook/>
-      <ThePrinceOfThorns/>
     </div>
     <div class="news-container">
       <h1 class="news-blue">News from your clubs</h1>
@@ -33,7 +32,6 @@
 
 <script>
 import CurrentlyReadingBook from "@/components/CurrentlyReadingBook";
-import ThePrinceOfThorns from "@/components/ThePrinceOfThorns";
 import WordsOfRadiance from "@/components/WordsOfRadiance";
 import Suggestion from "@/components/Suggestion";
 
@@ -42,7 +40,6 @@ export default {
   components: {
     Suggestion,
     WordsOfRadiance,
-    ThePrinceOfThorns,
     CurrentlyReadingBook
   }
 }

@@ -1,15 +1,15 @@
 <template>
 <div class="prince-container">
-  <img class="prince-image" src="../assets/book2.png">
+  <img class="prince-image" :src="volumeInfo.imageLinks.thumbnail">
   <div class="prince-title">
-    <h1 class="book-title">The prince of Thorns</h1>
+    <h1 class="book-title">{{volumeInfo.title}}</h1>
     <div class="by">by
-      <span class="kings-author">Mark Lawrence </span>
+      <span v-if="volumeInfo.authors" class="kings-author">{{volumeInfo.authors[0]}}</span>
     </div>
     <i class="icon-clubIcon">
       <span class="club-name">Dark Fantasy</span> </i>
-    <div class="pages">Pages: 357</div>
-    <div class="rating">Rating: 4.3/5</div>
+    <div class="pages">Pages: {{volumeInfo.pageCount}}</div>
+    <div class="rating">Rating: {{volumeInfo.averageRating}}/5</div>
     <div class="average">
       <span class="member-page">Average member page:</span>
       <span class="page-number">110</span>
@@ -31,7 +31,18 @@
 
 <script>
 export default {
-name: "ThePrinceOfThorns"
+  name: "ThePrinceOfThorns",
+  props: {
+    book: {
+      type: Object,
+      required: true
+    }
+  },
+  computed: {
+    volumeInfo(){
+      return this.book.volumeInfo
+    }
+  }
 }
 </script>
 
@@ -186,6 +197,10 @@ name: "ThePrinceOfThorns"
   text-align: center;
   border-radius: 8px;
   color: white;
+}
+
+.prince-image{
+  width:220px;
 }
 
 </style>

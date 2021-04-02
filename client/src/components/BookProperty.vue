@@ -1,6 +1,6 @@
 <template>
   <div class="book-property">
-    <ThePrinceOfThorns/>
+    <ThePrinceOfThorns v-if="loadState === 'success'" :book="book"/>
     <div class="navigation">
       <div class="dropdown">
         <button class="dropbtn">Actions <img class="arrow" src="../assets/arrow2.png"></button>
@@ -18,18 +18,16 @@
       <span class="last-update">Last update: 3 days ago</span>
     </div>
     <h1 class="about">About the book</h1>
-    <div class="about-content">
-      <p class="release">Release Date: <span class="date">17.03.2015.</span> </p>
-      <p class="categories">Categories: <span class="category-count">Dark Fantasy, Science Fiction, Fantasy</span> </p>
-      <p class="publisher">Publisher: <span class="publisher-name">Lorem Ipsum Publish</span> </p>
+    <div v-if="loadState === 'success'" class="about-content">
+      <p class="release">Release Date: <span class="date">{{book.volumeInfo.publishedDate}}</span> </p>
+      <p class="categories">Categories: <span v-if="book.volumeInfo.categories" class="category-count">{{book.volumeInfo.categories[0]}}</span> </p>
+      <p class="publisher">Publisher: <span class="publisher-name">{{book.volumeInfo.publisher}}</span> </p>
     </div>
     <div class="above-summary">
     </div>
     <h2 class="summary">Summary</h2>
     <div class="summary-content">
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis cursus laoreet laoreet. Pellentesque consequat sagittis nibh, et varius risus fermentum at. Vestibulum non libero justo. Donec porta rutrum est eleifend tempus. Morbi pellentesque, orci quis tempus commodo, libero lorem ultrices velit, non sollicitudin nisl ex et metus. Nulla ut mollis nisi. Praesent massa nisl, ultrices non dapibus et, imperdiet sit amet erat. Fusce convallis vehicula dapibus.</p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis cursus laoreet laoreet. Pellentesque consequat sagittis nibh, et varius risus fermentum at. Vestibulum non libero justo. Donec porta rutrum est eleifend tempus. Morbi pellentesque, orci quis tempus commodo, libero lorem ultrices velit, non sollicitudin nisl ex et metus. Nulla ut mollis nisi. Praesent massa nisl, ultrices non dapibus et, imperdiet sit amet erat. Fusce convallis vehicula dapibus.</p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis cursus laoreet laoreet. Pellentesque consequat sagittis nibh, et varius risus fermentum at. Vestibulum non libero justo. Donec porta rutrum est eleifend tempus. Morbi pellentesque, orci quis tempus commodo, libero lorem ultrices velit, non sollicitudin nisl ex et metus. Nulla ut mollis nisi. Praesent massa nisl, ultrices non dapibus et, imperdiet sit amet erat. Fusce convallis vehicula dapibus.</p>
+      <p>{{bookDescription}}</p>
     </div>
     <div class="discussion">
       Discussion
@@ -49,6 +47,7 @@ export default {
   data() {
     return {
       book: {},
+      bookDescription: "",
       loadState: ''
     }
   },
@@ -60,6 +59,8 @@ export default {
           .then(response => {
             this.book = response.data;
             this.loadState = 'success';
+            //remove unwanted tags from book description response
+            this.bookDescription = response.data.volumeInfo.description.replace(/(<([^>]+)>)/gi, "");
           })
     }
   },

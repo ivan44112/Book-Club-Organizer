@@ -1,5 +1,4 @@
 <template>
-
   <div class="section-top">
     <div class="logo-container">
       <div class="logo-img">

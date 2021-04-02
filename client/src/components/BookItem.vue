@@ -1,5 +1,5 @@
 <template>
-  <router-link v-bind:to="{ name: 'book', params: {id: book.id}}">
+  <router-link v-bind:to="{ name: 'book', params: {id: book.id}}" :key="$route.path">
     <div class="book-item">
       <div >
         <template v-if="volumeInfo.imageLinks">
@@ -38,6 +38,12 @@ export default {
     volumeInfo(){
       return this.book.volumeInfo
     }
+  },
+  watch: {
+    $route(to, from) {
+      if(to !== from) {
+        location.reload();
+    }}
   }
 }
 </script>
