@@ -8,9 +8,11 @@ const {
     loginValidation,
     userValidationResult
 } = require("../../validation/userValidation");
+
 /*
 POST REQUEST - /register
 provide:name,email,password(min 6 characters)
+returns:Bearer token
  */
 router.post("/register", registerValidation, userValidationResult, async (req, res) => {
     const {name, email, password} = req.body;
@@ -39,6 +41,7 @@ router.post("/register", registerValidation, userValidationResult, async (req, r
 /*
 POST REQUEST - /login
 provide:email,password
+returns: Bearer token
  */
 router.post("/login", loginValidation, userValidationResult, async (req, res) => {
 

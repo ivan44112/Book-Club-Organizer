@@ -7,7 +7,6 @@ Creates a new club
 POST REQUEST - /createClub
 require: Bearer token -> admin becomes currently logged in person
 provide:club_name
-returns:email,name
  */
 router.post("/createClub", authorize, async (req, res) => {
     const {name} = req.body;
@@ -19,14 +18,15 @@ router.post("/createClub", authorize, async (req, res) => {
         if (club.rows.length > 0) {
             return res.status(401).send("Club with that name already exists");
         }
-        const newClub = await pool.query("INSERT INTO clubs (club_name, club_admin) VALUES ($1,$2) RETURNING *", [name, user_id]);
+        const newClub = await pool.query("INSERT INTO clubs (club_name, club_admin) VALUES ($1,$2)", [name, user_id]);
 
-        res.json(newClub.rows[0]);
+        res.json({success: "true"});
     } catch (err) {
         console.error(err.message);
         res.status(500).send("Server error");
     }
 });
+
 /*
 Gets all clubs
 GET REQUEST - /getClubs
@@ -88,7 +88,6 @@ router.get("/countMembers/:id", async (req, res) => {
         res.status(500).send("Server error");
     }
 });
-
 
 
 module.exports = router;
