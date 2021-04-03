@@ -60,12 +60,6 @@ export default {
   },
   data() {
     return {
-      icons: [{text: 'Dashboard', icon: 'dashboardIcon', to: '/dashboard/dashboardcontent'},
-        {text: 'Clubs', icon: 'clubIcon', to: '/dashboard/clubs'},
-        {text: 'My Books', icon: 'booksIcon', to: '/dashboard/mybooks'},
-        {text: 'Messages', icon: 'messagesIcon', to: '/dashboard/messages'},
-        {text: 'Settings', icon: 'settingsIcon', to: '/dashboard/settings'},
-      ],
       books: [],
       keyword: '',
       loadState: '',

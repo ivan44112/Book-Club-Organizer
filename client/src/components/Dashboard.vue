@@ -32,7 +32,7 @@ export default {
         {text: 'Clubs', icon: 'clubIcon', to: '/dashboard/clubs'},
         {text: 'My Books', icon: 'booksIcon', to: '/dashboard/mybooks'},
         {text: 'Messages', icon: 'messagesIcon', to: '/dashboard/messages'},
-        {text: 'Settings', icon: 'settingsIcon', to: '/dashboard/settings'},
+        {text: 'Create Club', icon: 'penIcon', to: '/dashboard/createClub'},
       ]
     }
   }

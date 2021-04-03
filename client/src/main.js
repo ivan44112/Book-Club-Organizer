@@ -15,6 +15,7 @@ import DashboardContent from "@/components/DashboardContent";
 import {Auth} from "@/services/userServices";
 import BookProperty from "@/components/BookProperty";
 import ExploreClubs from "./components/ExploreClubs";
+import CreateClub from "./components/CreateClub";
 
 
 Object.keys(rules).forEach(rule => {
@@ -45,7 +46,8 @@ const router = new VueRouter({
                 {path: 'messages', component: Messages},
                 {path: 'settings', component: Settings},
                 {path: 'book/:id', name: "book", component:BookProperty},
-                {path: 'exploreclubs', component: ExploreClubs}
+                {path: 'exploreclubs', component: ExploreClubs},
+                {path: 'createclub', component: CreateClub},
             ]
         },
         {
