@@ -5,15 +5,15 @@
       <div class="dropdown">
         <button class="dropbtn">Actions <img class="arrow" src="../assets/arrow2.png"></button>
         <div class="dropdown-content">
-          <a href="#">Mark as read</a>
-          <a href="#">Add to favorites</a>
-          <a href="#">Submit</a>
-          <a class="remove" href="#">Remove</a>
+          <a href="#">Mark as Read</a>
+          <a href="#">Add to Favorites</a>
+          <a href="#">Add to Wishlist</a>
+          <!-- <a class="remove" href="#">Remove</a> -->
         </div>
       </div>
     </div>
     <div class="dropdown-after">
-      <div class="number">238</div>
+      <input class="number" type="number" value="236"/>
       <button class="update" type="submit" value="update">Update Page</button>
       <span class="last-update">Last update: 3 days ago</span>
     </div>
@@ -141,15 +141,18 @@ export default {
 }
 
 .number {
-  width: 150px;
+  width: 120px;
   color: #0072D5;
+  border:none;
   border-bottom: 3px solid #0072D5;
-  font: normal normal bold 26px/30px Arial
+  font: normal normal bold 26px/30px Arial;
+  outline:none;
+  text-align: center;
 }
 
 .update {
   border: none;
-  width: 138px;
+  width: 130px;
   height: 35px;
   background: #0072D5;
   border-radius: 6px;
@@ -157,7 +160,7 @@ export default {
   cursor: pointer;
   outline: none;
   font-weight: bold;
-  margin-left: 50px;
+  margin-left: 30px;
 }
 
 .last-update {
