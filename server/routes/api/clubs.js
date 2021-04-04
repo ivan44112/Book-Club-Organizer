@@ -5,12 +5,12 @@ const authorize = require("../../middleware/authorize");
 /*
 Creates a new club
 POST REQUEST - /createClub
-require: Bearer token -> admin becomes currently logged in person
+require: Bearer token -> admin becomes currently logged in user
 provide:club_name
  */
 router.post("/createClub", authorize, async (req, res) => {
-    const {name} = req.body;
     const user_id = req.user;
+    const {name, description, category} = req.body;
 
     try {
         const club = await pool.query("SELECT * FROM clubs WHERE club_name = $1", [name]);
@@ -18,7 +18,8 @@ router.post("/createClub", authorize, async (req, res) => {
         if (club.rows.length > 0) {
             return res.status(401).send("Club with that name already exists");
         }
-        await pool.query("INSERT INTO clubs (club_name, club_admin) VALUES ($1,$2)", [name, user_id]);
+        await pool.query("INSERT INTO clubs (club_name, admin, description, category) VALUES ($1,$2,$3,$4)", [
+            name, user_id, description,category]);
 
         res.json({success: "true"});
     } catch (err) {
@@ -47,7 +48,7 @@ router.get("/getClubs", async (req, res) => {
 Adds new member to club
 POST REQUEST - /addMember/:id
 id to provide in url -> club id
-require: Bearer token -> new member becomes currently logged in person
+require: Bearer token -> new member becomes currently logged in user
  */
 router.post("/addMember/:id", authorize, async (req, res) => {
     const club_id = req.params.id;

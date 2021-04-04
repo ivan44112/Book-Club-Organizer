@@ -6,9 +6,10 @@ CREATE TABLE users
 (
     user_id       uuid PRIMARY KEY DEFAULT
                                        uuid_generate_v4(),
-    user_name     VARCHAR(255) NOT NULL,
-    user_email    VARCHAR(255) NOT NULL,
-    user_password VARCHAR(255) NOT NULL
+    name     VARCHAR(255) NOT NULL,
+    email    VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('cest', current_timestamp)
 )
 
 CREATE TABLE clubs(
@@ -18,7 +19,7 @@ CREATE TABLE clubs(
     club_admin   VARCHAR(255) NOT NULL,
     current_book VARCHAR(255) SET DEFAULT NULL,
     books_Read   INT SET DEFAULT 0,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP;
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('cest', current_timestamp);
 )
 
 CREATE TABLE club_members
@@ -40,7 +41,7 @@ CREATE TABLE club_books
     book_id VARCHAR(20),
     club_id uuid,
     reading_status boolean DEFAULT false,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('cest', current_timestamp),
     FOREIGN KEY (club_id) REFERENCES clubs(club_id) ON DELETE CASCADE
 )
 
@@ -50,7 +51,7 @@ CREATE TABLE club_books_comments
     club_books_id uuid,
     user_id uuid,
     comment VARCHAR(255),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('cest', current_timestamp),
     FOREIGN KEY (club_books_id) REFERENCES clubs_books(club_books_id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 )
@@ -71,7 +72,7 @@ CREATE TABLE user_books
     reading_status int default 1,
     favorite_status boolean default false,
     current_page int default 0,
-    date_started TIMESTAMP WITH TIME ZONE DEFAULT timezone('cet', current_timestamp),
+    date_started TIMESTAMP WITH TIME ZONE DEFAULT timezone('cest', current_timestamp),
     date_finished TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (club_id) REFERENCES clubs(club_id) ON DELETE CASCADE
