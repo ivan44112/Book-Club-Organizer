@@ -18,7 +18,7 @@ router.post("/createClub", authorize, async (req, res) => {
         if (club.rows.length > 0) {
             return res.status(401).send("Club with that name already exists");
         }
-        const newClub = await pool.query("INSERT INTO clubs (club_name, club_admin) VALUES ($1,$2)", [name, user_id]);
+        await pool.query("INSERT INTO clubs (club_name, club_admin) VALUES ($1,$2)", [name, user_id]);
 
         res.json({success: "true"});
     } catch (err) {
@@ -48,17 +48,22 @@ Adds new member to club
 POST REQUEST - /addMember/:id
 id to provide in url -> club id
 require: Bearer token -> new member becomes currently logged in person
-todo -> check if club exists
  */
 router.post("/addMember/:id", authorize, async (req, res) => {
     const club_id = req.params.id;
     const user_id = req.user;
 
     try {
-        const club = await pool.query("SELECT * FROM club_members WHERE club_id = $1 AND user_id=$2", [club_id, user_id]);
+        const club = await pool.query("SELECT * FROM clubs WHERE club_id=$1", [club_id]);
 
-        if (club.rows.length > 0) {
-            return res.status(401).send("Member already exists in that club");
+        if (club.rows.length === 0) {
+            return res.status(401).send("Club doesn't exist!");
+        }
+
+        const clubmember = await pool.query("SELECT * FROM club_members WHERE club_id = $1 AND user_id=$2", [club_id, user_id]);
+
+        if (clubmember.rows.length > 0) {
+            return res.status(401).send("Member already exists in that club!");
         }
         await pool.query("INSERT INTO club_members (club_id, user_id) VALUES ($1,$2) RETURNING *", [club_id, user_id]);
 
@@ -88,6 +93,5 @@ router.get("/countMembers/:id", async (req, res) => {
         res.status(500).send("Server error");
     }
 });
-
 
 module.exports = router;

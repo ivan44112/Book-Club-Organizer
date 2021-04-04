@@ -61,7 +61,7 @@ GET REQUEST - /getFinishedBooks/:id
 id to provide in url -> club id
 provide:status(false/true)
  */
-router.get("/getFinishedBooks/:id", async (req, res) => {
+router.get("/getClubBookStatus/:id", async (req, res) => {
     const club_id = req.params.id;
     const {status} = req.body;
 
