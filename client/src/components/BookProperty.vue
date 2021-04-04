@@ -29,19 +29,20 @@
     <div class="summary-content">
       <p>{{bookDescription}}</p>
     </div>
-    <div class="discussion">
-      Discussion
-    </div>
+    <h1 class="discussion-title">Discussion</h1>
+    <BookComment/>
   </div>
 </template>
 
 <script>
 import ThePrinceOfThorns from "@/components/ThePrinceOfThorns";
 import axios from "axios";
+import BookComment from "./BookComment";
 
 export default {
   name: "BookProperty",
   components: {
+    BookComment,
     ThePrinceOfThorns,
   },
   data() {
@@ -235,8 +236,7 @@ export default {
   font: normal normal  15px/22px Arial;
 
 }
-
-.discussion{
+.discussion-title{
   padding-top: 33px;
   display: flex;
   border: none;
@@ -248,6 +248,5 @@ export default {
   left: 190px;
   background-color: #f7f9fd;
 }
-
 </style>
 
