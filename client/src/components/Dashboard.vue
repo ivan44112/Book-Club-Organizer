@@ -31,7 +31,6 @@ export default {
       icons: [{text: 'Dashboard', icon: 'dashboardIcon', to: '/dashboard/dashboardcontent'},
         {text: 'Clubs', icon: 'clubIcon', to: '/dashboard/clubs'},
         {text: 'My Books', icon: 'booksIcon', to: '/dashboard/mybooks'},
-        {text: 'Messages', icon: 'messagesIcon', to: '/dashboard/messages'},
         {text: 'Create Club', icon: 'penIcon', to: '/dashboard/createClub'},
       ]
     }

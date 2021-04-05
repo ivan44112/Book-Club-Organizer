@@ -27,16 +27,18 @@
           <button class="button">Join a Club</button>
         </router-link>
       </div>
+      <!--
       <div class="notification-bell">
         <a href="#" class="notification">
           <img src="../assets/bell.svg">
           <span class="bell">3</span>
         </a>
       </div>
+      -->
       <div class="profile-container" v-on:click="dropdownIsOpen = !dropdownIsOpen">
         <div class="profile-name">
           <img class="profile-img" src="../assets/avatar.png"/>
-          <span class="profile-text">John Doe</span>
+          <span class="profile-text">{{ user.name }}</span>
           <img class="arrow" src="../assets/arrow.svg" v-bind:class="{rotate: dropdownIsOpen}">
         </div>
         <div class="nav-dropdown" v-bind:class="{toggled: dropdownIsOpen}">
@@ -64,7 +66,8 @@ export default {
       keyword: '',
       loadState: '',
       dropdownIsOpen:false,
-      searchClicked: false
+      searchClicked: false,
+      user:{}
     }
   },
   methods: {
@@ -83,11 +86,27 @@ export default {
       await Auth.logout();
       this.$router.push('/login');
     },
+
     clearSearch(){
       this.keyword = "";
       this.searchClicked = false;
+    },
+
+    async getUser(){
+      let user = JSON.parse(localStorage.getItem("user"))
+      try{
+        let res = await axios.get('http://localhost:5000/auth/currentUser', {
+          headers: { "Authorization": `Bearer ${user.token}`}
+        })
+        this.user = res.data;
+      } catch (err){
+        console.log(err)
+      }
     }
   },
+  mounted(){
+    this.getUser()
+  }
 }
 </script>
 

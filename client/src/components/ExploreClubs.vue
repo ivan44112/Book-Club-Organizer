@@ -5,31 +5,47 @@
     </div>
     <div class="input-container">
       <form>
-        <input class="search-input" type="text"  placeholder="Search by name">
+        <input v-model="keyword" class="search-input" type="text"  placeholder="Search by name">
       </form>
-      <multiselect v-model="value" :options="options"></multiselect>
     </div>
     <div class="card-container">
-      <ExploreClubCard/>
-      <ExploreClubCard/>
-      <ExploreClubCard/>
-      <ExploreClubCard/>
+      <ExploreClubCard v-for="club in searchedClubs" v-bind:key="club.club_id" :club="club"/>
     </div>
   </div>
 </template>
 
 <script>
-import Multiselect from 'vue-multiselect'
 import ExploreClubCard from "./ExploreClubCard";
+import axios from "axios";
 
 export default {
   name: "ExploreClubs",
-  components: {ExploreClubCard, Multiselect},
+  components: {ExploreClubCard},
   data() {
     return{
-      value:null,
-      options: ["Adventure", "Horror", "Biography", "Action", "Fantasy"]
+      allClubs:[],
+      keyword:""
     }
+  },
+  methods:{
+    async getAllClubs(){
+      try{
+        let res = await axios.get('http://localhost:5000/clubs/getClubs')
+        this.allClubs = res.data;
+      } catch (err){
+        console.log(err)
+      }
+    }
+  },
+  computed: {
+    searchedClubs() {
+      return this.allClubs.filter(club => {
+        return club.club_name.toLowerCase().includes(this.keyword.toLowerCase())
+      })
+    }
+  },
+  mounted() {
+    this.getAllClubs();
   }
 }
 </script>

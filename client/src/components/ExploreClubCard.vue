@@ -1,19 +1,57 @@
 <template>
   <div class="club-card-container">
     <img class="club-img" src="../assets/club2.png">
-    <p class="club-title">Dark Fantasy</p>
+    <p class="club-title">{{club.club_name}}</p>
     <div class="card-details">
       <p>Currently Reading:</p>
-      <p class="currently-reading-title">The Prince of Thorns</p>
-      <p>Members: 18</p>
-      <p>Books read: 5</p>
+      <p v-if="currentlyReadingTitle" class="currently-reading-title">{{currentlyReadingTitle}}</p>
+      <p v-on:click="getCurrentlyReadingBook">Members: {{clubMemberCount}}</p>
+      <p>Books read: {{club.books_read}}</p>
+      <p class="categories">Category: {{club.category}}</p>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
-  name: "ExploreClubCard"
+  name: "ExploreClubCard",
+  data(){
+    return{
+      currentlyReadingTitle:"",
+      clubMemberCount:0
+    }
+  },
+  props: {
+    club: {
+      type: Object
+    },
+  },
+  methods:{
+    getCurrentlyReadingBook() {
+      if(this.club.current_book){
+        axios
+            .get(`https://www.googleapis.com/books/v1/volumes/${this.club.current_book}`)
+            .then(response => {
+              this.currentlyReadingTitle = response.data.volumeInfo.title;
+            })
+      }else{
+        this.currentlyReadingTitle = ""
+      }
+    },
+    getClubMemberCount() {
+      axios
+          .get(`http://localhost:5000/clubs/countMembers/${this.club.club_id}`)
+          .then(response => {
+            this.clubMemberCount = response.data.count;
+          })
+    }
+  },
+  mounted() {
+    this.getCurrentlyReadingBook()
+    this.getClubMemberCount();
+  }
 }
 </script>
 
@@ -52,5 +90,8 @@ export default {
     color:#0072D5;
     font-weight: bold;
     font-size: 16px !important;
+  }
+  .categories{
+    text-align: left;
   }
 </style>

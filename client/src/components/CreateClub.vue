@@ -34,6 +34,8 @@
 <script>
 
 
+import axios from "axios";
+
 export default {
   name: "CreateClub",
   components: {},
@@ -45,15 +47,40 @@ export default {
         clubDescription:"",
         clubCategories:[],
         clubCover:null
-      }
+      },
+      clubCreated:false
     }
   },
   methods:{
     onFileSelected(event){
       this.formData.clubCover = event.target.files[0]
     },
-    createClub(){
-      console.log(this.formData)
+    async createClub(){
+      let data = {
+        name: this.formData.clubName,
+        description: this.formData.clubDescription,
+        category: this.formData.clubCategories
+      }
+      let user = JSON.parse(localStorage.getItem("user"))
+      try{
+          await axios.post('http://localhost:5000/clubs/createClub', data, {
+          headers: { "Authorization": `Bearer ${user.token}`}
+        })
+        this.clubCreated = true;
+      } catch (err){
+        console.log(err)
+      }
+    },
+    async getUser(){
+      let user = JSON.parse(localStorage.getItem("user"))
+      try{
+        let res = await axios.get('http://localhost:5000/auth/currentUser', {
+          headers: { "Authorization": `Bearer ${user.token}`}
+        })
+        this.user = res.data;
+      } catch (err){
+        console.log(err)
+      }
     }
   }
 }
