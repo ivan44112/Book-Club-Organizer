@@ -1,46 +1,92 @@
 <template>
-  <div class="club1-container">
-    <img class="club1-image" src="../assets/club1.png">
-    <div class="club1-title">
-      <h1 class="club-name">The Flying Readers</h1>
-      <div class="owner">Owner:
-        <span class="owner-name">Ana Smith
-          <img class="ana-image" src="../assets/anasmith.png">
-        </span>
-      </div>
-      <div class="currently-reading">Currently Reading:
-        <span class="book-name">The way of Kings</span>
-        <span class="read-percent">(54%)</span>
-      </div>
-      <div class="upcoming-book">Upcoming Book:
-        <span class="upcoming-name">Words of Radiance</span>
-      </div>
-      <div class="members">Members:
-        <span class="members-count">32</span>
-      </div>
-      <div class="books-read">Books read:
-        <span class="books-count">18</span>
-      </div>
-      <div class="more">
-        <a class="more-btn" href="#">More ></a>
+  <router-link v-bind:to="{ name: 'club', params: {id: club.club_id}}" :key="$route.path">
+    <div class="club1-container">
+      <img class="club1-image" src="../assets/club1.png">
+      <div class="club1-title">
+        <h1 class="club-name">{{club.club_name}}</h1>
+        <div class="owner">Owner:
+          <span class="owner-name">Ana Smith
+            <img class="ana-image" src="../assets/anasmith.png">
+          </span>
+        </div>
+        <div class="currently-reading">Currently Reading:
+          <span class="book-name">{{currentlyReadingTitle ? currentlyReadingTitle : "None" }}</span>
+          <!-- <span class="read-percent">(54%)</span> -->
+        </div>
+        <div class="upcoming-book">Upcoming Book:
+          <span class="upcoming-name">{{ upcomingTitle }}</span>
+        </div>
+        <div class="members">Members:
+          <span class="members-count">{{clubMemberCount}}</span>
+        </div>
+        <div class="books-read">Books read:
+          <span class="books-count">{{club.books_read}}</span>
+        </div>
+        <!--
+        <div class="more">
+          <a class="more-btn" href="#">More ></a>
+        </div>
+        -->
       </div>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
-  name: "ClubCard"
+  name: "ClubCard",
+  data(){
+    return{
+      currentlyReadingTitle:"",
+      upcomingTitle:"Not decided",
+      clubMemberCount:0
+    }
+  },
+  props: {
+    club: {
+      type: Object
+    },
+  },
+  methods:{
+    getCurrentlyReadingBook() {
+      if(this.club.current_book){
+        axios
+            .get(`https://www.googleapis.com/books/v1/volumes/${this.club.current_book}`)
+            .then(response => {
+              this.currentlyReadingTitle = response.data.volumeInfo.title;
+            })
+      }else{
+        this.currentlyReadingTitle = ""
+      }
+    },
+    getClubMemberCount() {
+      axios
+          .get(`http://localhost:5000/clubs/countMembers/${this.club.club_id}`)
+          .then(response => {
+            this.clubMemberCount = response.data.count;
+          })
+    }
+  },
+  mounted() {
+    this.getCurrentlyReadingBook()
+    this.getClubMemberCount();
+  }
 }
 </script>
 
 <style scoped>
+a{
+  text-decoration: none;
+}
 .club1-container {
   width: 100%;
   display: flex;
   padding-top: 25px;
   padding-left: 30px;
   text-align: left;
+  cursor: pointer;
 }
 
 .club1-title {
@@ -56,6 +102,7 @@ export default {
   font: normal normal bold 24px/32px Arial;
   color: #0072D5;
   cursor: pointer;
+  text-decoration: none !important;
 }
 
 .owner {

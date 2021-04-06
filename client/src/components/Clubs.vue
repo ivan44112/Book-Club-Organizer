@@ -4,18 +4,37 @@
       <h1 class="title-blue">My Book Clubs</h1>
     </div>
     <div>
-      <ClubCard/>
+      <ClubCard v-for="club in allClubs" v-bind:key="club.club_id" :club="club"/>
     </div>
   </div>
 </template>
 
 <script>
 import ClubCard from "./ClubCard";
+import axios from "axios";
 export default {
   name: "Clubs",
   components: {
     ClubCard
 
+  },
+  data(){
+    return{
+      allClubs:[]
+    }
+  },
+  methods:{
+    async getAllClubs(){
+      try{
+        let res = await axios.get('http://localhost:5000/clubs/getClubs')
+        this.allClubs = res.data;
+      } catch (err){
+        console.log(err)
+      }
+    }
+  },
+  mounted() {
+    this.getAllClubs();
   }
 }
 </script>
