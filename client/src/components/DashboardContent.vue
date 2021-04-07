@@ -16,7 +16,7 @@
       <i class="icon-clubIcon">
         <span class="club-name">The Flying Readers</span> </i>
     </div>
-    <WordsOfRadiance/>
+    <WaitingBook/>
     <div class="club-two">
       <i class="icon-clubIcon">
         <span class="clubtwo-name">Dark Fantasy</span>
@@ -32,14 +32,14 @@
 
 <script>
 import CurrentlyReadingBook from "@/components/CurrentlyReadingBook";
-import WordsOfRadiance from "@/components/WordsOfRadiance";
 import Suggestion from "@/components/Suggestion";
+import WaitingBook from "./WaitingBook";
 
 export default {
   name: "DashboardContent",
   components: {
+    WaitingBook,
     Suggestion,
-    WordsOfRadiance,
     CurrentlyReadingBook
   }
 }

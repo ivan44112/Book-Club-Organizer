@@ -24,7 +24,7 @@
 
 <script>
 export default {
-  name: "WordsOfRadiance"
+  name: "WaitingBook"
 }
 </script>
 

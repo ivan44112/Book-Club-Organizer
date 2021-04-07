@@ -5,9 +5,10 @@
     <h1 class="book-title">Suggestion Phase</h1>
     <div class="suggestion-number">3 books suggested
     </div>
+    <span class="alert">Suggest one book for the next read</span>
     <span class="alert">Your book will stay hidden until voting phase starts</span>
     <div class="suggest">
-      <button class="suggest-button" type="submit" value="Submit">Suggest a Book</button>
+      <button class="suggest-button" type="submit">Start voting phase</button>
     </div>
 </div>
 
@@ -39,6 +40,7 @@ name: "Suggestion"
   padding-left: 50px;
   border: 1px solid #dae0e5;
   border-radius: 0 8px 8px 0;
+  font-size: 14px;
 
 }
 
@@ -63,13 +65,14 @@ name: "Suggestion"
 
 .suggest-button {
   border: none;
-  width: 210px;
-  height: 45px;
+  width: 160px;
+  height: 42px;
   background: #0072D5;
-  border-radius: 6px;
+  border-radius: 5px;
   color: #FFFFFF;
   cursor: pointer;
   outline: none;
   font-weight: bold;
+  margin-top:20px;
 }
 </style>
