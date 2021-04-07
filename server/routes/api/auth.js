@@ -82,4 +82,22 @@ router.get("/currentUser", authorize, async (req, res) => {
     }
 });
 
+/*
+GET REQUEST - /currentUserById/:id
+id to provide in url -> user id
+returns:name
+ */
+router.get("/currentUserById/:id", async (req, res) => {
+    const user_id = req.params.id;
+
+    try {
+        const user = await pool.query("SELECT name FROM users WHERE user_id=$1", [user_id]);
+
+        res.json(user.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server error");
+    }
+});
+
 module.exports = router;

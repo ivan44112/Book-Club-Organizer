@@ -80,15 +80,15 @@ Gets all clubs the user is in
 GET REQUEST - /getUserClubs/
 require: Bearer token -> gets clubs of currently logged in user
  */
-router.get("/getUserClubs", authorize, async(req, res) =>{
+router.get("/getUserClubs", authorize, async (req, res) => {
     const user_id = req.user;
 
-    try{
+    try {
         const userClubs = await pool.query("SELECT * FROM clubs AS c LEFT JOIN club_members AS cm ON c.club_id = cm.club_id  WHERE cm.user_id = $1", [user_id]);
 
         res.json(userClubs.rows);
-    }catch(err){
-       console.error(err.message);
+    } catch (err) {
+        console.error(err.message);
         res.status(500).send("Server error");
     }
 });
