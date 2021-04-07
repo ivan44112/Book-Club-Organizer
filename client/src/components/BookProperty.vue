@@ -8,6 +8,11 @@
           <a href="#">Mark as Read</a>
           <a href="#">Add to Favorites</a>
           <a href="#">Add to Wishlist</a>
+          <a class="suggest-btn" href="#">Suggest Book</a>
+          <div class="dropdown-right">
+            <a href="#">The Flying Readers</a>
+            <a href="#">Dark Fantasy</a>
+          </div>
           <!-- <a class="remove" href="#">Remove</a> -->
         </div>
       </div>
@@ -85,7 +90,7 @@ export default {
 .dropbtn {
   background-color: white;
   color: #0072D5;
-  padding: 16px;
+  padding: 10px;
   font: normal normal bold 16px Arial;
   cursor: pointer;
   border: 1px solid;
@@ -97,6 +102,27 @@ export default {
   position: relative;
   display: inline-block;
 
+}
+.dropdown-right{
+  position: absolute;
+  left:160px;
+  top:125px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  display: flex;
+  background: white;
+  flex-direction: column;
+  white-space:nowrap;
+  visibility: hidden;
+}
+.dropdown-right:hover{
+  visibility: visible;
+}
+
+.suggest-btn:hover + .dropdown-right{
+  visibility: visible;
+}
+.dropdown-right a{
+  padding:5px;
 }
 
 .arrow {
