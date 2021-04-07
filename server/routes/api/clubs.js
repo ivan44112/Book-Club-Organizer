@@ -19,7 +19,7 @@ router.post("/createClub", authorize, async (req, res) => {
             return res.status(401).send("Club with that name already exists");
         }
         await pool.query("INSERT INTO clubs (club_name, admin, description, category) VALUES ($1,$2,$3,$4)", [
-            name, user_id, description,category]);
+            name, user_id, description, category]);
 
         res.json({success: "true"});
     } catch (err) {
@@ -71,6 +71,24 @@ router.post("/addMember/:id", authorize, async (req, res) => {
         res.json({status: 'true'});
     } catch (err) {
         console.error(err.message);
+        res.status(500).send("Server error");
+    }
+});
+
+/*
+Gets all clubs the user is in
+GET REQUEST - /getUserClubs/
+require: Bearer token -> gets clubs of currently logged in user
+ */
+router.get("/getUserClubs", authorize, async(req, res) =>{
+    const user_id = req.user;
+
+    try{
+        const userClubs = await pool.query("SELECT * FROM clubs AS c LEFT JOIN club_members AS cm ON c.club_id = cm.club_id  WHERE cm.user_id = $1", [user_id]);
+
+        res.json(userClubs.rows);
+    }catch(err){
+       console.error(err.message);
         res.status(500).send("Server error");
     }
 });
