@@ -1,15 +1,17 @@
 <template>
-  <div class="club-card-container">
-    <img class="club-img" src="../assets/club2.png">
-    <p class="club-title">{{club.club_name}}</p>
-    <div class="card-details">
-      <p>Currently Reading:</p>
-      <p v-if="currentlyReadingTitle" class="currently-reading-title">{{currentlyReadingTitle}}</p>
-      <p v-on:click="getCurrentlyReadingBook">Members: {{clubMemberCount}}</p>
-      <p>Books read: {{club.books_read}}</p>
-      <p class="categories">Category: {{club.category}}</p>
+  <router-link v-bind:to="{ name: 'club', params: {id: club.club_id}}" :key="$route.path">
+    <div class="club-card-container">
+      <img class="club-img" src="../assets/club2.png">
+      <p class="club-title">{{club.club_name}}</p>
+      <div class="card-details">
+        <p>Currently Reading:</p>
+        <p v-if="currentlyReadingTitle" class="currently-reading-title">{{currentlyReadingTitle}}</p>
+        <p v-on:click="getCurrentlyReadingBook">Members: {{clubMemberCount}}</p>
+        <p>Books read: {{club.books_read}}</p>
+        <p class="categories">Category: {{club.category}}</p>
+      </div>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script>
@@ -56,6 +58,12 @@ export default {
 </script>
 
 <style scoped>
+  a{
+    text-decoration: none;
+  }
+  p{
+    color: #414141;
+  }
   .club-card-container{
     width: 250px;
     margin: 10px;

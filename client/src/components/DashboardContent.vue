@@ -1,16 +1,17 @@
 <template>
-
   <div class="content-middle">
     <div class="title-container">
       <h1 class="title-blue">Currently Reading Books</h1>
     </div>
     <div class=readingbooks-container>
-      <CurrentlyReadingBook/>
+      <CurrentlyReadingBook v-for="club in userClubs" v-bind:key="club.club_id" :club="club"/>
     </div>
+    <!--
     <div class="news-container">
       <h1 class="news-blue">News from your clubs</h1>
     </div>
     <div class="no-news">There are currently no news</div>
+    -->
     <div class="upcoming-books">Upcoming Books</div>
     <div class="club">
       <i class="icon-clubIcon">
@@ -23,10 +24,7 @@
       </i>
     </div>
     <Suggestion/>
-
   </div>
-
-
 </template>
 
 
@@ -34,6 +32,7 @@
 import CurrentlyReadingBook from "@/components/CurrentlyReadingBook";
 import Suggestion from "@/components/Suggestion";
 import WaitingBook from "./WaitingBook";
+import axios from "axios";
 
 export default {
   name: "DashboardContent",
@@ -41,6 +40,28 @@ export default {
     WaitingBook,
     Suggestion,
     CurrentlyReadingBook
+  },
+  data(){
+    return{
+      userClubs:[]
+    }
+  },
+  methods:{
+    async getUserClubs(){
+      let user = JSON.parse(localStorage.getItem("user"))
+      try{
+        let res = await axios.get('http://localhost:5000/clubs/getUserClubs', {
+          headers: { "Authorization": `Bearer ${user.token}`}
+        })
+        this.userClubs = res.data;
+        console.log(res.data)
+      } catch (err){
+        console.log(err)
+      }
+    },
+  },
+  mounted() {
+    this.getUserClubs();
   }
 }
 
@@ -48,12 +69,8 @@ export default {
 </script>
 
 <style scoped>
-
-
 .content-middle {
   width: calc(100% - 190px);
-
-
 }
 
 .title-container {
@@ -105,6 +122,7 @@ export default {
 
 .upcoming-books {
   display: flex;
+  margin-top:25px;
   padding-top: 25px;
   background-color: #f7f9fd;
   border: none;

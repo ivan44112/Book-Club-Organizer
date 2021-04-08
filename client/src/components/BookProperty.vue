@@ -10,8 +10,7 @@
           <a href="#">Add to Wishlist</a>
           <a class="suggest-btn" href="#">Suggest Book</a>
           <div class="dropdown-right">
-            <a href="#">The Flying Readers</a>
-            <a href="#">Dark Fantasy</a>
+            <a v-on:click="suggestBook(club.club_id)" v-for="club in userClubs" v-bind:key="club.club_id" :value="club.club_id">{{ club.club_name }}</a>
           </div>
           <!-- <a class="remove" href="#">Remove</a> -->
         </div>
@@ -54,7 +53,8 @@ export default {
     return {
       book: {},
       bookDescription: "",
-      loadState: ''
+      loadState: '',
+      userClubs:[]
     }
   },
   methods:{
@@ -68,10 +68,51 @@ export default {
             //remove unwanted tags from book description response
             this.bookDescription = response.data.volumeInfo.description.replace(/(<([^>]+)>)/gi, "");
           })
+    },
+    async getUserClubs(){
+      let user = JSON.parse(localStorage.getItem("user"))
+      try{
+        let res = await axios.get('http://localhost:5000/clubs/getUserClubs', {
+          headers: { "Authorization": `Bearer ${user.token}`}
+        })
+        console.log(res.data)
+        this.userClubs = res.data;
+      } catch (err){
+        console.log(err)
+      }
+    },
+    async getAllSuggestedBooks(){
+      try{
+        let res = await axios.get(`http://localhost:5000/bookSuggestions/getBooks/26ddbae0-f2ee-440e-9be2-bb7946ab86fd`)
+        console.log(res.data)
+      } catch (err){
+        console.log(err)
+      }
+    },
+    async suggestBook(clubId){
+      let user = JSON.parse(localStorage.getItem("user"))
+      let config = {
+        headers: {
+          "Authorization": `Bearer ${user.token}`
+        }
+      };
+      let body = {
+        "book_id":this.$route.params.id
+      }
+      try{
+        let res = await axios.post(`http://localhost:5000/bookSuggestions/addBook/${clubId}`,body,config)
+        if(res.data){
+          alert("you successfully suggested this book")
+        }
+      } catch (err){
+        alert("you already suggested a book")
+      }
     }
   },
    mounted() {
-    this.getBookData()
+    this.getBookData();
+    this.getUserClubs();
+    this.getAllSuggestedBooks()
   }
 }
 </script>
@@ -122,7 +163,8 @@ export default {
   visibility: visible;
 }
 .dropdown-right a{
-  padding:5px;
+  cursor: pointer;
+  min-width:120px;
 }
 
 .arrow {

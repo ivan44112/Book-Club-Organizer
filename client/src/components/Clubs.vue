@@ -4,7 +4,7 @@
       <h1 class="title-blue">My Book Clubs</h1>
     </div>
     <div>
-      <ClubCard v-for="club in allClubs" v-bind:key="club.club_id" :club="club"/>
+      <ClubCard v-for="club in userClubs" v-bind:key="club.club_id" :club="club"/>
     </div>
   </div>
 </template>
@@ -20,21 +20,24 @@ export default {
   },
   data(){
     return{
-      allClubs:[]
+      userClubs:[]
     }
   },
   methods:{
-    async getAllClubs(){
+    async getUserClubs(){
+      let user = JSON.parse(localStorage.getItem("user"))
       try{
-        let res = await axios.get('http://localhost:5000/clubs/getClubs')
-        this.allClubs = res.data;
+        let res = await axios.get('http://localhost:5000/clubs/getUserClubs', {
+          headers: { "Authorization": `Bearer ${user.token}`}
+        })
+        this.userClubs = res.data;
       } catch (err){
         console.log(err)
       }
     }
   },
   mounted() {
-    this.getAllClubs();
+    this.getUserClubs();
   }
 }
 </script>

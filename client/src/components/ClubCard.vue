@@ -5,8 +5,8 @@
       <div class="club1-title">
         <h1 class="club-name">{{club.club_name}}</h1>
         <div class="owner">Owner:
-          <span class="owner-name">Ana Smith
-            <img class="ana-image" src="../assets/anasmith.png">
+          <span class="owner-name">{{clubAdmin}}
+            <!--<img class="ana-image" src="../assets/anasmith.png"> -->
           </span>
         </div>
         <div class="currently-reading">Currently Reading:
@@ -41,7 +41,8 @@ export default {
     return{
       currentlyReadingTitle:"",
       upcomingTitle:"Not decided",
-      clubMemberCount:0
+      clubMemberCount:0,
+      clubAdmin:""
     }
   },
   props: {
@@ -67,11 +68,19 @@ export default {
           .then(response => {
             this.clubMemberCount = response.data.count;
           })
+    },
+    getClubAdmin(){
+      axios
+          .get(`http://localhost:5000/auth/currentUserById/${this.club.admin}`)
+          .then(response => {
+            this.clubAdmin = response.data.name;
+          })
     }
   },
   mounted() {
     this.getCurrentlyReadingBook()
     this.getClubMemberCount();
+    this.getClubAdmin();
   }
 }
 </script>

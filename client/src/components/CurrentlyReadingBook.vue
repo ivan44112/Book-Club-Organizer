@@ -10,7 +10,7 @@
         <span class="kings-author">Brandon Sanderson </span>
       </div>
       <i class="icon-clubIcon">
-        <span class="club-name">The Flying Readers</span> </i>
+        <span class="club-name">{{club.club_name}}</span> </i>
       <div class="pages">Pages: 1040</div>
       <div class="rating">Rating: 4.7/5</div>
       <div class="average">
@@ -33,8 +33,26 @@
 </template>
 
 <script>
+
+
 export default {
-  name: "CurrentlyReadingBook"
+  name: "CurrentlyReadingBook",
+  data(){
+    return{
+
+    }
+  },
+  props: {
+    club: {
+      type: Object
+    },
+  },
+  methods:{
+
+  },
+  mounted() {
+
+  }
 }
 </script>
 
