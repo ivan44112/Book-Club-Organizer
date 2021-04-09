@@ -157,15 +157,13 @@ router.patch("/pageNumber/:id", authorize, async (req, res) => {
 
 /*
 Change favorite status for user
-PATCH REQUEST - /updateBookPage/:id
-id to provide in url -> club_id
+PATCH REQUEST - /updateBookPage
 require:Bearer token -> books of currently logged in user
 provide:book_id, favorite_status
-todo->remove status from body?
+todo->remove status from body, check status?
  */
-router.patch("/favoriteStatus/:id", authorize, async (req, res) => {
+router.patch("/favoriteStatus", authorize, async (req, res) => {
     const user = req.user;
-    const club_id = req.params.id;
     const {book_id, favorite_status} = req.body;
 
     try {
@@ -173,8 +171,8 @@ router.patch("/favoriteStatus/:id", authorize, async (req, res) => {
         if (userBook.rows.length === 0) {
             return res.status(401).send("User doesn't have that book added");
         }
-        await pool.query("UPDATE user_books SET favorite_status=$1, date_last_updated=timezone('cest'::text, CURRENT_TIMESTAMP) WHERE book_id=$2 AND user_id=$3 AND club_id=$4", [
-            favorite_status, book_id, user, club_id
+        await pool.query("UPDATE user_books SET favorite_status=$1, date_last_updated=timezone('cest'::text, CURRENT_TIMESTAMP) WHERE book_id=$2 AND user_id=$3", [
+            favorite_status, book_id, user
         ]);
 
         res.json({success: 'true'});
