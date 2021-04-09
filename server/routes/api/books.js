@@ -31,6 +31,31 @@ router.post("/addUserBook/:id", async (req, res) => {
 });
 
 /*
+Adding book that user wants to read separate from club
+POST REQUEST - /addUserBook
+provide:book_id
+todo->check for club
+ */
+router.post("/addUserBookNoClub", authorize, async (req, res) => {
+    const user = req.user;
+    const {book_id} = req.body;
+
+    try {
+        const userBook = await pool.query("SELECT * FROM user_books WHERE book_id=$1", [book_id])
+        if (userBook.rows.length > 0) {
+            return res.status(401).send("User already has that book added");
+        }
+
+        await pool.query("INSERT INTO user_books(book_id, user_id, reading_status) VALUES($1,$2,0)", [book_id, user]);
+
+        res.json({success: 'true'});
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server error");
+    }
+});
+
+/*
 Update reading status of a book
 PATCH REQUEST - /readingStatus/:id
 id to provide in url -> club_id
@@ -84,11 +109,12 @@ Get all books depending on status
 GET REQUEST - /getUserBooks/:id
 id to provide in url -> club_id
 require:Bearer token -> books of currently logged in user
-provide:status
+provide in query params:status
+0->want to read, 1->reading, 2->finished
  */
 router.get("/getUserBooks/:id", authorize, async (req, res) => {
     const user = req.user;
-    const {reading_status} = req.body;
+    const reading_status = req.query.status;
 
     try {
         const userBooks = await pool.query("SELECT * FROM user_books WHERE user_id=$1 AND reading_status=$2", [user, reading_status]);
