@@ -4,34 +4,81 @@
       <h1 class="title-blue">Currently Reading</h1>
     </div>
     <div class="currently-reading-container">
-      <MyBook/>
-      <MyBook/>
-      <MyBook/>
-      <MyBook/>
-      <MyBook/>
+      <MyBook v-for="book in currentlyReadingBooks" v-bind:key="book.id" :books="book" :club="userClubs" :type="'reading'"/>
     </div>
     <h1 class="books-toread">Books i want to read</h1>
     <div class="books-to-read-container">
-      <img class="book-toread" src="../assets/book3.png">
+      <MyBook v-for="book in wantToReadBooks" v-bind:key="book.id" :books="book" :club="userClubs" :type="'wantToRead'"/>
     </div>
     <h1 class="booksiwant-toread">Favorite Books</h1>
     <div class="favorite-books-container">
-      <img class="bookiwant-toread" src="../assets/book4.png">
+
     </div>
   </div>
 </template>
 
 <script>
 import MyBook from "./MyBook";
+import axios from "axios";
+
 export default {
   name: "MyBooks",
+  data (){
+    return{
+      wantToReadBooks:{},
+      currentlyReadingBooks:{},
+      userClubs: {}
+    }
+  },
   components: {
     MyBook
 
   },
   methods: {
-
+    async getUserClubs(){
+      let user = JSON.parse(localStorage.getItem("user"))
+      try{
+        let res = await axios.get('http://localhost:5000/clubs/getUserClubs', {
+          headers: { "Authorization": `Bearer ${user.token}`}
+        })
+        this.userClubs = res.data;
+      } catch (err){
+        console.log(err)
       }
+      await this.getWantToReadBooks()
+      await this.getCurrentlyReadingBooks()
+    },
+
+    getWantToReadBooks(){
+      let user = JSON.parse(localStorage.getItem("user"))
+      let config = {
+        headers: { "Authorization": `Bearer ${user.token}`},
+        params: { status: 0 }
+      }
+      axios
+          .get(`http://localhost:5000/books/getUserBooks/${this.userClubs[0].club_id}`, config)
+          .then(res => {
+            console.log(res.data)
+            this.wantToReadBooks = res.data
+          })
+    },
+    getCurrentlyReadingBooks(){
+      let user = JSON.parse(localStorage.getItem("user"))
+      let config = {
+        headers: { "Authorization": `Bearer ${user.token}`},
+        params: { status: 1 }
+      }
+      axios
+          .get(`http://localhost:5000/books/getUserBooks/${this.userClubs[0].club_id}`, config)
+          .then(res => {
+            console.log(res.data)
+            this.currentlyReadingBooks = res.data
+          })
+    }
+      },
+  mounted() {
+    this.getUserClubs()
+  }
 }
 </script>
 

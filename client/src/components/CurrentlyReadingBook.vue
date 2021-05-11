@@ -1,18 +1,27 @@
 <template>
-  <div class="kings-container">
-    <img class="kings-image" src="../assets/book1.png">
+  <div v-if="!loading" class="kings-container">
+    <template v-if="book.volumeInfo.imageLinks">
+      <img class="kings-image" :src="book.volumeInfo.imageLinks.thumbnail" :alt="book.volumeInfo.title">
+    </template>
+    <template v-else>
+      <img
+          src="https://islandpress.org/sites/default/files/400px%20x%20600px-r01BookNotPictured.jpg"
+          :alt="book.volumeInfo.title"
+          width="128"
+      >
+    </template>
     <div class="kings-title">
       <div class="more">
         <a class="more-btn" href="#">More ></a>
       </div>
-      <h1 class="book-title">The way of Kings</h1>
+      <h1 class="book-title">{{book.volumeInfo.title}}</h1>
       <div class="by">by
-        <span class="kings-author">Brandon Sanderson </span>
+        <span class="kings-author">{{book.volumeInfo.authors[0]}}</span>
       </div>
       <i class="icon-clubIcon">
-        <span class="club-name">{{club.club_name}}</span> </i>
-      <div class="pages">Pages: 1040</div>
-      <div class="rating">Rating: 4.7/5</div>
+        <span class="club-name">{{clubName}}</span> </i>
+      <div class="pages">Pages: {{book.volumeInfo.pageCount}}</div>
+      <div class="rating">Rating: {{book.volumeInfo.averageRating}}/5</div>
       <div class="average">
         <span class="member-page">Average member page:</span>
         <span class="page-number">548</span>
@@ -35,23 +44,38 @@
 <script>
 
 
+import axios from "axios";
+
 export default {
   name: "CurrentlyReadingBook",
   data(){
     return{
-
+      book:{},
+      loading:true
     }
   },
   props: {
-    club: {
-      type: Object
+    clubName: {
+      type: String
     },
+    bookId:{
+      type: String
+    }
   },
   methods:{
+    async getBookData(){
+      await axios
+          .get(`https://www.googleapis.com/books/v1/volumes/${this.bookId}`)
+          .then(response => {
+            this.book = response.data;
+            this.loading = false;
+          })
+    },
 
   },
   mounted() {
-
+    this.getBookData();
+    console.log(this.bookId)
   }
 }
 </script>
@@ -64,8 +88,9 @@ export default {
   padding-top: 25px;
   padding-left: 30px;
   text-align: left;
-
-
+}
+.kings-image{
+  width:230px;
 }
 
 .kings-title {
@@ -75,7 +100,6 @@ export default {
   padding-left: 50px;
   border: 1px solid #dae0e5;
   border-radius: 0 8px 8px 0;
-
 }
 
 .book-title {

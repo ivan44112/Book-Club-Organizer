@@ -4,18 +4,43 @@
      <h1>Voting phase</h1>
      <p>You can vote for one book for the next read</p>
    </div>
-   <div class="voting-container-data">
-     <VotingBook/>
-     <VotingBook/>
+   <div v-if="votingBooks" class="voting-container-data">
+     <VotingBook v-for="book in votingBooks" v-bind:key="book.book_id" :book="book"/>
    </div>
  </div>
 </template>
 
 <script>
 import VotingBook from "./VotingBook";
+import axios from "axios";
 export default {
   name: "Voting",
-  components: {VotingBook}
+  components: {VotingBook},
+  data(){
+    return{
+      votingBooks: [],
+      loading:true,
+    }
+  },
+  props: {
+    currentClub: {
+      type: Object
+    },
+  },
+  methods:{
+    async getVotingBooks(){
+      try{
+        let res = await axios.get(`http://localhost:5000/bookSuggestions/getBooks/${this.$route.params.id}`)
+        this.votingBooks = res.data;
+        this.loading = false
+      } catch (err){
+        console.log(err)
+      }
+    },
+  },
+  mounted() {
+    this.getVotingBooks()
+  }
 }
 </script>
 

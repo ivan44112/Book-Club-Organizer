@@ -3,8 +3,8 @@
     <div class="title-container">
       <h1 class="title-blue">Currently Reading Books</h1>
     </div>
-    <div class=readingbooks-container>
-      <CurrentlyReadingBook v-for="club in userClubs" v-bind:key="club.club_id" :club="club"/>
+    <div v-if="!loading" class=readingbooks-container>
+      <CurrentlyReadingBook v-for="club in currentlyReadingBooksByClubs" :clubName="club.club" :bookId="club.book" v-bind:key="club.club"/>
     </div>
     <!--
     <div class="news-container">
@@ -43,7 +43,10 @@ export default {
   },
   data(){
     return{
-      userClubs:[]
+      userClubs:[],
+      currentlyReadingClubs: {},
+      currentlyReadingBooksByClubs:[],
+      loading:true
     }
   },
   methods:{
@@ -54,15 +57,32 @@ export default {
           headers: { "Authorization": `Bearer ${user.token}`}
         })
         this.userClubs = res.data;
-        console.log(res.data)
+        this.getCurrentlyReadBooksByClubs();
+        this.loading = false;
       } catch (err){
         console.log(err)
       }
     },
+    getCurrentlyReadBooksByClubs(){
+      let array = []
+      this.userClubs.forEach(function (club){
+           axios
+               .get(`http://localhost:5000/clubBooks/getClubBookStatus/${club.club_id}`,
+              { params: { status: true } })
+               .then(res => {
+                 let obj = {};
+                 obj["book"] = res.data[0].book_id;
+                 obj["club"] = club.club_name;
+                 array.push(obj);
+               })
+      })
+      this.currentlyReadingBooksByClubs = array;
+    },
   },
   mounted() {
     this.getUserClubs();
-  }
+  },
+
 }
 
 
