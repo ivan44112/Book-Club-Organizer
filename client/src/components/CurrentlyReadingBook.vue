@@ -18,7 +18,7 @@
       <div class="by">by
         <span class="kings-author">{{book.volumeInfo.authors[0]}}</span>
       </div>
-      <i class="icon-clubIcon">
+      <i v-if="clubName" class="icon-clubIcon">
         <span class="club-name">{{clubName}}</span> </i>
       <div class="pages">Pages: {{book.volumeInfo.pageCount}}</div>
       <div class="rating">Rating: {{book.volumeInfo.averageRating}}/5</div>

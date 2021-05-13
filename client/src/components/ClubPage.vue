@@ -38,8 +38,8 @@
     </div>
     <div class="currently-reading-section-container">
       <h1 class="blue-title">Currently reading</h1>
-      <div class="currently-reading-data-container">
-        <CurrentlyReadingBook :club="currentClub"/>
+      <div v-if="currentlyReadingBook" class="currently-reading-data-container">
+        <CurrentlyReadingBook :bookId="currentlyReadingBook"/>
       </div>
     </div>
     <div class="upcoming-section-container">
@@ -70,7 +70,8 @@ name: "ClubPage",
       clubAdmin:"",
       userClubs:[],
       clubJoined:false,
-      clubLeft:false
+      clubLeft:false,
+      currentlyReadingBook:""
     }
   },
   methods:{
@@ -83,8 +84,10 @@ name: "ClubPage",
       } catch (err){
         console.log(err)
       }
+      await this.getCurrentlyReadBooksByClubs();
       await this.getClubAdmin();
     },
+
     async getClubAdmin(){
       try{
         let res = await axios.get(`http://localhost:5000/auth/currentUserById/${this.currentClub.admin}`)
@@ -93,6 +96,7 @@ name: "ClubPage",
         console.log(err)
       }
     },
+
     async getUserClubs(){
       let user = JSON.parse(localStorage.getItem("user"))
       try{
@@ -104,6 +108,7 @@ name: "ClubPage",
         console.log(err)
       }
     },
+
     async joinClub(){
       let user = JSON.parse(localStorage.getItem("user"))
       let data = {}
@@ -121,7 +126,18 @@ name: "ClubPage",
       } catch (err){
         console.log(err)
       }
-    }
+    },
+
+    async getCurrentlyReadBooksByClubs(){
+      axios
+          .get(`http://localhost:5000/clubBooks/getClubBookStatus/${this.currentClub.club_id}`,
+              { params: { status: true } })
+          .then(res => {
+            this.currentlyReadingBook = res.data[0].book_id
+          })
+
+    },
+
   },
   mounted() {
   this.getAllClubs();
