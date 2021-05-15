@@ -4,7 +4,7 @@
       <h1 class="title-blue">Currently Reading Books</h1>
     </div>
     <div v-if="!loading" class=readingbooks-container>
-      <CurrentlyReadingBook v-for="club in currentlyReadingBooksByClubs" :clubName="club.club" :bookId="club.book" v-bind:key="club.club"/>
+      <CurrentlyReadingBook v-for="club in currentlyReadingBooksByClubs" :clubName="club.club" :bookId="club.book" :clubId="club.clubId" v-bind:key="club.club"/>
     </div>
     <!--
     <div class="news-container">
@@ -73,6 +73,7 @@ export default {
                  let obj = {};
                  obj["book"] = res.data[0].book_id;
                  obj["club"] = club.club_name;
+                 obj["clubId"] = club.club_id;
                  array.push(obj);
                })
       })

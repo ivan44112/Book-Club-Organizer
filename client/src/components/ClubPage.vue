@@ -39,7 +39,7 @@
     <div class="currently-reading-section-container">
       <h1 class="blue-title">Currently reading</h1>
       <div v-if="currentlyReadingBook" class="currently-reading-data-container">
-        <CurrentlyReadingBook :bookId="currentlyReadingBook"/>
+        <CurrentlyReadingBook :bookId="currentlyReadingBook" :clubId="currentClub.club_id"/>
       </div>
     </div>
     <div class="upcoming-section-container">

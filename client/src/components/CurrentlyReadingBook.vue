@@ -22,19 +22,21 @@
         <span class="club-name">{{clubName}}</span> </i>
       <div class="pages">Pages: {{book.volumeInfo.pageCount}}</div>
       <div class="rating">Rating: {{book.volumeInfo.averageRating}}/5</div>
+      <!--
       <div class="average">
         <span class="member-page">Average member page:</span>
         <span class="page-number">548</span>
       </div>
-      <div class="average-member">
+      -->
+      <div v-if="clubAveragePagePercent" class="average-member">
         <div class="average-percent">
-          <span class="avg-percent">54%</span>
+          <span v-bind:style="avgPercent" class="avg-percent">{{clubAveragePagePercent}}%</span>
         </div>
       </div>
-      <div class="current-page">My current page:
-        <span class="current-number">792</span>
+      <div v-if="userBookData[0]" class="current-page">My current page:
+        <span class="current-number">{{userBookData[0].current_page}}</span>
         <div class="current-percent">
-          <span class="curr-percent">62%</span>
+          <span v-bind:style="percent" class="curr-percent">{{userPagePercent}}%</span>
         </div>
       </div>
     </div>
@@ -51,7 +53,10 @@ export default {
   data(){
     return{
       book:{},
-      loading:true
+      userBookData:{},
+      loading:true,
+      userPagePercent:"",
+      clubAveragePagePercent:""
     }
   },
   props: {
@@ -60,6 +65,21 @@ export default {
     },
     bookId:{
       type: String
+    },
+    clubId:{
+      type: String
+    }
+  },
+  computed:{
+    percent(){
+      return {
+        width: this.userPagePercent + "%"
+      }
+    },
+    avgPercent(){
+      return {
+        width: this.clubAveragePagePercent + "%"
+      }
     }
   },
   methods:{
@@ -68,14 +88,38 @@ export default {
           .get(`https://www.googleapis.com/books/v1/volumes/${this.bookId}`)
           .then(response => {
             this.book = response.data;
-            this.loading = false;
+          })
+      await this.getUserBookData();
+      await this.getAveragePage()
+    },
+    async getUserBookData(){
+      let user = JSON.parse(localStorage.getItem("user"))
+      let config = {
+        headers: { "Authorization": `Bearer ${user.token}`},
+        params: { status: 1 }
+      }
+      axios
+          .get(`http://localhost:5000/books/getUserBooks/${this.bookId}`, config)
+          .then(res => {
+            this.userBookData = res.data.filter(book => book.book_id === this.bookId)
+            this.userPagePercent = Math.floor((this.userBookData[0].current_page / this.book.volumeInfo.pageCount) * 100);
           })
     },
+    async getAveragePage(){
+      let body = {
+        "book_id": this.bookId
+      }
+      axios
+          .get(`http://localhost:5000/books/calculateAvg/${this.clubId}`,body)
+          .then(res => {
+            this.clubAveragePagePercent = res.data[0].avg
+            this.loading = false;
+          })
+    }
 
   },
   mounted() {
     this.getBookData();
-    console.log(this.bookId)
   }
 }
 </script>
