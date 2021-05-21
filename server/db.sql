@@ -88,3 +88,13 @@ CREATE TABLE book_voting
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (club_id) REFERENCES clubs(club_id) ON DELETE CASCADE
 )
+
+CREATE TABLE book_votes
+(
+    book_votes_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+    book_voting_id uuid NOT NULL,
+    user_id uuid NOT NULL,
+    vote boolean default false,
+    FOREIGN KEY (book_voting_id) REFERENCES book_voting(book_voting_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+)
