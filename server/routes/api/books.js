@@ -105,6 +105,32 @@ router.get("/calculateAvg/:id", async (req, res) => {
 });
 
 /*
+Get user book
+GET REQUEST - /getUserBooks/:id
+require:Bearer token -> books of currently logged in user
+provide in query params:status
+0->want to read, 1->reading, 2->finished
+ */
+router.get("/getUserBook", authorize, async (req, res) => {
+    const user = req.user;
+    const {book_id} = req.body;
+
+    try {
+        const userBookCheck = await pool.query("SELECT * FROM user_books WHERE user_id=$1 AND book_id=$2", [user, book_id])
+        if (userBookCheck.rows.length === 0) {
+            return res.status(401).send("User doesn't have that book added");
+        }
+
+        const userBook = await pool.query("SELECT * FROM user_books WHERE user_id=$1 AND book_id=$2", [user, book_id]);
+
+        res.json(userBook.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server error");
+    }
+});
+
+/*
 Get all books depending on status
 GET REQUEST - /getUserBooks/:id
 id to provide in url -> club_id
@@ -117,6 +143,11 @@ router.get("/getUserBooks/:id", authorize, async (req, res) => {
     const reading_status = req.query.status;
 
     try {
+        const userBookCheck = await pool.query("SELECT * FROM user_books WHERE user_id=$1", [user])
+        if (userBookCheck.rows.length === 0) {
+            return res.status(401).send("User doesn't have books added");
+        }
+
         const userBooks = await pool.query("SELECT * FROM user_books WHERE user_id=$1 AND reading_status=$2", [user, reading_status]);
 
         res.json(userBooks.rows);
@@ -148,7 +179,6 @@ router.patch("/pageNumber/:id", authorize, async (req, res) => {
         ]);
 
         res.json({success: 'true'});
-
     } catch (err) {
         console.error(err.message);
         res.status(500).send("Server error");

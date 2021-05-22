@@ -76,6 +76,35 @@ router.post("/addMember/:id", authorize, async (req, res) => {
 });
 
 /*
+Remove a user from the club
+DELETE REQUEST - /deleteMember/:id
+id to provide in url -> club id
+require: Bearer token -> logged in user leaves club
+ */
+router.delete("/deleteMember/:id", authorize, async (req, res) => {
+    const club_id = req.params.id;
+    const user_id = req.user;
+
+    try {
+        const club = await pool.query("SELECT * FROM clubs WHERE club_id=$1", [club_id]);
+        if (club.rows.length === 0) {
+            return res.status(401).send("Club doesn't exist!");
+        }
+
+        const clubmember = await pool.query("SELECT * FROM club_members WHERE club_id = $1 AND user_id=$2", [club_id, user_id]);
+        if (clubmember.rows.length === 0) {
+            return res.status(401).send("User isn't member of this club");
+        }
+        await pool.query("DELETE FROM club_members WHERE club_id=$1 AND user_id= $2", [club_id, user_id]);
+
+        res.json({status: 'true'});
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server error");
+    }
+});
+
+/*
 Gets all clubs the user is in
 GET REQUEST - /getUserClubs/
 require: Bearer token -> gets clubs of currently logged in user
