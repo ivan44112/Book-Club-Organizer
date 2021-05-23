@@ -113,7 +113,7 @@ provide in query params:status
  */
 router.get("/getUserBook", authorize, async (req, res) => {
     const user = req.user;
-    const {book_id} = req.body;
+    const book_id = req.query.book_id;
 
     try {
         const userBookCheck = await pool.query("SELECT * FROM user_books WHERE user_id=$1 AND book_id=$2", [user, book_id])

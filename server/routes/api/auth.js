@@ -73,7 +73,7 @@ returns:email,name
  */
 router.get("/currentUser", authorize, async (req, res) => {
     try {
-        const user = await pool.query("SELECT name, email FROM users WHERE user_id=$1", [req.user]);
+        const user = await pool.query("SELECT name, email, user_id FROM users WHERE user_id=$1", [req.user]);
 
         res.json(user.rows[0]);
     } catch (err) {

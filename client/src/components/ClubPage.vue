@@ -8,7 +8,7 @@
         <h1 class="club-name blue">{{currentClub.club_name}}</h1>
         <div class="data-item">
           <p>Club admin:</p>
-          <p class="bold blue">{{clubAdmin}}</p>
+          <p class="bold blue">{{clubAdmin.name}}</p>
         </div>
         <div class="data-item">
           <p>Category:</p>
@@ -45,9 +45,9 @@
     <div class="upcoming-section-container">
       <h1 class="blue-title">Upcoming title</h1>
       <div class="upcoming-title-data-container">
-        <Suggestion v-if="nextBookPhase === 'suggestion' "/>
-        <WaitingBook v-if="nextBookPhase === 'waiting' "/>
-        <Voting v-if="nextBookPhase === 'voting' "/>
+        <Suggestion v-if="bookPhase === 'suggestion' " :adminId="this.clubAdmin"/>
+        <WaitingBook v-if="bookPhase === 'waiting' "/>
+        <Voting :user="user" v-if="bookPhase === 'voting' "/>
       </div>
     </div>
   </div>
@@ -66,12 +66,13 @@ name: "ClubPage",
   data(){
     return{
       currentClub:{},
-      nextBookPhase:"voting",
+      bookPhase:"voting",
       clubAdmin:"",
       userClubs:[],
       clubJoined:false,
       clubLeft:false,
-      currentlyReadingBook:""
+      currentlyReadingBook:"",
+      user:{}
     }
   },
   methods:{
@@ -91,7 +92,8 @@ name: "ClubPage",
     async getClubAdmin(){
       try{
         let res = await axios.get(`http://localhost:5000/auth/currentUserById/${this.currentClub.admin}`)
-        this.clubAdmin = res.data.name;
+        this.clubAdmin = res.data;
+        console.log(this.clubAdmin)
       } catch (err){
         console.log(err)
       }
@@ -137,9 +139,22 @@ name: "ClubPage",
           })
 
     },
+    async getUser(){
+      let user = JSON.parse(localStorage.getItem("user"))
+      try{
+        let res = await axios.get('http://localhost:5000/auth/currentUser', {
+          headers: { "Authorization": `Bearer ${user.token}`}
+        })
+        this.user = res.data;
+        console.log(this.user)
+      } catch (err){
+        console.log(err)
+      }
+    }
 
   },
   mounted() {
+  this.getUser();
   this.getAllClubs();
   this.getUserClubs();
   }

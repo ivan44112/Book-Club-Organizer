@@ -1,6 +1,6 @@
 <template>
   <div class="book-property">
-    <ThePrinceOfThorns v-if="loadState === 'success'" :book="book"/>
+    <ThePrinceOfThorns v-if="!loading" :book="book" :currentClub="currentClub" :userBookData="userBookData" :currPage="userBookData[0].current_page"/>
     <div class="navigation">
       <div class="dropdown">
         <button class="dropbtn">Actions <img class="arrow" src="../assets/arrow2.png"></button>
@@ -16,13 +16,13 @@
         </div>
       </div>
     </div>
-    <div class="dropdown-after">
-      <input class="number" type="number" value="236"/>
+    <div v-if="userBookData[0]" class="dropdown-after">
+      <input class="number" type="number" v-model="userBookData[0].current_page" />
       <button class="update" type="submit" value="update">Update Page</button>
       <span class="last-update">Last update: 3 days ago</span>
     </div>
     <h1 class="about">About the book</h1>
-    <div v-if="loadState === 'success'" class="about-content">
+    <div v-if="book" class="about-content">
       <p class="release">Release Date: <span class="date">{{book.volumeInfo.publishedDate}}</span> </p>
       <p class="categories">Categories: <span v-if="book.volumeInfo.categories" class="category-count">{{book.volumeInfo.categories[0]}}</span> </p>
       <p class="publisher">Publisher: <span class="publisher-name">{{book.volumeInfo.publisher}}</span> </p>
@@ -53,18 +53,18 @@ export default {
     return {
       book: {},
       bookDescription: "",
-      loadState: '',
-      userClubs:[]
+      loading: true,
+      userClubs:[],
+      currentClub:{},
+      userBookData:{}
     }
   },
   methods:{
     getBookData(){
-      this.loadState = 'loading';
       axios
           .get(`https://www.googleapis.com/books/v1/volumes/${this.$route.params.id}`)
           .then(response => {
             this.book = response.data;
-            this.loadState = 'success';
             //remove unwanted tags from book description response
             this.bookDescription = response.data.volumeInfo.description.replace(/(<([^>]+)>)/gi, "");
           })
@@ -75,20 +75,13 @@ export default {
         let res = await axios.get('http://localhost:5000/clubs/getUserClubs', {
           headers: { "Authorization": `Bearer ${user.token}`}
         })
-        console.log(res.data)
         this.userClubs = res.data;
       } catch (err){
         console.log(err)
       }
+      await this.getUserBookData();
     },
-    async getAllSuggestedBooks(){
-      try{
-        let res = await axios.get(`http://localhost:5000/bookSuggestions/getBooks/26ddbae0-f2ee-440e-9be2-bb7946ab86fd`)
-        console.log(res.data)
-      } catch (err){
-        console.log(err)
-      }
-    },
+
     async suggestBook(clubId){
       let user = JSON.parse(localStorage.getItem("user"))
       let config = {
@@ -107,12 +100,33 @@ export default {
       } catch (err){
         alert("you already suggested a book")
       }
+    },
+
+    async getUserBookData(){
+      let user = JSON.parse(localStorage.getItem("user"))
+      let config = {
+        headers: {
+          "Authorization": `Bearer ${user.token}`,
+        },
+        params: {book_id: "5NomkK4EV68C"}
+      }
+      axios
+          .get(`http://localhost:5000/books/getUserBook`, config)
+          .then(res => {
+            this.userBookData = res.data
+            this.currentClub = this.userClubs.filter( club => club.club_id === this.userBookData[0].club_id)
+            this.loading = false;
+          })
+    },
+
+    updateCurrentPage(){
+
     }
+
   },
    mounted() {
     this.getBookData();
     this.getUserClubs();
-    this.getAllSuggestedBooks()
   }
 }
 </script>

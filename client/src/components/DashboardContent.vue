@@ -12,6 +12,7 @@
     </div>
     <div class="no-news">There are currently no news</div>
     -->
+    <!--
     <div class="upcoming-books">Upcoming Books</div>
     <div class="club">
       <i class="icon-clubIcon">
@@ -24,21 +25,18 @@
       </i>
     </div>
     <Suggestion/>
+    -->
   </div>
 </template>
 
 
 <script>
 import CurrentlyReadingBook from "@/components/CurrentlyReadingBook";
-import Suggestion from "@/components/Suggestion";
-import WaitingBook from "./WaitingBook";
 import axios from "axios";
 
 export default {
   name: "DashboardContent",
   components: {
-    WaitingBook,
-    Suggestion,
     CurrentlyReadingBook
   },
   data(){

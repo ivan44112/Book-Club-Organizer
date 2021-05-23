@@ -2,10 +2,10 @@
  <div class="voting-section-container">
    <div class="voting-description">
      <h1>Voting phase</h1>
-     <p>You can vote for one book for the next read</p>
+     <p>You can vote or suggest one book for the next read</p>
    </div>
    <div v-if="votingBooks" class="voting-container-data">
-     <VotingBook v-for="book in votingBooks" v-bind:key="book.book_id" :book="book"/>
+     <VotingBook :bookSuggested="bookSuggested" v-for="book in votingBooks" v-bind:key="book.book_id" :book="book"/>
    </div>
  </div>
 </template>
@@ -19,24 +19,32 @@ export default {
   data(){
     return{
       votingBooks: [],
-      loading:true,
+      bookSuggested: false
     }
   },
   props: {
     currentClub: {
       type: Object
     },
+    user: {
+      type: Object
+    }
   },
   methods:{
     async getVotingBooks(){
       try{
         let res = await axios.get(`http://localhost:5000/bookSuggestions/getBooks/${this.$route.params.id}`)
         this.votingBooks = res.data;
-        this.loading = false
+        const currentUserId = this.user.user_id;
+        res.data.forEach( book => {
+          if (book.user_id === currentUserId) {
+            this.bookSuggested = true;
+          }
+        })
       } catch (err){
         console.log(err)
       }
-    },
+    }
   },
   mounted() {
     this.getVotingBooks()

@@ -53,7 +53,7 @@ router.get("/getBooks/:id", async (req, res) => {
             return res.status(401).send("Club doesn't exist");
         }
 
-        const books = await pool.query("SELECT book_id,votes FROM book_voting WHERE club_id=$1", [club_id]);
+        const books = await pool.query("SELECT book_id,votes,user_id FROM book_voting WHERE club_id=$1", [club_id]);
 
         res.json(books.rows);
     } catch (err) {

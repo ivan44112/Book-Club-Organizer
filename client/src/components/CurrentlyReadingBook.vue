@@ -1,46 +1,48 @@
 <template>
-  <div v-if="!loading" class="kings-container">
-    <template v-if="book.volumeInfo.imageLinks">
-      <img class="kings-image" :src="book.volumeInfo.imageLinks.thumbnail" :alt="book.volumeInfo.title">
-    </template>
-    <template v-else>
-      <img
-          src="https://islandpress.org/sites/default/files/400px%20x%20600px-r01BookNotPictured.jpg"
-          :alt="book.volumeInfo.title"
-          width="128"
-      >
-    </template>
-    <div class="kings-title">
-      <div class="more">
-        <a class="more-btn" href="#">More ></a>
-      </div>
-      <h1 class="book-title">{{book.volumeInfo.title}}</h1>
-      <div class="by">by
-        <span class="kings-author">{{book.volumeInfo.authors[0]}}</span>
-      </div>
-      <i v-if="clubName" class="icon-clubIcon">
-        <span class="club-name">{{clubName}}</span> </i>
-      <div class="pages">Pages: {{book.volumeInfo.pageCount}}</div>
-      <div class="rating">Rating: {{book.volumeInfo.averageRating}}/5</div>
-      <!--
-      <div class="average">
-        <span class="member-page">Average member page:</span>
-        <span class="page-number">548</span>
-      </div>
-      -->
-      <div v-if="clubAveragePagePercent" class="average-member">
-        <div class="average-percent">
-          <span v-bind:style="avgPercent" class="avg-percent">{{clubAveragePagePercent}}%</span>
+  <router-link :to="{ name: 'book', params: {id: book.id} }" :key="$route.path">
+    <div v-if="!loading" class="kings-container">
+      <template v-if="book.volumeInfo.imageLinks">
+        <img class="kings-image" :src="book.volumeInfo.imageLinks.thumbnail" :alt="book.volumeInfo.title">
+      </template>
+      <template v-else>
+        <img
+            src="https://islandpress.org/sites/default/files/400px%20x%20600px-r01BookNotPictured.jpg"
+            :alt="book.volumeInfo.title"
+            width="128"
+        >
+      </template>
+      <div class="kings-title">
+        <div class="more">
+          <a class="more-btn" href="#">More ></a>
         </div>
-      </div>
-      <div v-if="userBookData[0]" class="current-page">My current page:
-        <span class="current-number">{{userBookData[0].current_page}}</span>
-        <div class="current-percent">
-          <span v-bind:style="percent" class="curr-percent">{{userPagePercent}}%</span>
+        <h1 class="book-title">{{book.volumeInfo.title}}</h1>
+        <div class="by">by
+          <span class="kings-author">{{book.volumeInfo.authors[0]}}</span>
+        </div>
+        <i v-if="clubName" class="icon-clubIcon">
+          <span class="club-name">{{clubName}}</span> </i>
+        <div class="pages">Pages: {{book.volumeInfo.pageCount}}</div>
+        <div class="rating">Rating: {{book.volumeInfo.averageRating}}/5</div>
+        <!--
+        <div class="average">
+          <span class="member-page">Club average:</span>
+          <span class="page-number">548</span>
+        </div>
+        -->
+        <div v-if="clubAveragePagePercent" class="average-member">
+          <div class="average-percent">
+            <span v-bind:style="avgPercent" class="avg-percent">{{clubAveragePagePercent}}%</span>
+          </div>
+        </div>
+        <div v-if="userBookData[0]" class="current-page">My current page:
+          <span class="current-number">{{userBookData[0].current_page}}</span>
+          <div class="current-percent">
+            <span v-bind:style="percent" class="curr-percent">{{userPagePercent}}%</span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script>
@@ -101,7 +103,11 @@ export default {
       axios
           .get(`http://localhost:5000/books/getUserBooks/${this.bookId}`, config)
           .then(res => {
-            this.userBookData = res.data.filter(book => book.book_id === this.bookId)
+            let result;
+            let asd = res.data
+            result = asd.filter(book => book.book_id === this.bookId)
+            this.userBookData = result
+            console.log(result)
             this.userPagePercent = Math.floor((this.userBookData[0].current_page / this.book.volumeInfo.pageCount) * 100);
           })
     },
@@ -219,7 +225,7 @@ export default {
 
 .average-percent {
   position: absolute;
-  width: 54%;
+  width: 0%;
   left: 0;
   top: 0;
   bottom: 0;
@@ -284,14 +290,14 @@ export default {
   justify-content: flex-end;
   padding-right: 20px;
   padding-top: 10px;
-
-
 }
 
 .more-btn {
   font: normal normal bold 14px/19px Arial;
   color: #0072D5;
   text-decoration: none;
-
+}
+a{
+  text-decoration: none;
 }
 </style>

@@ -11,7 +11,7 @@
       >
     </template>
     <p>{{bookData.volumeInfo.title}}</p>
-    <button>Vote</button>
+    <button v-if="!bookSuggested && !voted" v-on:click="vote">Vote</button>
   </div>
 </template>
 
@@ -24,12 +24,16 @@ export default {
     return{
       bookData:[],
       loading: true,
+      voted:false
     }
   },
   props: {
     book: {
       type: Object
     },
+    bookSuggested: {
+      type: Boolean
+    }
   },
   methods:{
     async getBookData(){
@@ -40,6 +44,20 @@ export default {
             this.loading = false
           })
     },
+    async vote(){
+      let body = {
+        "book_id":this.book.book_id
+      }
+      try{
+        let res = await axios.patch(`http://localhost:5000/bookSuggestions/addVote/${this.$route.params.id}`,body)
+        if(res.data){
+          console.log(res.data)
+          this.voted = true;
+        }
+      } catch (err){
+        alert("error")
+      }
+    }
   },
   mounted() {
     this.getBookData()

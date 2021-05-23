@@ -7,22 +7,21 @@
       <span v-if="volumeInfo.authors" class="kings-author">{{volumeInfo.authors[0]}}</span>
     </div>
     <i class="icon-clubIcon">
-      <span class="club-name">Dark Fantasy</span> </i>
+      <span class="club-name">{{currentClub[0].club_name}}</span> </i>
     <div class="pages">Pages: {{volumeInfo.pageCount}}</div>
     <div class="rating">Rating: {{volumeInfo.averageRating}}/5</div>
     <div class="average">
-      <span class="member-page">Average member page:</span>
-      <span class="page-number">110</span>
+      <span class="member-page">Club average:</span>
     </div>
-    <div class="average-member">
+    <div v-if="!loading" class="average-member">
       <div class="average-percent">
-        <span class="avg-percent">37%</span>
+        <span v-bind:style="avgPercent" class="avg-percent">{{clubAveragePagePercent}}%</span>
       </div>
     </div>
-    <div class="current-page">My current page:
-      <span class="current-number">238</span>
+    <div v-if="!loading" class="current-page">My current page:
+      <span class="current-number">{{currPage}}</span>
       <div class="current-percent">
-        <span class="curr-percent">73%</span>
+        <span v-bind:style="percent" class="curr-percent">{{userPagePercent}}%</span>
       </div>
     </div>
   </div>
@@ -30,18 +29,68 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "ThePrinceOfThorns",
+  data(){
+    return{
+      loading:true,
+      userPagePercent:"",
+      clubAveragePagePercent:""
+    }
+  },
   props: {
     book: {
       type: Object,
       required: true
+    },
+    currentClub:{
+      type: Array
+    },
+    userBookData:{
+      type:Array
+    },
+    currPage:{
+      type: null
     }
   },
   computed: {
     volumeInfo(){
       return this.book.volumeInfo
+    },
+    percent(){
+      return {
+        width: this.userPagePercent + "%"
+      }
+    },
+    avgPercent(){
+      return {
+        width: this.clubAveragePagePercent + "%"
+      }
     }
+  },
+  methods:{
+    async getAveragePage(){
+      let body = {
+        "book_id": this.book.book_id
+      }
+      axios
+          .get(`http://localhost:5000/books/calculateAvg/${this.currentClub[0].club_id}`,body)
+          .then(res => {
+            this.clubAveragePagePercent = res.data[0].avg
+            this.loading = false
+          })
+    }
+  },
+  watch: {
+    currPage: function() {
+      this.userPagePercent = Math.floor((this.currPage / this.book.volumeInfo.pageCount) * 100);
+    }
+  },
+  mounted() {
+    this.userPagePercent = Math.floor((this.currPage / this.book.volumeInfo.pageCount) * 100);
+    this.getAveragePage();
   }
 }
 </script>
@@ -139,7 +188,7 @@ export default {
 
 .average-percent {
   position: absolute;
-  width: 37%;
+  width: 0%;
   left: 0;
   top: 0;
   bottom: 0;
@@ -159,6 +208,9 @@ export default {
   color: #727272;
   opacity: 1;
   padding-top: 10px;
+}
+.average{
+  margin-top:5px;
 }
 
 .current-page {
