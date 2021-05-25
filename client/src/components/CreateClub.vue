@@ -1,7 +1,7 @@
 <template>
 <div class="create-club-container">
   <div class="title-container">
-    <h1 class="title-blue">Create Book Club</h1>
+    <h1 class="title-blue" v-on:click="asd">Create Book Club</h1>
   </div>
   <div class="form-container">
     <form v-on:submit.prevent="createClub()">
@@ -59,7 +59,7 @@ export default {
       let data = {
         name: this.formData.clubName,
         description: this.formData.clubDescription,
-        category: this.formData.clubCategories
+        category: this.formData.clubCategories.join(',')
       }
       let user = JSON.parse(localStorage.getItem("user"))
       try{
@@ -67,6 +67,7 @@ export default {
           headers: { "Authorization": `Bearer ${user.token}`}
         })
         this.clubCreated = true;
+        await this.$router.push('/dashboard/exploreclubs');
       } catch (err){
         console.log(err)
       }
@@ -81,6 +82,9 @@ export default {
       } catch (err){
         console.log(err)
       }
+    },
+    asd(){
+
     }
   }
 }

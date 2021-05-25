@@ -6,7 +6,7 @@
     <div class="currently-reading-container">
       <MyBook v-for="book in currentlyReadingBooks" v-bind:key="book.id" :books="book" :club="userClubs" :type="'reading'"/>
     </div>
-    <h1 class="books-toread">Books i want to read</h1>
+    <h1 class="books-toread">Wishlist</h1>
     <div class="books-to-read-container">
       <MyBook v-for="book in wantToReadBooks" v-bind:key="book.id" :books="book" :club="userClubs" :type="'wantToRead'"/>
     </div>

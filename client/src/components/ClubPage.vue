@@ -1,5 +1,5 @@
 <template>
-  <div class="club-container">
+  <div v-if="currentClub" class="club-container">
     <div class="club-section">
       <div class="img-container">
         <img src="../assets/club1.png" alt="cover"/>
@@ -25,15 +25,19 @@
         <div class="data-item">
           <p>{{currentClub.description}}</p>
         </div>
-        <button v-if="!this.userClubs.find(club => club.club_id === this.currentClub.club_id)"
-                v-on:click="joinClub"
-                class="join-club-button"
-                v-bind:class = "(this.clubJoined)?'disable_button':''">
-          Join {{currentClub.club_name}}
-        </button>
-        <button class="leave_club-button" v-else
-                v-bind:class = "(this.clubLeft)?'disable_button':''">
-                Leave {{currentClub.club_name}}</button>
+        <div v-if="!userIsAdmin">
+          <button v-if="!this.userClubs.find(club => club.club_id === this.currentClub.club_id)"
+                  v-on:click="joinClub"
+                  class="join-club-button"
+                  v-bind:class = "(this.clubJoined)?'disable_button':''">
+            Join {{currentClub.club_name}}
+          </button>
+          <button class="leave_club-button" v-on:click="leaveClub"
+                  v-else
+                  v-bind:class = "(this.clubLeft)?'disable_button':''">
+                  Leave {{currentClub.club_name}}
+          </button>
+        </div>
       </div>
     </div>
     <div class="currently-reading-section-container">
@@ -72,7 +76,8 @@ name: "ClubPage",
       clubJoined:false,
       clubLeft:false,
       currentlyReadingBook:"",
-      user:{}
+      user:{},
+      userIsAdmin: false
     }
   },
   methods:{
@@ -87,13 +92,13 @@ name: "ClubPage",
       }
       await this.getCurrentlyReadBooksByClubs();
       await this.getClubAdmin();
+      await this.checkIfAdmin();
     },
 
     async getClubAdmin(){
       try{
         let res = await axios.get(`http://localhost:5000/auth/currentUserById/${this.currentClub.admin}`)
         this.clubAdmin = res.data;
-        console.log(this.clubAdmin)
       } catch (err){
         console.log(err)
       }
@@ -130,6 +135,24 @@ name: "ClubPage",
       }
     },
 
+    async leaveClub(){
+      let user = JSON.parse(localStorage.getItem("user"))
+      let config = {
+        headers: {
+          "Authorization": `Bearer ${user.token}`
+        }
+      };
+      try{
+        let res = await axios.delete(`http://localhost:5000/clubs/deleteMember/${this.currentClub.club_id}`,config)
+        if(res.data){
+          this.clubLeft = true;
+          alert("You successfully left this club")
+        }
+      } catch (err){
+        console.log(err)
+      }
+    },
+
     async getCurrentlyReadBooksByClubs(){
       axios
           .get(`http://localhost:5000/clubBooks/getClubBookStatus/${this.currentClub.club_id}`,
@@ -146,9 +169,13 @@ name: "ClubPage",
           headers: { "Authorization": `Bearer ${user.token}`}
         })
         this.user = res.data;
-        console.log(this.user)
       } catch (err){
         console.log(err)
+      }
+    },
+    async checkIfAdmin(){
+      if(this.currentClub.admin === this.user.user_id){
+        this.userIsAdmin = true
       }
     }
 

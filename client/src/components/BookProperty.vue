@@ -1,13 +1,12 @@
 <template>
-  <div class="book-property">
-    <ThePrinceOfThorns v-if="!loading" :book="book" :currentClub="currentClub" :userBookData="userBookData" :currPage="userBookData[0].current_page"/>
+  <div v-if="book && userBookData[0]" class="book-property">
+    <ThePrinceOfThorns v-if="!loading" :book="book" :currentClub="currentClub" :userBookData="userBookData" :currPage="currentPage"/>
     <div class="navigation">
       <div class="dropdown">
         <button class="dropbtn">Actions <img class="arrow" src="../assets/arrow2.png"></button>
         <div class="dropdown-content">
-          <a href="#">Mark as Read</a>
-          <a href="#">Add to Favorites</a>
-          <a href="#">Add to Wishlist</a>
+          <a>Add to Favorites</a>
+          <a v-on:click="addToWishList">Add to Wishlist</a>
           <a class="suggest-btn" href="#">Suggest Book</a>
           <div class="dropdown-right">
             <a v-on:click="suggestBook(club.club_id)" v-for="club in userClubs" v-bind:key="club.club_id" :value="club.club_id">{{ club.club_name }}</a>
@@ -16,13 +15,15 @@
         </div>
       </div>
     </div>
-    <div v-if="userBookData[0]" class="dropdown-after">
-      <input class="number" type="number" v-model="userBookData[0].current_page" />
-      <button class="update" type="submit" value="update">Update Page</button>
+    <div  class="dropdown-after">
+      <input class="number" type="number" v-model="currentPage" :max="book.volumeInfo.pageCount" :min="0" />
+      <button v-bind:class="{ disabledButton: currentPage.toString() === userBookData[0].current_page.toString() }" class="update" type="submit" value="update" v-on:click="updateCurrentPage">Update Page</button>
+      <!--
       <span class="last-update">Last update: 3 days ago</span>
+      -->
     </div>
     <h1 class="about">About the book</h1>
-    <div v-if="book" class="about-content">
+    <div  class="about-content">
       <p class="release">Release Date: <span class="date">{{book.volumeInfo.publishedDate}}</span> </p>
       <p class="categories">Categories: <span v-if="book.volumeInfo.categories" class="category-count">{{book.volumeInfo.categories[0]}}</span> </p>
       <p class="publisher">Publisher: <span class="publisher-name">{{book.volumeInfo.publisher}}</span> </p>
@@ -56,7 +57,9 @@ export default {
       loading: true,
       userClubs:[],
       currentClub:{},
-      userBookData:{}
+      userBookData:{},
+      pageNumberChanged: false,
+      currentPage : 0
     }
   },
   methods:{
@@ -102,25 +105,64 @@ export default {
       }
     },
 
+    async addToWishList(){
+      let user = JSON.parse(localStorage.getItem("user"))
+      let config = {
+        headers: {
+          "Authorization": `Bearer ${user.token}`
+        }
+      };
+      let body = {
+        "book_id":this.book.id
+      }
+      try{
+        let res = await axios.post(`http://localhost:5000/books/addUserBookNoClub`,body,config)
+        if(res.data){
+          alert("you successfully added this book to your Wishlist")
+        }
+      } catch (err){
+        alert("you already added this book")
+      }
+    },
+
     async getUserBookData(){
       let user = JSON.parse(localStorage.getItem("user"))
       let config = {
         headers: {
           "Authorization": `Bearer ${user.token}`,
         },
-        params: {book_id: "5NomkK4EV68C"}
+        params: {book_id: "4OfWWfRDAXcC"}
       }
       axios
           .get(`http://localhost:5000/books/getUserBook`, config)
           .then(res => {
             this.userBookData = res.data
+            this.currentPage = res.data[0].current_page
             this.currentClub = this.userClubs.filter( club => club.club_id === this.userBookData[0].club_id)
             this.loading = false;
           })
     },
 
     updateCurrentPage(){
-
+      let user = JSON.parse(localStorage.getItem("user"))
+      let config = {
+        headers: {
+          "Authorization": `Bearer ${user.token}`,
+        }
+      }
+      let body = {
+        "book_id":this.book.book_id,
+        "current_page":this.currentPage
+      }
+      axios
+          .patch(`http://localhost:5000/books/pageNumber/${this.currentClub[0].club_id}`,body,config)
+          .then(res => {
+            console.log(res.data)
+          })
+          .catch( e => {
+            console.log(e.response.data)
+              }
+          )
     }
 
   },
@@ -138,7 +180,7 @@ export default {
 
 .navigation {
   display: flex;
-  padding-top: 10px;
+  padding-top: 20px;
   padding-left: 30px;
 }
 
@@ -202,6 +244,7 @@ export default {
   padding: 12px 16px;
   text-decoration: none;
   display: block;
+  cursor: pointer;
 }
 
 .dropdown-content a.remove {
@@ -332,6 +375,13 @@ export default {
   width: 100%;
   left: 190px;
   background-color: #f7f9fd;
+}
+
+.disabledButton{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
 }
 </style>
 
