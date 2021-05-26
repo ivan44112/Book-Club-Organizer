@@ -35,7 +35,7 @@
       <p>{{bookDescription}}</p>
     </div>
     <h1 class="discussion-title">Discussion</h1>
-    <BookComment/>
+    <BookComment :currentClub="currentClub"/>
   </div>
 </template>
 
@@ -203,7 +203,7 @@ export default {
 .dropdown-right{
   position: absolute;
   left:160px;
-  top:125px;
+  top: 84px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   display: flex;
   background: white;

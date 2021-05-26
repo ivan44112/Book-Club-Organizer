@@ -70,6 +70,7 @@ export default {
     display: flex;
     flex-direction: column;
     padding: 15px;
+    align-items: center;
   }
   .voting-book-container img{
     width: 200px;

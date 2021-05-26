@@ -1,23 +1,93 @@
 <template>
   <div class="comments-container">
-    <div class="comment">
-      <p class="comment-author">Adam Smith:</p>
-      <p class="comment-text">I really like this Eddard Stark so far.</p>
-      <!-- <button class="reply-button">reply</button> -->
-    </div>
+    <Comment v-for="comment in comments" :key="comment.created_at" :comment="comment.comment" :userId="comment.user_id"/>
     <div class="new-comment">
       <form>
-        <p class="comment-author">John Doe:</p>
-        <textarea required class="new-comment-textarea"/>
-        <input class="submit-comment-button" type="submit" value="Add Comment">
+        <p class="comment-author">{{user.name}}:</p>
+        <textarea required class="new-comment-textarea" id="comment" name="comment" v-model="text"/>
+        <input class="submit-comment-button" type="submit" value="Add Comment" v-on:click="postComment">
       </form>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+import Comment from "./Comment";
+
 export default {
-name: "BookComment"
+name: "BookComment",
+  components: {Comment},
+  data(){
+    return{
+      user: {},
+      clubBookData:{},
+      text: "",
+      comments:{}
+    }
+  },
+  props: {
+    currentClub:{
+      type: Array
+    },
+  },
+  methods: {
+    async getCurrentClubBookData() {
+      axios
+          .get(`http://localhost:5000/clubBooks/getClubBookStatus/${this.currentClub[0].club_id}`,
+              {params: {status: true}})
+          .then(res => {
+            this.clubBookData = res.data[0];
+            this.getComments();
+          })
+    },
+    async getCurrentUser(){
+      let user = JSON.parse(localStorage.getItem("user"))
+      try{
+        let res = await axios.get('http://localhost:5000/auth/currentUser', {
+          headers: { "Authorization": `Bearer ${user.token}`}
+        })
+        this.user = res.data;
+      } catch (err){
+        console.log(err)
+      }
+    },
+    async postComment(e){
+      e.preventDefault()
+      let user = JSON.parse(localStorage.getItem("user"))
+      let config = {
+        headers: {
+          "Authorization": `Bearer ${user.token}`
+        }
+      };
+      let body = {
+        "comment":this.text
+      }
+      try{
+        let res = await axios.post(`http://localhost:5000/clubBooks/addComment/${this.clubBookData.club_books_id}`,body,config)
+        if(res.data){
+          this.text = ""
+          await this.getComments()
+        }
+      } catch (err){
+        alert("Comment Error")
+      }
+    },
+    async getComments(){
+      try{
+        let res = await axios.get(`http://localhost:5000/clubBooks/getComment/${this.clubBookData.club_books_id}`)
+        if(res.data){
+          this.comments = res.data
+        }
+      } catch (err){
+        alert("Error")
+      }
+    }
+  },
+  mounted() {
+  this.getCurrentUser()
+  this.getCurrentClubBookData()
+  }
 }
 </script>
 
@@ -29,30 +99,10 @@ name: "BookComment"
   flex-direction: column;
   display: flex;
 }
-.comment{
-  text-align: left;
-  background: #F8F8F8;
-  border-radius: 8px;
-  padding: 5px 10px;
-  display: flex;
-  flex-direction: column;
-}
+
 .comment-author{
   font-weight: bold;
   margin: 10px 0;
-}
-.comment-text{
-  margin: 10px 0;
-}
-.reply-button{
-  border:none;
-  background: white;
-  color:#0072D5;
-  font-weight: bold;
-  align-self: flex-end;
-  outline: none;
-  cursor: pointer;
-  margin: 0 5px 5px 0;
 }
 
 .new-comment{

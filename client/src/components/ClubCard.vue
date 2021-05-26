@@ -9,15 +9,20 @@
             <!--<img class="ana-image" src="../assets/anasmith.png"> -->
           </span>
         </div>
+        <!--
         <div class="currently-reading">Currently Reading:
           <span class="book-name">{{currentlyReadingTitle ? currentlyReadingTitle : "None" }}</span>
-          <!-- <span class="read-percent">(54%)</span> -->
+           <span class="read-percent">(54%)</span>
         </div>
         <div class="upcoming-book">Upcoming Book:
           <span class="upcoming-name">{{ upcomingTitle }}</span>
         </div>
+        -->
         <div class="members">Members:
           <span class="members-count">{{clubMemberCount}}</span>
+        </div>
+        <div class="members">Category:
+          <span class="books-count">{{club.category}}</span>
         </div>
         <div class="books-read">Books read:
           <span class="books-count">{{club.books_read}}</span>
@@ -96,6 +101,7 @@ a{
   padding-left: 30px;
   text-align: left;
   cursor: pointer;
+  height: 215px;
 }
 
 .club1-title {

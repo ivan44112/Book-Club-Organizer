@@ -39,7 +39,7 @@ router.get("/getClubBookStatus/:id", async (req, res) => {
     const reading_status = req.query.status;
 
     try {
-        const finishedBooks = await pool.query("SELECT book_id FROM club_books WHERE club_id=$1 AND reading_status=$2", [
+        const finishedBooks = await pool.query("SELECT book_id,club_books_id FROM club_books WHERE club_id=$1 AND reading_status=$2", [
             club_id, reading_status]);
 
         res.json(finishedBooks.rows);
@@ -82,7 +82,7 @@ router.get("/getComment/:id", async (req, res) => {
     const club_books_id = req.params.id;
 
     try {
-        const comments = await pool.query("SELECT comment, created_at FROM  club_books_comments WHERE club_books_id=$1", [club_books_id]);
+        const comments = await pool.query("SELECT comment, created_at, user_id FROM  club_books_comments WHERE club_books_id=$1", [club_books_id]);
 
         res.json(comments.rows);
     } catch (err) {

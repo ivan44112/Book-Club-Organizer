@@ -3,7 +3,7 @@
     <div class="title-container">
       <h1 class="title-blue">My Book Clubs</h1>
     </div>
-    <div>
+    <div class="card-container">
       <ClubCard v-for="club in userClubs" v-bind:key="club.club_id" :club="club"/>
     </div>
   </div>
@@ -55,7 +55,6 @@ export default {
   display: flex;
   justify-content: flex-start;
   background-color: #f7f9fd;
-
 }
 
 .title-blue {
@@ -64,7 +63,9 @@ export default {
   outline: none;
   font: normal normal bold 20px/26px Arial;
   padding-left: 30px;
-
 }
 
+.card-container{
+  padding-bottom: 30px;
+}
 </style>
