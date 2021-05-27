@@ -3,32 +3,6 @@ const pool = require("../../db");
 const authorize = require("../../middleware/authorize");
 
 /*
-Inserts new book currently being read in club
-POST REQUEST - /addClubBook/:id
-id to provide in url -> club id
- */
-router.post("/addClubBook/:id", async (req, res) => {
-    const {book} = req.body;
-    const club_id = req.params.id;
-
-    try {
-        const club = await pool.query("SELECT * FROM clubs WHERE club_id = $1", [club_id]);
-
-        if (club.rows.length === 0) {
-            return res.status(401).send("Club doesn't exist");
-        }
-
-        await pool.query("UPDATE club_books SET reading_status=false WHERE reading_status=true AND club_id=$1", [club_id]);
-        await pool.query("INSERT INTO club_books(book_id, club_id) VALUES ($1,$2)", [book, club_id]);
-
-        res.json({status: 'true'});
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send("Server error");
-    }
-});
-
-/*
 Gets books read or being read in club
 GET REQUEST - /getFinishedBooks/:id
 id to provide in url -> club id

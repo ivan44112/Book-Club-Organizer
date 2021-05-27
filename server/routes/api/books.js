@@ -3,25 +3,36 @@ const pool = require("../../db");
 const authorize = require("../../middleware/authorize");
 
 /*
-After a club decides it's next book, adds that book to every user for that club
+After a club decides it's next book, adds that book to every user for that club,
+also adds the book to the current_book value of the selected club
 POST REQUEST - /addUserBook/:id
 id to provide in url -> club_id
 provide:book_id
-todo->check for club
  */
 router.post("/addUserBook/:id", async (req, res) => {
     const club_id = req.params.id;
     const {book_id} = req.body;
 
     try {
+        const club = await pool.query("SELECT * FROM clubs WHERE club_id = $1", [club_id]);
+
+        if (club.rows.length === 0) {
+            return res.status(401).send("Club doesn't exist");
+        }
+
         const data = await pool.query("SELECT user_id FROM club_members WHERE club_id=$1", [club_id])
         const users = data.rows;
+
 
         for (let prop in users) {
             await pool.query("INSERT INTO user_books(book_id, user_id, club_id) VALUES($1,$2,$3)", [
                 book_id, users[prop].user_id, club_id
             ])
         }
+
+        await pool.query("UPDATE club_books SET reading_status=false WHERE reading_status=true AND club_id=$1", [club_id]);
+        await pool.query("INSERT INTO club_books(book_id, club_id) VALUES ($1,$2)", [book_id, club_id]);
+        await pool.query("UPDATE clubs SET current_book=$1, books_read=COALESCE(books_read,0)+1 WHERE club_id=$2", [book_id, club_id]);
 
         res.json({success: 'true'});
     } catch (err) {

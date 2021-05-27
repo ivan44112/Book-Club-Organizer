@@ -19,7 +19,8 @@ CREATE TABLE clubs(
     club_admin   VARCHAR(255) NOT NULL,
     current_book VARCHAR(255) SET DEFAULT NULL,
     books_Read   INT SET DEFAULT 0,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('cest', current_timestamp);
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('cest', current_timestamp),
+    voting_phase boolean DEFAULT false;
 )
 
 CREATE TABLE club_members

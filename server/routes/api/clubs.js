@@ -142,4 +142,27 @@ router.get("/countMembers/:id", async (req, res) => {
     }
 });
 
+/*
+Changes voting phase to its current opposite value
+PATCH REQUEST - /changeVotingPhase/:id
+id to provide in url -> club id
+ */
+router.patch("/changeVotingPhase/:id", async (req, res) => {
+    const club_id = req.params.id;
+
+    try {
+        const club = await pool.query("SELECT * FROM clubs WHERE club_id=$1", [club_id]);
+        if (club.rows.length === 0) {
+            return res.status(401).send("Club doesn't exist!");
+        }
+
+        await pool.query("UPDATE clubs SET voting_phase= NOT voting_phase WHERE club_id=$1", [club_id]);
+
+        res.json({status: 'true'});
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server error");
+    }
+})
+
 module.exports = router;
