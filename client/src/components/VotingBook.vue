@@ -11,7 +11,9 @@
       >
     </template>
     <p>{{bookData.volumeInfo.title}}</p>
-    <button v-if="!bookSuggested && !voted" v-on:click="vote">Vote</button>
+    <p v-if="userIsAdmin" class="votes-count">{{votes}} votes</p>
+    <button v-if="!bookSuggested && !voted && !userIsAdmin" v-on:click="vote">Vote</button>
+    <button v-if="userIsAdmin" v-on:click="addAsNextBookAdmin">Set as next read</button>
   </div>
 </template>
 
@@ -24,7 +26,8 @@ export default {
     return{
       bookData:[],
       loading: true,
-      voted:false
+      voted:false,
+      bookSetAsNext:false
     }
   },
   props: {
@@ -33,7 +36,19 @@ export default {
     },
     bookSuggested: {
       type: Boolean
-    }
+    },
+    userIsAdmin: {
+      type: Boolean
+    },
+    votes: {
+      type: Number
+    },
+    currentClub: {
+      type: Object
+    },
+    toggleVotingPhase: {
+      type: Function
+    },
   },
   methods:{
     async getBookData(){
@@ -57,6 +72,20 @@ export default {
       } catch (err){
         alert("error")
       }
+    },
+    addAsNextBookAdmin(){
+      let body = {
+        "book_id":this.book.book_id
+      }
+      axios
+          .post(`http://localhost:5000/books/addUserBook/${this.currentClub.club_id}`,body)
+          .then(res => {
+            if(res.data){
+              this.toggleVotingPhase();
+              this.bookSetAsNext = true;
+              this.$router.go()
+            }
+          })
     }
   },
   mounted() {
@@ -76,16 +105,23 @@ export default {
     width: 200px;
   }
   .voting-book-container button{
-    width: 100px;
+    width: 130px;
     align-self: center;
     margin-top: 5px;
     border: none;
-    height: 30px;
+    height: 36px;
     background: #0072D5;
     border-radius: 4px;
     color: #FFFFFF;
     cursor: pointer;
     outline: none;
     font-weight: bold;
+  }
+  .voting-book-container button:hover{
+    background: #1891ff;
+  }
+  .votes-count{
+    font-weight: bold;
+    margin:0 0 7px 0;
   }
 </style>

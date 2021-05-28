@@ -6,8 +6,11 @@
     <div class="by">by
       <span v-if="volumeInfo.authors" class="kings-author">{{volumeInfo.authors[0]}}</span>
     </div>
-    <i class="icon-clubIcon">
-      <span class="club-name">{{currentClub[0].club_name}}</span> </i>
+    <router-link class="router-link" v-bind:to="{ name: 'club', params: {id: currentClub[0].club_id}}" :key="$route.path">
+      <i class="icon-clubIcon">
+        <span class="club-name">{{currentClub[0].club_name}}</span>
+      </i>
+    </router-link>
     <div class="pages">Pages: {{volumeInfo.pageCount}}</div>
     <div class="rating">Rating: {{volumeInfo.averageRating}}/5</div>
     <div class="average">
@@ -110,7 +113,7 @@ export default {
   width: 67%;
   display: flex;
   flex-direction: column;
-  padding-left: 50px;
+  padding: 0 15px 15px 35px;
   border: 1px solid #dae0e5;
   border-radius: 0 8px 8px 0;
 
@@ -253,6 +256,11 @@ export default {
 
 .prince-image{
   width:220px;
+}
+
+.router-link{
+  margin-top: 20px;
+  text-decoration: none;
 }
 
 </style>

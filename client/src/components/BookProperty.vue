@@ -59,7 +59,9 @@ export default {
       currentClub:{},
       userBookData:{},
       pageNumberChanged: false,
-      currentPage : 0
+      currentPage : 0,
+      user:{},
+      isAdmin: false
     }
   },
   methods:{
@@ -163,12 +165,36 @@ export default {
             console.log(e.response.data)
               }
           )
+    },
+
+    async getUser(){
+      let user = JSON.parse(localStorage.getItem("user"))
+      try{
+        let res = await axios.get('http://localhost:5000/auth/currentUser', {
+          headers: { "Authorization": `Bearer ${user.token}`}
+        })
+        this.user = res.data;
+      } catch (err){
+        console.log(err)
+      }
+    },
+
+    async checkIfAdmin(){
+      if(this.currentClub.admin === this.user.user_id){
+        this.isAdmin = true
+      }
+    },
+
+    finishBook(){
+
     }
 
   },
    mounted() {
     this.getBookData();
     this.getUserClubs();
+    this.getUser();
+    this.checkIfAdmin();
   }
 }
 </script>
@@ -198,8 +224,9 @@ export default {
 .dropdown {
   position: relative;
   display: inline-block;
-
+  padding: 5px 10px 5px 0;
 }
+
 .dropdown-right{
   position: absolute;
   left:160px;
@@ -241,7 +268,7 @@ export default {
 
 .dropdown-content a {
   color: #0072D5;
-  padding: 12px 16px;
+  padding: 16px 14px;
   text-decoration: none;
   display: block;
   cursor: pointer;
@@ -383,5 +410,6 @@ export default {
   color: #666666;
   cursor: not-allowed;
 }
+
 </style>
 

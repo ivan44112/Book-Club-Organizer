@@ -49,10 +49,12 @@
     <div class="upcoming-section-container">
       <h1 class="blue-title">Upcoming title</h1>
       <div class="upcoming-title-data-container">
+        <!--
         <Suggestion v-if="bookPhase === 'suggestion' " :adminId="this.clubAdmin"/>
         <WaitingBook v-if="bookPhase === 'waiting' "/>
-        <Voting :user="user" v-if="bookPhase === 'voting' "/>
-      </div>
+        -->
+        <Voting :user="user" :userIsAdmin="this.userIsAdmin" :currentClub="currentClub"/>
+    </div>
     </div>
   </div>
 </template>
@@ -61,16 +63,13 @@
 import axios from "axios";
 import CurrentlyReadingBook from "./CurrentlyReadingBook";
 import Voting from "./Voting";
-import Suggestion from "./Suggestion";
-import WaitingBook from "./WaitingBook";
 
 export default {
 name: "ClubPage",
-  components: {WaitingBook, Suggestion, Voting, CurrentlyReadingBook},
+  components: {Voting, CurrentlyReadingBook},
   data(){
     return{
       currentClub:{},
-      bookPhase:"voting",
       clubAdmin:"",
       userClubs:[],
       clubJoined:false,
@@ -111,6 +110,7 @@ name: "ClubPage",
           headers: { "Authorization": `Bearer ${user.token}`}
         })
         this.userClubs = res.data;
+        console.log(res.data)
       } catch (err){
         console.log(err)
       }

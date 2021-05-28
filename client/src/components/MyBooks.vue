@@ -4,11 +4,11 @@
       <h1 class="title-blue">Currently Reading</h1>
     </div>
     <div class="currently-reading-container">
-      <MyBook v-for="book in currentlyReadingBooks" v-bind:key="book.id" :books="book" :club="userClubs" :type="'reading'"/>
+      <MyBook v-for="book in currentlyReadingBooks" v-bind:key="book.book_id" :books="book" :club="userClubs"/>
     </div>
     <h1 class="books-toread">Wishlist</h1>
     <div class="books-to-read-container">
-      <MyBook v-for="book in wantToReadBooks" v-bind:key="book.id" :books="book" :club="userClubs" :type="'wantToRead'"/>
+      <MyBook v-for="book in wantToReadBooks" v-bind:key="book.book_id" :books="book" :club="userClubs"/>
     </div>
     <h1 class="booksiwant-toread">Favorite Books</h1>
     <div class="favorite-books-container">
@@ -58,7 +58,6 @@ export default {
       axios
           .get(`http://localhost:5000/books/getUserBooks/${this.userClubs[0].club_id}`, config)
           .then(res => {
-            console.log(res.data)
             this.wantToReadBooks = res.data
           })
     },

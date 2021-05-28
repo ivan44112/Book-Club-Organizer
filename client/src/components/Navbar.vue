@@ -37,7 +37,9 @@
       -->
       <div class="profile-container" v-on:click="dropdownIsOpen = !dropdownIsOpen">
         <div class="profile-name">
+          <!--
           <img class="profile-img" src="../assets/avatar.png"/>
+          -->
           <span class="profile-text">{{ user.name }}</span>
           <img class="arrow" src="../assets/arrow.svg" v-bind:class="{rotate: dropdownIsOpen}">
         </div>
@@ -301,7 +303,7 @@ export default {
 .nav-dropdown{
   background: white;
   position: absolute;
-  width: 120%;
+  width: 124%;
   top: 55px;
   box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.15);
   display: flex;
@@ -321,7 +323,7 @@ export default {
   background: #f3f3f3;
 }
 .toggled{
-  top:64px !important;
+  top:52px !important;
   transition: 0.2s ease-out;
   opacity: 1 !important;
   visibility: visible !important;
