@@ -86,6 +86,7 @@ CREATE TABLE book_voting
     user_id uuid NOT NULL,
     club_id uuid NOT NULL,
     votes int default 0,
+    date_started TIMESTAMP DEFAULT NULL,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (club_id) REFERENCES clubs(club_id) ON DELETE CASCADE
 )

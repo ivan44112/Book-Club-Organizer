@@ -23,7 +23,6 @@ router.post("/addUserBook/:id", async (req, res) => {
         const data = await pool.query("SELECT user_id FROM club_members WHERE club_id=$1", [club_id])
         const users = data.rows;
 
-
         for (let prop in users) {
             await pool.query("INSERT INTO user_books(book_id, user_id, club_id) VALUES($1,$2,$3)", [
                 book_id, users[prop].user_id, club_id

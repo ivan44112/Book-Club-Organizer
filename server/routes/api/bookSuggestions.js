@@ -53,7 +53,7 @@ router.get("/getBooks/:id", async (req, res) => {
             return res.status(401).send("Club doesn't exist");
         }
 
-        const books = await pool.query("SELECT book_id,votes,user_id FROM book_voting WHERE club_id=$1", [club_id]);
+        const books = await pool.query("SELECT book_id,votes,user_id FROM book_voting WHERE club_id=$1 AND date_ended IS NULL", [club_id]);
 
         res.json(books.rows);
     } catch (err) {
@@ -75,20 +75,26 @@ router.post("/addVote/:id", authorize, async (req, res) => {
     const {book_id} = req.body;
 
     try {
-        const userBook = await pool.query("SELECT book_voting_id FROM book_voting WHERE book_id=$1 AND club_id=$2 ", [book_id, club_id])
+        const club = await pool.query("SELECT * FROM clubs WHERE club_id = $1", [club_id]);
+
+        if (club.rows.length === 0) {
+            return res.status(401).send("Club doesn't exist");
+        }
+
+        const userBook = await pool.query("SELECT book_voting_id FROM book_voting WHERE book_id=$1 AND club_id=$2", [book_id, club_id])
         if (userBook.rows.length === 0) {
             return res.status(401).send("That book isn't added yet!");
         }
         const bookVotesId = userBook.rows[0].book_voting_id;
 
         const userVote = await pool.query("SELECT user_id FROM book_votes WHERE book_voting_id=$1 AND user_id=$2", [bookVotesId, user])
-        if(userVote.rows.length > 0) {
+        if (userVote.rows.length > 0) {
             return res.status(401).send("User already voted for that book")
         }
 
         await pool.query("INSERT INTO book_votes(book_voting_id, user_id) VALUES($1, $2)", [bookVotesId, user]);
         await pool.query("UPDATE book_voting SET votes=COALESCE(votes,0)+1 WHERE book_id=$1 AND club_id=$2", [
-             book_id, club_id
+            book_id, club_id
         ]);
 
         res.json({success: 'true'});

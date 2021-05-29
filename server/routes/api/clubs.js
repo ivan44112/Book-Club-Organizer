@@ -18,8 +18,12 @@ router.post("/createClub", authorize, async (req, res) => {
         if (club.rows.length > 0) {
             return res.status(401).send("Club with that name already exists");
         }
-        await pool.query("INSERT INTO clubs (club_name, admin, description, category) VALUES ($1,$2,$3,$4)", [
+        const newClub = await pool.query("INSERT INTO clubs (club_name, admin, description, category) VALUES ($1,$2,$3,$4) RETURNING  *", [
             name, user_id, description, category]);
+
+        const newClubId = newClub.rows[0].club_id;
+
+        await pool.query("INSERT INTO club_members (club_id, user_id) VALUES ($1,$2)", [newClubId, user_id])
 
         res.json({success: "true"});
     } catch (err) {
@@ -156,7 +160,18 @@ router.patch("/changeVotingPhase/:id", async (req, res) => {
             return res.status(401).send("Club doesn't exist!");
         }
 
-        await pool.query("UPDATE clubs SET voting_phase= NOT voting_phase WHERE club_id=$1", [club_id]);
+        const data = await pool.query("UPDATE clubs SET voting_phase= NOT voting_phase WHERE club_id=$1 RETURNING *", [club_id]);
+
+        if (data.rows[0].voting_phase === false) {
+            const bookVoteCompleted = await pool.query("UPDATE book_voting SET date_ended=timezone('cest', current_timestamp) WHERE club_id=$1 AND date_ended IS NULL RETURNING *",
+                [club_id]
+            )
+            const bookVoteCompletedId = bookVoteCompleted.rows;
+
+            for (let prop in bookVoteCompletedId) {
+                await pool.query("DELETE FROM book_votes WHERE book_voting_id=$1", [bookVoteCompletedId[prop].book_voting_id])
+            }
+        }
 
         res.json({status: 'true'});
     } catch (err) {
