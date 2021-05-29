@@ -1,6 +1,12 @@
 <template>
   <div class="content-middle">
-    <div class="title-container">
+    <div v-if="!userClubs.length && !loading" class="join-club">
+      <h1>You didnt join any clubs yet</h1>
+      <router-link to="/dashboard/exploreclubs">
+        <button>Explore Clubs</button>
+      </router-link>
+    </div>
+    <div v-if="userClubs.length" class="title-container">
       <h1 class="title-blue">Currently Reading Books</h1>
     </div>
     <div v-if="!loading" class=readingbooks-container>
@@ -73,6 +79,8 @@ export default {
                  obj["club"] = club.club_name;
                  obj["clubId"] = club.club_id;
                  array.push(obj);
+               }).catch(err => {
+                 console.log(err.message)
                })
       })
       this.currentlyReadingBooksByClubs = array;
@@ -181,6 +189,28 @@ export default {
 }
 .readingbooks-container{
   margin-bottom: 50px;
+}
+
+.join-club{
+  margin-top:15%
+}
+
+.join-club h1{
+  font-size: 25px;
+}
+.join-club button{
+  margin-top: 15px;
+  padding: 9px 13px;
+  font-size: 14px;
+  font-weight: bold;
+  border:none;
+  cursor: pointer;
+  border-radius: 4px;
+  color:white;
+  background: #0072D5;
+}
+.join-club button:hover{
+  opacity: 0.8;
 }
 
 </style>

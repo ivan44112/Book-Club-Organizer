@@ -4,11 +4,11 @@
       <h1 class="title-blue">Currently Reading</h1>
     </div>
     <div class="currently-reading-container">
-      <MyBook v-for="book in currentlyReadingBooks" v-bind:key="book.book_id" :books="book" :club="userClubs"/>
+      <MyBook v-for="book in currentlyReadingBooks" v-bind:key="book.book_id" :books="book"/>
     </div>
     <h1 class="books-toread">Wishlist</h1>
     <div class="books-to-read-container">
-      <MyBook v-for="book in wantToReadBooks" v-bind:key="book.book_id" :books="book" :club="userClubs"/>
+      <MyBook v-for="book in wantToReadBooks" v-bind:key="book.book_id" :books="book"/>
     </div>
     <h1 class="booksiwant-toread">Favorite Books</h1>
     <div class="favorite-books-container">
@@ -45,11 +45,13 @@ export default {
       } catch (err){
         console.log(err)
       }
-      await this.getWantToReadBooks()
-      await this.getCurrentlyReadingBooks()
+      if(this.userClubs[0]){
+        await this.getWantToReadBooks()
+        await this.getCurrentlyReadingBooks()
+      }
     },
 
-    getWantToReadBooks(){
+    async getWantToReadBooks(){
       let user = JSON.parse(localStorage.getItem("user"))
       let config = {
         headers: { "Authorization": `Bearer ${user.token}`},
@@ -59,9 +61,11 @@ export default {
           .get(`http://localhost:5000/books/getUserBooks/${this.userClubs[0].club_id}`, config)
           .then(res => {
             this.wantToReadBooks = res.data
-          })
+          }).catch(err => {
+            console.log(err.message)
+      })
     },
-    getCurrentlyReadingBooks(){
+    async getCurrentlyReadingBooks(){
       let user = JSON.parse(localStorage.getItem("user"))
       let config = {
         headers: { "Authorization": `Bearer ${user.token}`},
@@ -70,9 +74,10 @@ export default {
       axios
           .get(`http://localhost:5000/books/getUserBooks/${this.userClubs[0].club_id}`, config)
           .then(res => {
-            console.log(res.data)
             this.currentlyReadingBooks = res.data
-          })
+          }).catch(err => {
+            console.log(err.message)
+      })
     }
       },
   mounted() {

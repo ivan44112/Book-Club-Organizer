@@ -29,12 +29,6 @@ export default {
     }
   },
   props: {
-    type:{
-      type: String
-    },
-    club: {
-      type: Array
-    },
     books:{
       type: Object
     }

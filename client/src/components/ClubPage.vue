@@ -26,7 +26,7 @@
           <p>{{currentClub.description}}</p>
         </div>
         <div v-if="!userIsAdmin">
-          <button v-if="!this.userClubs.find(club => club.club_id === this.currentClub.club_id)"
+          <button v-if="!userIsMember"
                   v-on:click="joinClub"
                   class="join-club-button"
                   v-bind:class = "(this.clubJoined)?'disable_button':''">
@@ -42,11 +42,14 @@
     </div>
     <div class="currently-reading-section-container">
       <h1 class="blue-title">Currently reading</h1>
+      <div v-if="!userIsAdmin && !currentlyReadingBook">
+        <h1 class="no-book-text">Book not chosen yet</h1>
+      </div>
       <div v-if="currentlyReadingBook" class="currently-reading-data-container">
         <CurrentlyReadingBook :bookId="currentlyReadingBook" :clubId="currentClub.club_id"/>
       </div>
     </div>
-    <div class="upcoming-section-container">
+    <div v-if="userIsMember || userIsAdmin" class="upcoming-section-container">
       <h1 class="blue-title">Upcoming title</h1>
       <div class="upcoming-title-data-container">
         <!--
@@ -76,7 +79,8 @@ name: "ClubPage",
       clubLeft:false,
       currentlyReadingBook:"",
       user:{},
-      userIsAdmin: false
+      userIsAdmin: false,
+      userIsMember: false
     }
   },
   methods:{
@@ -110,7 +114,10 @@ name: "ClubPage",
           headers: { "Authorization": `Bearer ${user.token}`}
         })
         this.userClubs = res.data;
-        console.log(res.data)
+        let userClub = res.data.filter(club => club.club_id === this.$route.params.id)
+        if(userClub.length){
+          this.userIsMember = true;
+        }
       } catch (err){
         console.log(err)
       }
@@ -128,7 +135,7 @@ name: "ClubPage",
         let res = await axios.post(`http://localhost:5000/clubs/addMember/${this.currentClub.club_id}`,data,config)
         if(res.data){
           this.clubJoined = true;
-          alert("You successfully joined this club")
+          this.$router.go()
         }
       } catch (err){
         console.log(err)
@@ -146,7 +153,7 @@ name: "ClubPage",
         let res = await axios.delete(`http://localhost:5000/clubs/deleteMember/${this.currentClub.club_id}`,config)
         if(res.data){
           this.clubLeft = true;
-          alert("You successfully left this club")
+          this.$router.go()
         }
       } catch (err){
         console.log(err)
@@ -169,6 +176,7 @@ name: "ClubPage",
           headers: { "Authorization": `Bearer ${user.token}`}
         })
         this.user = res.data;
+        console.log(res.data)
       } catch (err){
         console.log(err)
       }
@@ -271,5 +279,10 @@ name: "ClubPage",
     opacity: 0.3;
     transition: 0.2s;
     pointer-events: none;
+  }
+  .no-book-text{
+    font-size: 20px;
+    margin-left: 20px;
+    display: flex;
   }
 </style>

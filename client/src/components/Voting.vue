@@ -3,10 +3,10 @@
    <div v-if="currentClub.voting_phase">
      <div class="voting-description">
        <h1>Voting phase</h1>
-       <p v-if="!userIsAdmin || bookSuggested">You can vote or suggest one book for the next read</p>
+       <p v-if="!userIsAdmin || bookSuggested">You can vote or suggest multiple books for the next read</p>
      </div>
      <div v-if="votingBooks" class="voting-container-data">
-       <VotingBook :bookSuggested="bookSuggested" v-for="book in votingBooks" v-bind:key="book.book_id" :book="book" :userIsAdmin="userIsAdmin" :votes="book.votes" :currentClub="currentClub" :toggleVotingPhase="toggleVotingPhase"/>
+       <VotingBook v-for="book in votingBooks" v-bind:key="book.book_id" :book="book" :userIsAdmin="userIsAdmin" :votes="book.votes" :currentClub="currentClub" :toggleVotingPhase="toggleVotingPhase"/>
      </div>
    </div>
    <div v-if="!currentClub.voting_phase" class="voting-description margin-bottom">
@@ -45,12 +45,6 @@ export default {
       try{
         let res = await axios.get(`http://localhost:5000/bookSuggestions/getBooks/${this.$route.params.id}`)
         this.votingBooks = res.data;
-        const currentUserId = this.user.user_id;
-        res.data.forEach( book => {
-          if (book.user_id === currentUserId) {
-            this.bookSuggested = true;
-          }
-        })
       } catch (err){
         console.log(err)
       }

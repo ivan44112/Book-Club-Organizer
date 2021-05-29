@@ -12,7 +12,7 @@
     </template>
     <p>{{bookData.volumeInfo.title}}</p>
     <p v-if="userIsAdmin" class="votes-count">{{votes}} votes</p>
-    <button v-if="!bookSuggested && !voted && !userIsAdmin" v-on:click="vote">Vote</button>
+    <button v-if="!userIsAdmin" v-on:click="vote">Vote</button>
     <button v-if="userIsAdmin" v-on:click="addAsNextBookAdmin">Set as next read</button>
   </div>
 </template>
@@ -33,9 +33,6 @@ export default {
   props: {
     book: {
       type: Object
-    },
-    bookSuggested: {
-      type: Boolean
     },
     userIsAdmin: {
       type: Boolean
@@ -60,17 +57,23 @@ export default {
           })
     },
     async vote(){
+      let user = JSON.parse(localStorage.getItem("user"))
+      let config = {
+        headers: {
+          "Authorization": `Bearer ${user.token}`
+        }
+      };
       let body = {
         "book_id":this.book.book_id
       }
       try{
-        let res = await axios.patch(`http://localhost:5000/bookSuggestions/addVote/${this.$route.params.id}`,body)
+        let res = await axios.post(`http://localhost:5000/bookSuggestions/addVote/${this.$route.params.id}`,body,config)
         if(res.data){
           console.log(res.data)
-          this.voted = true;
+          this.$router.go()
         }
       } catch (err){
-        alert("error")
+        alert("You already voted")
       }
     },
     addAsNextBookAdmin(){

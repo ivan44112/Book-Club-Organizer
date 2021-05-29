@@ -149,6 +149,9 @@ export default {
   border-radius: 4px;
   cursor: pointer;
 }
+.create-button:hover{
+  opacity: 0.8;
+}
 .checkbox-label{
   margin-left: 5px;
 }

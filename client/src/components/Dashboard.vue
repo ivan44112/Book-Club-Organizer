@@ -51,7 +51,7 @@ export default {
 
 .section-left {
   width: 190px;
-  height: 100vh;
+  height: calc(100vh - 78px);
   border-right: 1px solid #dae0e5;
 }
 

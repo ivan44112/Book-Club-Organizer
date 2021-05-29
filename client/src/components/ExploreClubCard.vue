@@ -6,7 +6,7 @@
       <div class="card-details">
         <p>Currently Reading:</p>
         <p v-if="currentlyReadingTitle" class="currently-reading-title">{{currentlyReadingTitle}}</p>
-        <p v-on:click="getCurrentlyReadingBook">Members: {{clubMemberCount}}</p>
+        <p>Members: {{clubMemberCount}}</p>
         <p>Books read: {{club.books_read}}</p>
         <p class="categories">Category: {{club.category}}</p>
       </div>
@@ -31,16 +31,19 @@ export default {
     },
   },
   methods:{
-    getCurrentlyReadingBook() {
-      if(this.club.current_book){
-        axios
-            .get(`https://www.googleapis.com/books/v1/volumes/${this.club.current_book}`)
-            .then(response => {
-              this.currentlyReadingTitle = response.data.volumeInfo.title;
-            })
-      }else{
-        this.currentlyReadingTitle = ""
-      }
+    async getCurrentlyReadingBook(){
+      axios
+          .get(`http://localhost:5000/clubBooks/getClubBookStatus/${this.club.club_id}`,
+              { params: { status: true } })
+          .then(res => {
+            if(res.data[0]){
+              axios
+                  .get(`https://www.googleapis.com/books/v1/volumes/${res.data[0].book_id}`)
+                  .then(response => {
+                    this.currentlyReadingTitle = response.data.volumeInfo.title;
+                  })
+            }
+          })
     },
     getClubMemberCount() {
       axios
@@ -51,7 +54,7 @@ export default {
     }
   },
   mounted() {
-    this.getCurrentlyReadingBook()
+    this.getCurrentlyReadingBook();
     this.getClubMemberCount();
   }
 }
@@ -71,6 +74,11 @@ export default {
     box-shadow: 0 3px 6px #00000026;
     border-radius: 10px;
   }
+  .club-card-container:hover{
+    box-shadow: 0 3px 6px #00000016;
+    transform: scale(1.01);
+    transition: 0.1s;
+  }
   .club-img{
     width:100%;
     border-radius: 10px 10px 0 0;
@@ -87,7 +95,7 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 0 12px;
+    padding: 0 12px 5px 12px;
     margin-bottom: 8px;
   }
   .card-details p{

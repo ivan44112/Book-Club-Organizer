@@ -1,11 +1,14 @@
 <template>
-  <div v-if="book && userBookData[0]" class="book-property">
-    <ThePrinceOfThorns v-if="!loading" :book="book" :currentClub="currentClub" :userBookData="userBookData" :currPage="currentPage"/>
+  <div v-if="book" class="book-property">
+    <ThePrinceOfThorns v-if="!bookNotInAnyClub && !loading" :book="book" :currentClub="currentClub" :userBookData="userBookData" :currPage="currentPage"/>
+    <div v-if="bookNotInAnyClub && !loading" class="book-container">
+      <h1>{{book.volumeInfo.title}}</h1>
+      <img class="kings-image" :src="book.volumeInfo.imageLinks.thumbnail" :alt="book.volumeInfo.title">
+    </div>
     <div class="navigation">
       <div class="dropdown">
         <button class="dropbtn">Actions <img class="arrow" src="../assets/arrow2.png"></button>
         <div class="dropdown-content">
-          <a>Add to Favorites</a>
           <a v-on:click="addToWishList">Add to Wishlist</a>
           <a class="suggest-btn" href="#">Suggest Book</a>
           <div class="dropdown-right">
@@ -15,15 +18,15 @@
         </div>
       </div>
     </div>
-    <div  class="dropdown-after">
-      <input class="number" type="number" v-model="currentPage" :max="book.volumeInfo.pageCount" :min="0" />
+    <div v-if="!bookNotInAnyClub && !loading" class="dropdown-after">
+      <input  class="number" type="number" v-model="currentPage" :max="book.volumeInfo.pageCount" :min="0" />
       <button v-bind:class="{ disabledButton: currentPage.toString() === userBookData[0].current_page.toString() }" class="update" type="submit" value="update" v-on:click="updateCurrentPage">Update Page</button>
       <!--
       <span class="last-update">Last update: 3 days ago</span>
       -->
     </div>
     <h1 class="about">About the book</h1>
-    <div  class="about-content">
+    <div v-if="!loading" class="about-content">
       <p class="release">Release Date: <span class="date">{{book.volumeInfo.publishedDate}}</span> </p>
       <p class="categories">Categories: <span v-if="book.volumeInfo.categories" class="category-count">{{book.volumeInfo.categories[0]}}</span> </p>
       <p class="publisher">Publisher: <span class="publisher-name">{{book.volumeInfo.publisher}}</span> </p>
@@ -34,8 +37,10 @@
     <div class="summary-content">
       <p>{{bookDescription}}</p>
     </div>
-    <h1 class="discussion-title">Discussion</h1>
-    <BookComment :currentClub="currentClub"/>
+    <div v-if="!bookNotInAnyClub">
+      <h1 class="discussion-title">Discussion</h1>
+      <BookComment :currentClub="currentClub"/>
+    </div>
   </div>
 </template>
 
@@ -61,7 +66,8 @@ export default {
       pageNumberChanged: false,
       currentPage : 0,
       user:{},
-      isAdmin: false
+      isAdmin: false,
+      bookNotInAnyClub: true
     }
   },
   methods:{
@@ -72,6 +78,7 @@ export default {
             this.book = response.data;
             //remove unwanted tags from book description response
             this.bookDescription = response.data.volumeInfo.description.replace(/(<([^>]+)>)/gi, "");
+            this.loading = false;
           })
     },
     async getUserClubs(){
@@ -133,15 +140,15 @@ export default {
         headers: {
           "Authorization": `Bearer ${user.token}`,
         },
-        params: {book_id: "4OfWWfRDAXcC"}
+        params: {book_id: this.$route.params.id}
       }
       axios
           .get(`http://localhost:5000/books/getUserBook`, config)
           .then(res => {
-            this.userBookData = res.data
-            this.currentPage = res.data[0].current_page
-            this.currentClub = this.userClubs.filter( club => club.club_id === this.userBookData[0].club_id)
-            this.loading = false;
+              this.userBookData = res.data
+              this.currentPage = res.data[0].current_page
+              this.currentClub = this.userClubs.filter( club => club.club_id === this.userBookData[0].club_id)
+              this.bookNotInAnyClub = false
           })
     },
 
@@ -153,7 +160,7 @@ export default {
         }
       }
       let body = {
-        "book_id":this.book.book_id,
+        "book_id":this.$route.params.id,
         "current_page":this.currentPage
       }
       axios
@@ -184,10 +191,6 @@ export default {
         this.isAdmin = true
       }
     },
-
-    finishBook(){
-
-    }
 
   },
    mounted() {
@@ -230,7 +233,7 @@ export default {
 .dropdown-right{
   position: absolute;
   left:160px;
-  top: 84px;
+  top: 50px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   display: flex;
   background: white;
@@ -410,6 +413,17 @@ export default {
   color: #666666;
   cursor: not-allowed;
 }
-
+.book-container{
+  display: flex;
+  flex-direction: column;
+}
+.book-container img{
+  width:250px;
+  margin:0 30px 10px 30px;
+}
+.book-container h1{
+  align-self: flex-start;
+  margin-left: 30px;
+}
 </style>
 
