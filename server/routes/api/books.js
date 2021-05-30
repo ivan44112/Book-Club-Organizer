@@ -98,14 +98,19 @@ router.patch("/readingStatus/:id", authorize, async (req, res) => {
 Calculate average page number for certain club and book
 GET REQUEST - /averagePageNumber/:id
 id to provide in url -> club_id
-provide:book_id
+provide:book_id in params
  */
 router.get("/calculateAvg/:id", async (req, res) => {
     const club_id = req.params.id;
-    const {book_id} = req.body;
+    const book_id = req.query.book_id;
 
     try {
-        const avg = await pool.query("SELECT AVG(current_page) FROM user_books WHERE club_id=$1 AND book_id=$2", [club_id, book_id]);
+        const clubBookCheck = await pool.query("SELECT * FROM user_books WHERE book_id=$1 AND club_id=$2", [book_id, club_id])
+        if (clubBookCheck.rows.length === 0) {
+            return res.status(401).send("No users in club with that book found");
+        }
+
+        const avg = await pool.query("SELECT ROUND(AVG(current_page)) FROM user_books WHERE club_id=$1 AND book_id=$2", [club_id, book_id]);
 
         res.json(avg.rows)
     } catch (err) {
