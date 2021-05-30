@@ -76,7 +76,8 @@ todo->check for user, check if that club is associated with that book
 router.patch("/readingStatus/:id", authorize, async (req, res) => {
     const user = req.user;
     const club_id = req.params.id;
-    const {book_id, reading_status} = req.body;
+    const book_id = req.query.book_id;
+    const reading_status = req.query.reading_status;
 
     try {
         const userBook = await pool.query("SELECT * FROM user_books WHERE book_id=$1", [book_id])
