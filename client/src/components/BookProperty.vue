@@ -167,6 +167,7 @@ export default {
           .patch(`http://localhost:5000/books/pageNumber/${this.currentClub[0].club_id}`,body,config)
           .then(res => {
             console.log(res.data)
+
           })
           .catch( e => {
             console.log(e.response.data)
@@ -316,6 +317,13 @@ export default {
   outline: none;
   font-weight: bold;
   margin-left: 30px;
+}
+
+.update:hover{
+  opacity: 0.8;
+}
+.update:active{
+  opacity: 1;
 }
 
 .last-update {

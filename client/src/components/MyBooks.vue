@@ -10,10 +10,12 @@
     <div class="books-to-read-container">
       <MyBook v-for="book in wantToReadBooks" v-bind:key="book.book_id" :books="book"/>
     </div>
+    <!--
     <h1 class="booksiwant-toread">Favorite Books</h1>
     <div class="favorite-books-container">
 
     </div>
+-->
   </div>
 </template>
 

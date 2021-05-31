@@ -14,12 +14,7 @@
     <div class="pages">Pages: {{volumeInfo.pageCount}}</div>
     <div class="rating">Rating: {{volumeInfo.averageRating}}/5</div>
     <div class="average">
-      <span class="member-page">Club average:</span>
-    </div>
-    <div v-if="!loading" class="average-member">
-      <div class="average-percent">
-        <span v-bind:style="avgPercent" class="avg-percent">{{clubAveragePagePercent}}%</span>
-      </div>
+      <span class="member-page">Club average page:<span class="page-number">{{averageClubPage}}</span></span>
     </div>
     <div v-if="!loading" class="current-page">My current page:
       <span class="current-number">{{currPage}}</span>
@@ -40,7 +35,7 @@ export default {
     return{
       loading:true,
       userPagePercent:"",
-      clubAveragePagePercent:""
+      averageClubPage:""
     }
   },
   props: {
@@ -66,23 +61,20 @@ export default {
       return {
         width: this.userPagePercent + "%"
       }
-    },
-    avgPercent(){
-      return {
-        width: this.clubAveragePagePercent + "%"
-      }
     }
   },
   methods:{
     async getAveragePage(){
-      let body = {
-        "book_id": this.book.book_id
+      let config = {
+        params: {
+          book_id: this.book.id
+        }
       }
       axios
-          .get(`http://localhost:5000/books/calculateAvg/${this.currentClub[0].club_id}`,body)
+          .get(`http://localhost:5000/books/calculateAvg/${this.currentClub[0].club_id}`,config)
           .then(res => {
-            this.clubAveragePagePercent = res.data[0].avg
-            this.loading = false
+            this.averageClubPage = res.data[0].round
+            this.loading = false;
           })
     }
   },
@@ -261,6 +253,9 @@ export default {
 .router-link{
   margin-top: 20px;
   text-decoration: none;
+}
+.page-number{
+  color: #109A3D;
 }
 
 </style>

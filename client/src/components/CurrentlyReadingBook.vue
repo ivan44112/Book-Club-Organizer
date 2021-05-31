@@ -23,17 +23,19 @@
           <span class="club-name">{{clubName}}</span> </i>
         <div class="pages">Pages: {{book.volumeInfo.pageCount}}</div>
         <div class="rating">Rating: {{book.volumeInfo.averageRating}}/5</div>
-        <!--
+
         <div class="average">
-          <span class="member-page">Club average:</span>
-          <span class="page-number">548</span>
+          <span class="member-page">Average club page:</span>
+          <span class="page-number">{{averageClubPage}}</span>
         </div>
-        -->
+
+        <!--
         <div v-if="clubAveragePagePercent" class="average-member">
           <div class="average-percent">
             <span v-bind:style="avgPercent" class="avg-percent">{{clubAveragePagePercent}}%</span>
           </div>
         </div>
+        -->
         <div v-if="userBookData[0]" class="current-page">My current page:
           <span class="current-number">{{userBookData[0].current_page}}</span>
           <div class="current-percent">
@@ -58,7 +60,7 @@ export default {
       userBookData:{},
       loading:true,
       userPagePercent:"",
-      clubAveragePagePercent:""
+      averageClubPage:""
     }
   },
   props: {
@@ -76,11 +78,6 @@ export default {
     percent(){
       return {
         width: this.userPagePercent + "%"
-      }
-    },
-    avgPercent(){
-      return {
-        width: this.clubAveragePagePercent + "%"
       }
     }
   },
@@ -112,13 +109,16 @@ export default {
           })
     },
     async getAveragePage(){
-      let body = {
-        "book_id": this.bookId
+      let config = {
+        params: {
+          book_id: this.bookId
+        }
       }
       axios
-          .get(`http://localhost:5000/books/calculateAvg/${this.clubId}`,body)
+          .get(`http://localhost:5000/books/calculateAvg/${this.clubId}`,config)
           .then(res => {
-            this.clubAveragePagePercent = res.data[0].avg
+            console.log(res.data)
+            this.averageClubPage = res.data[0].round
             this.loading = false;
           })
     }
@@ -223,6 +223,10 @@ export default {
 
 }
 
+.average{
+  margin-top:8px;
+}
+
 .average-percent {
   position: absolute;
   width: 0%;
@@ -251,7 +255,7 @@ export default {
   font: normal normal normal 14px/19px Arial;
   color: #727272;
   opacity: 1;
-  padding-top: 20px;
+  padding-top: 8px;
 
 }
 
