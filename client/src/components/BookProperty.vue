@@ -167,7 +167,7 @@ export default {
           .patch(`http://localhost:5000/books/pageNumber/${this.currentClub[0].club_id}`,body,config)
           .then(res => {
             console.log(res.data)
-
+            this.userBookData[0].current_page = this.currentPage
           })
           .catch( e => {
             console.log(e.response.data)

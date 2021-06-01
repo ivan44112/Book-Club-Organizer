@@ -12,9 +12,6 @@
         >
       </template>
       <div class="kings-title">
-        <div class="more">
-          <a class="more-btn" href="#">More ></a>
-        </div>
         <h1 class="book-title">{{book.volumeInfo.title}}</h1>
         <div class="by">by
           <span class="kings-author">{{book.volumeInfo.authors[0]}}</span>
@@ -147,7 +144,8 @@ export default {
   width: 67%;
   display: flex;
   flex-direction: column;
-  padding-left: 50px;
+  padding-left: 30px;
+  padding-right: 20px;
   border: 1px solid #dae0e5;
   border-radius: 0 8px 8px 0;
 }

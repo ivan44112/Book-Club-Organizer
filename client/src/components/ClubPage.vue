@@ -1,5 +1,5 @@
 <template>
-  <div v-if="currentClub" class="club-container">
+  <div v-if="currentClub && !loading" class="club-container">
     <div class="club-section">
       <div class="img-container">
         <img src="../assets/club1.png" alt="cover"/>
@@ -16,7 +16,7 @@
         </div>
         <div class="data-item">
           <p>Members:</p>
-          <p class="bold">32</p>
+          <p class="bold">{{clubMemberCount}}</p>
         </div>
         <div class="data-item">
           <p>Books read:</p>
@@ -33,7 +33,7 @@
             Join {{currentClub.club_name}}
           </button>
           <button class="leave_club-button" v-on:click="leaveClub"
-                  v-else
+                  v-if="userIsMember && !userIsAdmin"
                   v-bind:class = "(this.clubLeft)?'disable_button':''">
                   Leave {{currentClub.club_name}}
           </button>
@@ -80,7 +80,9 @@ name: "ClubPage",
       currentlyReadingBook:"",
       user:{},
       userIsAdmin: false,
-      userIsMember: false
+      userIsMember: false,
+      clubMemberCount:0,
+      loading: true
     }
   },
   methods:{
@@ -95,7 +97,8 @@ name: "ClubPage",
       }
       await this.getCurrentlyReadBooksByClubs();
       await this.getClubAdmin();
-      await this.checkIfAdmin();
+      this.checkIfAdmin();
+      this.getClubMemberCount();
     },
 
     async getClubAdmin(){
@@ -176,16 +179,23 @@ name: "ClubPage",
           headers: { "Authorization": `Bearer ${user.token}`}
         })
         this.user = res.data;
-        console.log(res.data)
       } catch (err){
         console.log(err)
       }
     },
-    async checkIfAdmin(){
+    checkIfAdmin(){
       if(this.currentClub.admin === this.user.user_id){
         this.userIsAdmin = true
       }
-    }
+    },
+    getClubMemberCount() {
+      axios
+          .get(`http://localhost:5000/clubs/countMembers/${this.currentClub.club_id}`)
+          .then(res => {
+            this.clubMemberCount = res.data.count;
+            this.loading = false;
+          })
+    },
 
   },
   mounted() {

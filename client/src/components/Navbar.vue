@@ -219,6 +219,10 @@ export default {
   font-weight: bold;
 }
 
+.button:hover {
+  opacity: 0.8;
+}
+
 
 .notification-bell {
   padding: 12px 31px;
@@ -277,6 +281,9 @@ export default {
   align-items: center;
   position: relative;
   cursor: pointer;
+}
+.profile-container:hover{
+  opacity: 0.8;
 }
 
 .profile-name {

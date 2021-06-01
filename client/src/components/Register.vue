@@ -64,7 +64,7 @@ export default {
         console.log('Registration result', result);
 
         if (result === true) {
-          this.$router.push('/dashboard');
+          this.$router.push('/dashboard/dashboardcontent');
         }
       } catch (e) {
         console.log(e.response.data);

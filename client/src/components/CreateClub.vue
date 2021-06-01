@@ -19,10 +19,12 @@
           <label class="checkbox-label" :for="category">{{category}}</label>
         </div>
       </div>
+      <!--
       <div class="form-item">
         <label for="clubImage">Cover Image:</label>
         <input type="file" name="clubImage" id="clubImage" v-on:change="onFileSelected"/>
       </div>
+      -->
       <div class="form-item">
         <input class="create-button" type="submit" value="Create Club"/>
       </div>
@@ -41,7 +43,7 @@ export default {
   components: {},
   data() {
     return{
-      categories: ["Adventure", "Horror", "Biography", "Action", "Fantasy"],
+      categories: ["Adventure", "Horror", "Biography", "Action", "Fantasy","Sci-Fi", "Romance", "Thriller", "Mystery", "Self-help / Personal", "Health"],
       formData:{
         clubName:"",
         clubDescription:"",
