@@ -70,7 +70,11 @@ router.post("/addMember/:id", authorize, async (req, res) => {
         if (clubmember.rows.length > 0) {
             return res.status(401).send("Member already exists in that club!");
         }
+
+        const currentClubBook = club.rows[0].current_book;
+
         await pool.query("INSERT INTO club_members (club_id, user_id) VALUES ($1,$2) RETURNING *", [club_id, user_id]);
+        await pool.query("INSERT INTO user_books(book_id, user_id, club_id) VALUES($1,$2,$3)", [currentClubBook, user_id, club_id]);
 
         res.json({status: 'true'});
     } catch (err) {
