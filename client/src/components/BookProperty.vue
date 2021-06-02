@@ -1,7 +1,7 @@
 <template>
   <div v-if="book" class="book-property">
-    <ThePrinceOfThorns v-if="!bookNotInAnyClub && !loading" :book="book" :currentClub="currentClub" :userBookData="userBookData" :currPage="currentPage"/>
-    <div v-if="bookNotInAnyClub && !loading" class="book-container">
+    <ThePrinceOfThorns v-if="bookIsInClub && !loading" :book="book" :currentClub="currentClub" :userBookData="userBookData" :currPage="currentPage"/>
+    <div v-if="!loading && bookIsInWishList" class="book-container">
       <h1>{{book.volumeInfo.title}}</h1>
       <img class="kings-image" :src="book.volumeInfo.imageLinks.thumbnail" :alt="book.volumeInfo.title">
     </div>
@@ -18,7 +18,7 @@
         </div>
       </div>
     </div>
-    <div v-if="!bookNotInAnyClub && !loading" class="dropdown-after">
+    <div v-if="bookIsInClub && !bookIsInWishList && !loading" class="dropdown-after">
       <input  class="number" type="number" v-model="currentPage" :max="book.volumeInfo.pageCount" :min="0" />
       <button v-bind:class="{ disabledButton: currentPage.toString() === userBookData[0].current_page.toString() }" class="update" type="submit" value="update" v-on:click="updateCurrentPage">Update Page</button>
       <!--
@@ -37,7 +37,7 @@
     <div class="summary-content">
       <p>{{bookDescription}}</p>
     </div>
-    <div v-if="!bookNotInAnyClub">
+    <div v-if="bookIsInClub && !bookIsInWishList">
       <h1 class="discussion-title">Discussion</h1>
       <BookComment :currentClub="currentClub"/>
     </div>
@@ -67,7 +67,8 @@ export default {
       currentPage : 0,
       user:{},
       isAdmin: false,
-      bookNotInAnyClub: true
+      bookIsInClub: false,
+      bookIsInWishList: false
     }
   },
   methods:{
@@ -148,7 +149,10 @@ export default {
               this.userBookData = res.data
               this.currentPage = res.data[0].current_page
               this.currentClub = this.userClubs.filter( club => club.club_id === this.userBookData[0].club_id)
-              this.bookNotInAnyClub = false
+              if(this.userBookData[0].reading_status === 0){
+                this.bookIsInWishList = true
+              }
+              this.bookIsInClub = true
           })
     },
 
