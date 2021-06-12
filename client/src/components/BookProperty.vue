@@ -1,7 +1,7 @@
 <template>
   <div v-if="book" class="book-property">
     <ThePrinceOfThorns v-if="bookIsInClub && !loading" :book="book" :currentClub="currentClub" :userBookData="userBookData" :currPage="currentPage"/>
-    <div v-if="!loading && bookIsInWishList" class="book-container">
+    <div v-if="!loading && (bookIsInWishList || !bookIsInClub)" class="book-container">
       <h1>{{book.volumeInfo.title}}</h1>
       <img class="kings-image" :src="book.volumeInfo.imageLinks.thumbnail" :alt="book.volumeInfo.title">
     </div>
