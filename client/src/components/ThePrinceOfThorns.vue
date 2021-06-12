@@ -71,7 +71,7 @@ export default {
         }
       }
       await axios
-          .get(`/books/calculateAvg/${this.currentClub[0].club_id}`,config)
+          .get(`http://localhost:5000/books/calculateAvg/${this.currentClub[0].club_id}`,config)
           .then(res => {
             this.averageClubPage = res.data[0].round
             this.loading = false;

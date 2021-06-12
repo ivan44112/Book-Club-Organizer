@@ -69,14 +69,14 @@ export default {
     },
     getClubMemberCount() {
       axios
-          .get(`/clubs/countMembers/${this.club.club_id}`)
+          .get(`http://localhost:5000/clubs/countMembers/${this.club.club_id}`)
           .then(response => {
             this.clubMemberCount = response.data.count;
           })
     },
     getClubAdmin(){
       axios
-          .get(`/auth/currentUserById/${this.club.admin}`)
+          .get(`http://localhost:5000/auth/currentUserById/${this.club.admin}`)
           .then(response => {
             this.clubAdmin = response.data.name;
           })

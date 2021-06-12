@@ -88,7 +88,7 @@ name: "ClubPage",
   methods:{
     async getAllClubs(){
       try{
-        let res = await axios.get('/clubs/getClubs')
+        let res = await axios.get('http://localhost:5000/clubs/getClubs')
         let allClubs = res.data;
         let club = allClubs.filter(club => club.club_id === this.$route.params.id)
         this.currentClub = club[0];
@@ -103,7 +103,7 @@ name: "ClubPage",
 
     async getClubAdmin(){
       try{
-        let res = await axios.get(`/auth/currentUserById/${this.currentClub.admin}`)
+        let res = await axios.get(`http://localhost:5000/auth/currentUserById/${this.currentClub.admin}`)
         this.clubAdmin = res.data;
       } catch (err){
         console.log(err)
@@ -113,7 +113,7 @@ name: "ClubPage",
     async getUserClubs(){
       let user = JSON.parse(localStorage.getItem("user"))
       try{
-        let res = await axios.get('/clubs/getUserClubs', {
+        let res = await axios.get('http://localhost:5000/clubs/getUserClubs', {
           headers: { "Authorization": `Bearer ${user.token}`}
         })
         this.userClubs = res.data;
@@ -135,7 +135,7 @@ name: "ClubPage",
         }
       };
       try{
-        let res = await axios.post(`/clubs/addMember/${this.currentClub.club_id}`,data,config)
+        let res = await axios.post(`http://localhost:5000/clubs/addMember/${this.currentClub.club_id}`,data,config)
         if(res.data){
           this.clubJoined = true;
           this.$router.go()
@@ -153,7 +153,7 @@ name: "ClubPage",
         }
       };
       try{
-        let res = await axios.delete(`/clubs/deleteMember/${this.currentClub.club_id}`,config)
+        let res = await axios.delete(`http://localhost:5000/clubs/deleteMember/${this.currentClub.club_id}`,config)
         if(res.data){
           this.clubLeft = true;
           this.$router.go()
@@ -165,7 +165,7 @@ name: "ClubPage",
 
     async getCurrentlyReadBooksByClubs(){
       axios
-          .get(`/clubBooks/getClubBookStatus/${this.currentClub.club_id}`,
+          .get(`http://localhost:5000/clubBooks/getClubBookStatus/${this.currentClub.club_id}`,
               { params: { status: true } })
           .then(res => {
             this.currentlyReadingBook = res.data[0].book_id
@@ -175,7 +175,7 @@ name: "ClubPage",
     async getUser(){
       let user = JSON.parse(localStorage.getItem("user"))
       try{
-        let res = await axios.get('/auth/currentUser', {
+        let res = await axios.get('http://localhost:5000/auth/currentUser', {
           headers: { "Authorization": `Bearer ${user.token}`}
         })
         this.user = res.data;
@@ -190,7 +190,7 @@ name: "ClubPage",
     },
     getClubMemberCount() {
       axios
-          .get(`/clubs/countMembers/${this.currentClub.club_id}`)
+          .get(`http://localhost:5000/clubs/countMembers/${this.currentClub.club_id}`)
           .then(res => {
             this.clubMemberCount = res.data.count;
             this.loading = false;

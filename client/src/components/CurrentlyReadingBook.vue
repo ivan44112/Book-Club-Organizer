@@ -95,7 +95,7 @@ export default {
         params: { status: 1 }
       }
       axios
-          .get(`/books/getUserBooks/${this.bookId}`, config)
+          .get(`http://localhost:5000/books/getUserBooks/${this.bookId}`, config)
           .then(res => {
             let result;
             let asd = res.data
@@ -112,7 +112,7 @@ export default {
         }
       }
       axios
-          .get(`/calculateAvg/${this.clubId}`,config)
+          .get(`http://localhost:5000/books/calculateAvg/${this.clubId}`,config)
           .then(res => {
             console.log(res.data)
             this.averageClubPage = res.data[0].round

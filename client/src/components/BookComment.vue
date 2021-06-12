@@ -34,7 +34,7 @@ name: "BookComment",
   methods: {
     async getCurrentClubBookData() {
       axios
-          .get(`/clubBooks/getClubBookStatus/${this.currentClub[0].club_id}`,
+          .get(`http://localhost:5000/clubBooks/getClubBookStatus/${this.currentClub[0].club_id}`,
               {params: {status: true}})
           .then(res => {
             this.clubBookData = res.data[0];
@@ -44,7 +44,7 @@ name: "BookComment",
     async getCurrentUser(){
       let user = JSON.parse(localStorage.getItem("user"))
       try{
-        let res = await axios.get('/auth/currentUser', {
+        let res = await axios.get('http://localhost:5000/auth/currentUser', {
           headers: { "Authorization": `Bearer ${user.token}`}
         })
         this.user = res.data;
@@ -64,7 +64,7 @@ name: "BookComment",
         "comment":this.text
       }
       try{
-        let res = await axios.post(`/clubBooks/addComment/${this.clubBookData.club_books_id}`,body,config)
+        let res = await axios.post(`http://localhost:5000/clubBooks/addComment/${this.clubBookData.club_books_id}`,body,config)
         if(res.data){
           this.text = ""
           await this.getComments()
@@ -75,7 +75,7 @@ name: "BookComment",
     },
     async getComments(){
       try{
-        let res = await axios.get(`/clubBooks/getComment/${this.clubBookData.club_books_id}`)
+        let res = await axios.get(`http://localhost:5000/clubBooks/getComment/${this.clubBookData.club_books_id}`)
         if(res.data){
           this.comments = res.data
         }

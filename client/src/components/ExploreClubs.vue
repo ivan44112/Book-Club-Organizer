@@ -30,7 +30,7 @@ export default {
   methods:{
     async getAllClubs(){
       try{
-        let res = await axios.get('/clubs/getClubs')
+        let res = await axios.get('http://localhost:5000/clubs/getClubs')
         this.allClubs = res.data;
       } catch (err){
         console.log(err)

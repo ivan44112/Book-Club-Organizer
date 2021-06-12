@@ -85,7 +85,7 @@ export default {
     async getUserClubs(){
       let user = JSON.parse(localStorage.getItem("user"))
       try{
-        let res = await axios.get('/clubs/getUserClubs', {
+        let res = await axios.get('http://localhost:5000/clubs/getUserClubs', {
           headers: { "Authorization": `Bearer ${user.token}`}
         })
         this.userClubs = res.data;
@@ -106,7 +106,7 @@ export default {
         "book_id":this.$route.params.id
       }
       try{
-        let res = await axios.post(`/bookSuggestions/addBook/${clubId}`,body,config)
+        let res = await axios.post(`http://localhost:5000/bookSuggestions/addBook/${clubId}`,body,config)
         if(res.data){
           alert("you successfully suggested this book")
         }
@@ -126,7 +126,7 @@ export default {
         "book_id":this.book.id
       }
       try{
-        let res = await axios.post(`/books/addUserBookNoClub`,body,config)
+        let res = await axios.post(`http://localhost:5000/books/addUserBookNoClub`,body,config)
         if(res.data){
           alert("you successfully added this book to your Wishlist")
         }
@@ -144,7 +144,7 @@ export default {
         params: {book_id: this.$route.params.id}
       }
       axios
-          .get(`/books/getUserBook`, config)
+          .get(`http://localhost:5000/books/getUserBook`, config)
           .then(res => {
               this.userBookData = res.data
               this.currentPage = res.data[0].current_page
@@ -168,7 +168,7 @@ export default {
         "current_page":this.currentPage
       }
       axios
-          .patch(`/books/pageNumber/${this.currentClub[0].club_id}`,body,config)
+          .patch(`http://localhost:5000/books/pageNumber/${this.currentClub[0].club_id}`,body,config)
           .then(res => {
             console.log(res.data)
             this.userBookData[0].current_page = this.currentPage
@@ -182,7 +182,7 @@ export default {
     async getUser(){
       let user = JSON.parse(localStorage.getItem("user"))
       try{
-        let res = await axios.get('/auth/currentUser', {
+        let res = await axios.get('http://localhost:5000/auth/currentUser', {
           headers: { "Authorization": `Bearer ${user.token}`}
         })
         this.user = res.data;

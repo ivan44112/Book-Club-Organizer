@@ -27,7 +27,6 @@
     "vue-dynamic-dropdown": "^1.0.12",
     "vue-template-compiler": "^2.6.11"
   },
-  "proxy": "http://localhost:5000",
   "eslintConfig": {
     "root": true,
     "env": {

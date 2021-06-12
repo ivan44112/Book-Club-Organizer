@@ -67,7 +67,7 @@ export default {
         "book_id":this.book.book_id
       }
       try{
-        let res = await axios.post(`/bookSuggestions/addVote/${this.$route.params.id}`,body,config)
+        let res = await axios.post(`http://localhost:5000/bookSuggestions/addVote/${this.$route.params.id}`,body,config)
         if(res.data){
           console.log(res.data)
           this.$router.go()
@@ -81,7 +81,7 @@ export default {
         "book_id":this.book.book_id
       }
       axios
-          .post(`/books/addUserBook/${this.currentClub.club_id}`,body)
+          .post(`http://localhost:5000/books/addUserBook/${this.currentClub.club_id}`,body)
           .then(res => {
             if(res.data){
               this.toggleVotingPhase();
