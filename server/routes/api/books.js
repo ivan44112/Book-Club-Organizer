@@ -15,20 +15,26 @@ router.post("/addUserBook/:id", async (req, res) => {
 
     try {
         const club = await pool.query("SELECT * FROM clubs WHERE club_id = $1", [club_id]);
+        const oldClubBook = club.rows[0].current_book;
 
         if (club.rows.length === 0) {
             return res.status(401).send("Club doesn't exist");
         }
 
-        const data = await pool.query("SELECT user_id FROM club_members WHERE club_id=$1", [club_id])
-        const users = data.rows;
+        const clubUsers = await pool.query("SELECT user_id FROM club_members WHERE club_id=$1", [club_id])
+        const users = clubUsers.rows;
 
-        for (let prop in users) {
+        for (let user in users) {
+            await pool.query("UPDATE user_books SET reading_status=2 WHERE club_id=$1 AND book_id=$2 AND user_id=$3", [
+                club_id, oldClubBook, users[user].user_id
+            ]);
+
             await pool.query("INSERT INTO user_books(book_id, user_id, club_id) VALUES($1,$2,$3)", [
-                book_id, users[prop].user_id, club_id
+                book_id, users[user].user_id, club_id
             ])
         }
 
+        await pool.query("DELETE FROM book_voting WHERE club_id=$1 AND date_ended IS NULL AND book_id NOT IN (SELECT book_id FROM book_voting WHERE book_id=$2)", [club_id, book_id])
         await pool.query("UPDATE club_books SET reading_status=false WHERE reading_status=true AND club_id=$1", [club_id]);
         await pool.query("INSERT INTO club_books(book_id, club_id) VALUES ($1,$2)", [book_id, club_id]);
         await pool.query("UPDATE clubs SET current_book=$1, books_read=COALESCE(books_read,0)+1 WHERE club_id=$2", [book_id, club_id]);

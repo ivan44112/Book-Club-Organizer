@@ -21,6 +21,10 @@ router.post("/addBook/:id", authorize, async (req, res) => {
         if (userVote.rows.length > 0) {
             return res.status(401).send("You already suggested that book for this club");
         }
+        const checkVotingPhase = await pool.query("SELECT voting_phase FROM clubs WHERE club_id=$1 AND voting_phase=false", [club_id])
+        if (checkVotingPhase.rows.length > 0) {
+            return res.status(401).send("Book club currently not in voting phase");
+        }
 
         const userBook = await pool.query("SELECT * FROM book_voting WHERE book_id=$1 AND club_id=$2", [book_id, club_id])
         if (userBook.rows.length > 0) {

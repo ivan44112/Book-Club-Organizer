@@ -103,7 +103,8 @@ router.delete("/deleteMember/:id", authorize, async (req, res) => {
         if (clubmember.rows.length === 0) {
             return res.status(401).send("User isn't member of this club");
         }
-        await pool.query("DELETE FROM club_members WHERE club_id=$1 AND user_id= $2", [club_id, user_id]);
+        await pool.query("DELETE FROM club_members WHERE club_id=$1 AND user_id=$2", [club_id, user_id]);
+        await pool.query("DELETE FROM user_books WHERE club_id=$1 AND user_id=$2", [club_id, user_id]);
 
         res.json({status: 'true'});
     } catch (err) {
