@@ -1,5 +1,5 @@
 <template>
-<div class="prince-container">
+<div v-if="!loading" class="prince-container">
   <img class="prince-image" :src="volumeInfo.imageLinks.thumbnail">
   <div class="prince-title">
     <h1 class="book-title">{{volumeInfo.title}}</h1>
@@ -16,7 +16,7 @@
     <div class="average">
       <span class="member-page">Club average page:<span class="page-number">{{averageClubPage}}</span></span>
     </div>
-    <div v-if="!loading" class="current-page">My current page:
+    <div class="current-page">My current page:
       <span class="current-number">{{currPage}}</span>
       <div class="current-percent">
         <span v-bind:style="percent" class="curr-percent">{{userPagePercent}}%</span>
@@ -70,7 +70,7 @@ export default {
           book_id: this.book.id
         }
       }
-      axios
+      await axios
           .get(`http://localhost:5000/books/calculateAvg/${this.currentClub[0].club_id}`,config)
           .then(res => {
             this.averageClubPage = res.data[0].round
