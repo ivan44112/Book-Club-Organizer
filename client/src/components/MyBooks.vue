@@ -40,7 +40,7 @@ export default {
     async getUserClubs(){
       let user = JSON.parse(localStorage.getItem("user"))
       try{
-        let res = await axios.get('http://localhost:5000/clubs/getUserClubs', {
+        let res = await axios.get('/clubs/getUserClubs', {
           headers: { "Authorization": `Bearer ${user.token}`}
         })
         this.userClubs = res.data;
@@ -60,7 +60,7 @@ export default {
         params: { status: 0 }
       }
       axios
-          .get(`http://localhost:5000/books/getUserBooks/${this.userClubs[0].club_id}`, config)
+          .get(`/books/getUserBooks/${this.userClubs[0].club_id}`, config)
           .then(res => {
             this.wantToReadBooks = res.data
           }).catch(err => {
@@ -74,7 +74,7 @@ export default {
         params: { status: 1 }
       }
       axios
-          .get(`http://localhost:5000/books/getUserBooks/${this.userClubs[0].club_id}`, config)
+          .get(`/books/getUserBooks/${this.userClubs[0].club_id}`, config)
           .then(res => {
             this.currentlyReadingBooks = res.data
           }).catch(err => {

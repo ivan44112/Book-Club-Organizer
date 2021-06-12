@@ -26,7 +26,7 @@ name: "Comment",
   methods:{
     getUserName(){
       axios
-          .get(`http://localhost:5000/auth/currentUserById/${this.userId}`)
+          .get(`/auth/currentUserById/${this.userId}`)
           .then(response => {
             this.userName = response.data.name;
           })

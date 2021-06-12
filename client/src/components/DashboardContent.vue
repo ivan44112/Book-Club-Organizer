@@ -57,7 +57,7 @@ export default {
     async getUserClubs(){
       let user = JSON.parse(localStorage.getItem("user"))
       try{
-        let res = await axios.get('http://localhost:5000/clubs/getUserClubs', {
+        let res = await axios.get('/clubs/getUserClubs', {
           headers: { "Authorization": `Bearer ${user.token}`}
         })
         this.userClubs = res.data;
@@ -71,7 +71,7 @@ export default {
       let array = []
       this.userClubs.forEach(function (club){
            axios
-               .get(`http://localhost:5000/clubBooks/getClubBookStatus/${club.club_id}`,
+               .get(`/clubBooks/getClubBookStatus/${club.club_id}`,
               { params: { status: true } })
                .then(res => {
                  let obj = {};

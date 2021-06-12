@@ -65,7 +65,7 @@ export default {
       }
       let user = JSON.parse(localStorage.getItem("user"))
       try{
-          await axios.post('http://localhost:5000/clubs/createClub', data, {
+          await axios.post('/clubs/createClub', data, {
           headers: { "Authorization": `Bearer ${user.token}`}
         })
         this.clubCreated = true;
@@ -77,7 +77,7 @@ export default {
     async getUser(){
       let user = JSON.parse(localStorage.getItem("user"))
       try{
-        let res = await axios.get('http://localhost:5000/auth/currentUser', {
+        let res = await axios.get('/auth/currentUser', {
           headers: { "Authorization": `Bearer ${user.token}`}
         })
         this.user = res.data;

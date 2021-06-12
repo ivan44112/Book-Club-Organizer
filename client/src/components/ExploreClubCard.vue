@@ -33,7 +33,7 @@ export default {
   methods:{
     async getCurrentlyReadingBook(){
       axios
-          .get(`http://localhost:5000/clubBooks/getClubBookStatus/${this.club.club_id}`,
+          .get(`/clubBooks/getClubBookStatus/${this.club.club_id}`,
               { params: { status: true } })
           .then(res => {
             if(res.data[0]){
@@ -47,7 +47,7 @@ export default {
     },
     getClubMemberCount() {
       axios
-          .get(`http://localhost:5000/clubs/countMembers/${this.club.club_id}`)
+          .get(`/clubs/countMembers/${this.club.club_id}`)
           .then(response => {
             this.clubMemberCount = response.data.count;
           })

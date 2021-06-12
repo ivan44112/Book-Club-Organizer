@@ -43,7 +43,7 @@ export default {
   methods:{
     async getVotingBooks(){
       try{
-        let res = await axios.get(`http://localhost:5000/bookSuggestions/getBooks/${this.$route.params.id}`)
+        let res = await axios.get(`/bookSuggestions/getBooks/${this.$route.params.id}`)
         this.votingBooks = res.data;
       } catch (err){
         console.log(err)
@@ -52,7 +52,7 @@ export default {
 
     async toggleVotingPhase(){
       try{
-        let res = await axios.patch(`http://localhost:5000/clubs/changeVotingPhase/${this.$route.params.id}`)
+        let res = await axios.patch(`/clubs/changeVotingPhase/${this.$route.params.id}`)
         if(res.data){
           this.votingPhaseChanged = true
           this.$router.go()
